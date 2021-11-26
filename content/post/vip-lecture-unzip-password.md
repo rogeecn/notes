@@ -1,7 +1,8 @@
 ---
 title: "部分上古VIP教程的解压密码"
 date: 2021-11-26T15:01:02+08:00
-draft: true
+draft: false
+tags: ["密码", "VIP教程"]
 ---
 ## 黑盾VIP教程的解压密码
 
