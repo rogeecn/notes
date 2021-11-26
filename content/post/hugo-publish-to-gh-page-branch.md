@@ -6,6 +6,8 @@ tags: ["Hugo", "Github"]
 categories: ["网站开发"]
 
 ---
+
+## 方法一：手工操作
 如果希望单独控制源文档和生成的网页文档的版本历史，可以使用单独建立一个gh-pages branch的方法托管到Github Pages——先将/public子目录添加到.gitignore中，让master branch忽略其更新，然后在本地和Github端添加一个名为gh-pages的branch：
 
 ```bash
@@ -18,6 +20,8 @@ git commit --allow-empty -m "Initializing gh-pages branch"
 git push origin gh-pages
 git checkout main
 ```
+
+<!--more-->
 
 为了提高每次发布的效率，可以将下述命令存在脚本中，每次只需要运行该脚本即可将gh-pages branch中的文章发布到Github的repo中：
 
@@ -52,3 +56,39 @@ git push origin gh-pages
 ```
 
 后将 main branch 中的源文档和gh-pages branch中的网页文档分别push到Github repo中，进入Settings标签菜单，选择Github Pages项中的Source栏，点gh-pages branch选项, 等待片刻，即可访问 https://your_name.github.io 看到用Hugo生成的网页了。
+
+## 方法二：使用 Github Workflow 
+
+在项目根目录下创建 `.github/workflows/main.yaml` 并录入如下命令
+
+```yaml
+name: Github-Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.89.4'
+          extended: true
+
+      - name: Build
+        run: hugo --gc --minify --cleanDestinationDir
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          force_orphan: true
+```
