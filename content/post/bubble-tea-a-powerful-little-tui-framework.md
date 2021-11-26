@@ -1,5 +1,5 @@
 ---
-title: "Bubble Tea a Powerful Little Tui Framework"
+title: "Bubble Tea 控制台界面程序开发框架"
 date: 2021-11-26T15:18:14+08:00
 draft: false
 tags: ["UI","TUI","兵器库"]
