@@ -26,4 +26,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          force_orphan: false
+          force_orphan: true
+          cname: notes.711xd.com
+
