@@ -9,6 +9,7 @@ tags: ["密码", "VIP教程"]
 - VIP解压密码1：`hdbz11`  
 - VIP解压密码2：`hdzskai`  
 - VIP解压密码3：`hdhg7715`
+<!--more-->
 
 ## 合购VIP论坛
 
