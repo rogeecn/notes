@@ -7,7 +7,7 @@ tags: ["Laravel", "阅读"]
 
 网上偶得此书, 是 Laravel 的作者写的. Laravel 是近年来优秀的 PHP 框架, 国内外都有很多支持者. 该框架应用了大量 PHP5 尤其是 5.3 以后的新特性, 使得后端的开发进一步的简便而灵活. 具体可以看这里 http://www.laravel.com 作者写的这本书详细介绍了 Laravel 框架涉及的各种软件理念和工具, 如依赖注入, 控制反转容器, 面向接口编程等. 我读来收获颇丰, 所以希望翻译成中文以飨读者. 
 
-##  作者自序
+## 作者自序
 
 自从编写了 Laravel 框架之后, 我收到了大量让我写书的请求. 想让我出一本关于如何建造具有良好架构的复杂应用的指南. 由于每一个应用程序都是独特的, 这就需要此书讲述的是通用且实用的理论, 同时易于在各种项目中实施. 
 
@@ -18,9 +18,9 @@ tags: ["Laravel", "阅读"]
 最后, 十分感谢 Laravel 社区的每一个人. 你们为世界上成千上万的 PHP 开发者做出了巨大的贡献, 使得 PHP 开发变得更好玩更令人激动. 祝编码快乐! 
 <!--more-->
 
-##**Dependency Injection**依赖注入
+## Dependency Injection 依赖注入
 
-###**The Problem**遇到的问题
+### The Problem 遇到的问题
 
 Laravel 框架的基 础是一个功能强大的控制反转容器 (IoC container) . 为了真正理解本框架, 需要好好掌握该容器. 但我们要搞清楚, 控制反转容器只是一种用于方便实现"依赖注入"的工具. 要实现依赖注入并不一定需要控制反 转容器, 只是用容器会更方便和容易一点儿. 
 
@@ -28,17 +28,17 @@ Laravel 框架的基 础是一个功能强大的控制反转容器 (IoC containe
 
 ```php
 class UserController extends BaseController{
-	public function getIndex()
-	{
-		$users= User::all();
-		return View::make('users.index', compact('users'));
-	}
+    public function getIndex()
+    {
+        $users= User::all();
+        return View::make('users.index', compact('users'));
+    }
 }
 ```
 
 这段代码很 简短, 但我们要想测试这段代码的话就一定会和实际的数据库发生联系. 也就是说, Eloquent ORM (译者注: Laravel 的数据库对象模型库) 和该控制器有着紧耦合. 如果不使用 Eloquent ORM, 不连接到实际数据库, 我们就没办法运行或者测试这段代码. 这段代码同时也违背了"关注分离"这个软件设计原则. 简单讲: 这个控制器知道的太多了. 控制器不需要去了解数据是从哪儿来的, 只要知道如何访问就行. 控制器也不需要知道这数据是从 MySQL 或哪儿来的, 只需要知道这数据目前是可用的. 
 
->** 关注分离**
+> **关注分离**
 > 每一个类都应该有单独的职责, 并且该职责应完全被这个类封装.  (译者注: 我认为就是不要让多个类负责同样的职责) 
 
 关注分离的好处就是能让 Web 控制器和数据访问解耦. 这会使得实现存储迁移更容易, 测试也会更容易. "Web"就仅仅是为你真正的应用做数据的传输了. 
@@ -51,18 +51,18 @@ class UserController extends BaseController{
 
 首先我们定义一个接口, 然后实现该接口. 
 
-```
+```php
 interface UserRepositoryInterface
 {
-	public function all();
+    public function all();
 }
 
 class DbUserRepository implements UserRepositoryInterface
 {
-	public function all()
-	{
-		return User::all()->toArray();
-	}
+    public function all()
+    {
+        return User::all()->toArray();
+    }
 }
 ```
 
@@ -71,16 +71,16 @@ class DbUserRepository implements UserRepositoryInterface
 ```php
 class UserController extends BaseController
 {
-	public function __construct(UserRepositoryInterface $users)
-	{
-		$this->users = $users;
-	}
+    public function __construct(UserRepositoryInterface $users)
+    {
+        $this->users = $users;
+    }
 
-	public function getIndex()
-	{
-		$users=$this->users->all();
-		return View::make('users.index', compact('users'));
-	}
+    public function getIndex()
+    {
+        $users=$this->users->all();
+        return View::make('users.index', compact('users'));
+    }
 }
 ```
 
@@ -94,20 +94,20 @@ class UserController extends BaseController
 ```php
 public function testIndexActionBindsUsersFromRepository()
 {    
-	// Arrange...
-	$repository = Mockery::mock('UserRepositoryInterface');
-	$repository->shouldReceive('all')->once()->andReturn(array('foo'));
-	App::instance('UserRepositoryInterface', $repository);
-	// Act...
-	$response  = $this->action('GET', 'UserController@getIndex');
+    // Arrange...
+    $repository = Mockery::mock('UserRepositoryInterface');
+    $repository->shouldReceive('all')->once()->andReturn(array('foo'));
+    App::instance('UserRepositoryInterface', $repository);
+    // Act...
+    $response  = $this->action('GET', 'UserController@getIndex');
 
-	// Assert...
-	$this->assertResponseOk();
-	$this->assertViewHas('users', array('foo'));
+    // Assert...
+    $this->assertResponseOk();
+    $this->assertViewHas('users', array('foo'));
 }
 ```
 
->**Are you Mocking Me 你在模仿我么? **
+> Are you Mocking Me 你在模仿我么?
 > 在上面的例子里, 我们使用了名为 `Mockery` 的模仿库. 这个库提供了一套整洁且富有表达力的方法, 用来模仿你写的类. Mockery 可以通过 Composer 安装. 
 
 ## Taking It Further 更进一步
@@ -116,11 +116,11 @@ public function testIndexActionBindsUsersFromRepository()
 
 ```php
 interface BillerInterface {
-	public function bill(array $user, $amount);
+    public function bill(array $user, $amount);
 }
 
 interface BillingNotifierInterface {
-	public function notify(array $user, $amount);
+    public function notify(array $user, $amount);
 }
 ```
 
@@ -128,21 +128,21 @@ interface BillingNotifierInterface {
 
 ```php
 class StripeBiller implements BillerInterface{
-	public function __construct(BillingNotifierInterface $notifier)
-	{
-		$this->notifier = $notifier;
-	}
-	public function bill(array $user, $amount)
-	{
-		// Bill the user via Stripe...
-		$this->notifier->notify($user, $amount);
-	}
+    public function __construct(BillingNotifierInterface $notifier)
+    {
+        $this->notifier = $notifier;
+    }
+    public function bill(array $user, $amount)
+    {
+        // Bill the user via Stripe...
+        $this->notifier->notify($user, $amount);
+    }
 }
 ```
 
 只要遵守了每个类的责任划分, 我们很容易将不同的提示器 (notifier) 注入到账单类里面. 比如, 我们可以注入一个 `SmsNotifier` 或者 `EmailNotifier` . 账单类只要遵守了约定, 就不用再考虑如何实现提示功能. 只要是遵守约定 (接口) 的类, 账单类都能用. 这不仅仅是方便了我们的开发, 而且我们还可以通过模拟 `BillingNotifierInterface` 来进行无痛测试. 
 
-> ### 使用接口
+### 使用接口
 > 写接口可能看上去挺麻烦, 但实际上能加速你的开发. 你不用实现任何接口, 就能使用模拟库来模拟你的接口, 进而测试整个后台逻辑! 
 
 那我们如何_做_依赖注入呢? 很简单: 
@@ -165,13 +165,14 @@ $biller = new StripeBiller(new SmsNotifier);
 
 总而言之, 记住本书提倡"简单"架构. 如果你在写小程序的时候无法遵守接口原则, 别觉得不好意思. 要记住做码农呢, 最重要就是开心. 如果你不喜欢写接口, 那就先简单的写代码吧. 日后再精进即可. 
 
-# The IoC Container 控制反转容器
+# The IoC Container 控制反转容器  
 
 ## Basic Binding 基础绑定
 
 我们已经学习了依赖注入, 接下来咱们一起来探索"控制反转容器"(IoC) . IoC 容器可以使你更容易管理依赖注入, Laravel 框架拥有一个很强大的 IoC 容器. Laravel 的核心就是这个 IoC 容器, 这个 IoC 容器使得框架各个组件能很好的在一起工作. 事实上 Laravel 的 Application 类就是继承自 Container 类! 
 
-> ###  控制反转容器
+###  控制反转容器
+
 > 控制反转容器使得依赖注入更方便. 当一个类或接口在容器里定义以后, 如何处理它们——如何在应用中管理, 注入这些对象? 
 
 在 Laravel 应用里, 你可以通过 App 来访问控制反转容器. 容器有很多方法, 不过我们从最基础的开始. 让我们继续使用上一章写的 `BillerInterface` 和 `BillingNotifierInterface` , 且假设我们使用了 [Stripe](https://github.com/fabpot/pimple) 来进行支付操作. 我们可以将 Stripe 的支付实现绑定到容器里, 就像这样: 
@@ -179,7 +180,7 @@ $biller = new StripeBiller(new SmsNotifier);
 ```php
 App::bind('BillerInterface', function()
 {
-	return new StripeBiller(App::make('BillingNotifierInterface'));
+    return new StripeBiller(App::make('BillingNotifierInterface'));
 });
 ```
 
@@ -188,13 +189,13 @@ App::bind('BillerInterface', function()
 ```php
 App::bind('BillingNotifierInterface', function()
 {
-	return new EmailBillingNotifier;
+    return new EmailBillingNotifier;
 });
 ```
 
 如你所见, 这个容器就是个用来存储各种绑定的地方 (译者注: 这么理解简单点. 再扯匿名函数, 闭包就扯远了) . 一旦一个类在容器里绑定了以后, 我们可以很容易的在应用的任何位置调用它. 我们甚至可以在 bind 函数内写另外的 bind. 
 
-> ### Have Acne?
+### Have Acne?
 > Laravel 框架的 Illuminate 容器和另一个名为 [Pimple](https://github.com/fabpot/pimple) 的 IoC 容器是可替换的. 所以如果你之前用的是 Pimple, 你尽可以大胆的升级为 [Illuminate Container](https://github.com/jilluminate/container), 后者还有更多新功能! 
 
 一旦我们使用了容器, 切换接口的实现就是一行代码的事儿. 比如考虑以下代码: 
@@ -204,7 +205,7 @@ class UserController extends BaseController{
 
 public function __construct(BillerInterface $biller)
 {
-	$this->biller = $biller;
+    $this->biller = $biller;
 }
 }
 ```
@@ -214,7 +215,7 @@ public function __construct(BillerInterface $biller)
 ```
 App::bind('BillingNotifierInterface', function()
 {
-	return new SmsBillingNotifier;
+    return new SmsBillingNotifier;
 });
 ```
 
@@ -227,7 +228,7 @@ App::bind('BillingNotifierInterface', function()
 ```php
 App::singleton('BillingNotifierInterface', function()
 {
-	return new SmsBillingNotifier;
+    return new SmsBillingNotifier;
 });
 ```
 
@@ -242,7 +243,7 @@ App::instance('BillingNotifierInterface', $notifier);
 
 现在我们熟悉了容器的基础用法, 让我们深入发掘它更强大的功能: 依靠反射来处理类和接口. 
 
-> ### Stand Alone Container 容器独立运行
+### Stand Alone Container 容器独立运行
 > 你的项目没有使用 Laravel? 但你依然可以使用 Laravel 的 IoC 容器! 只要用 Composer 安装了 `illuminate/container` 包就可以了. 
 
 ## Reflect Resolution 反射解决方案
@@ -260,10 +261,10 @@ var_dump($reflection->getConstants());
 ```php
 class UserController extends BaseController
 {
-	public function __construct(StripBiller $biller)
-	{
-		$this->biller = $biller;
-	}
+    public function __construct(StripBiller $biller)
+    {
+        $this->biller = $biller;
+    }
 }
 ```
 
@@ -281,10 +282,10 @@ class UserController extends BaseController
 ```php
 class UserController extends BaseController
 {
-	public function __construct(BillerInterface $biller)
-	{
-		$this->biller = $biller;
-	}
+    public function __construct(BillerInterface $biller)
+    {
+        $this->biller = $biller;
+    }
 }
 ```
 假设我们没有为 `BillerInterface` 做任何绑定, 容器该怎么知道要注入什么类呢? 要知道, interface 不能被实例化, 因为它只是个约定. 如果我们不提供更多信息的话, 容器是无法实例化这个依赖的. 我们需要明确指出哪个类要实现这个接口, 这就需要用到 `bind` 方法: 
@@ -306,7 +307,8 @@ App::bind('BillerInterface', 'BalancedBiller');
 App::singleton('BillerInterface', 'StripBiller');
 ```
 
-> ### Master The Container 掌握容器
+### Master The Container 掌握容器
+
 > 想了解更多关于容器的知识? 去读源码! 容器只有一个类 `Illuminate\Container\Container` . 读完了你就对容器有更深的认识了. 
 
 # Interface As Contract 接口约定
@@ -320,7 +322,7 @@ App::singleton('BillerInterface', 'StripBiller');
 ```c#
 public int BillUser(User user)
 {
-	this.biller.bill(user.GetId(), this.amount)
+    this.biller.bill(user.GetId(), this.amount)
 }
 ```
 
@@ -330,7 +332,7 @@ public int BillUser(User user)
 ```php
 public function billUser($user)
 {
-	$this->biller->bill($user->getId(), $this->amount);
+    $this->biller->bill($user->getId(), $this->amount);
 }
 ```
 
@@ -341,7 +343,7 @@ public function billUser($user)
 ```php
 public function billUser(User $user)
 {
-	$this->biller->bill($user->getId(), $amount);
+    $this->biller->bill($user->getId(), $amount);
 }
 ```
 
@@ -355,15 +357,16 @@ public function billUser(User $user)
 
 接口就是约定. 接口不包含任何代码实现, 只是定义了一个对象应该实现的一系列方法. 如果一个对象实现了一个接口, 那么我们就能确信这个接口所定义的一系列方法都能在这个对象上使用. 因为有约定保证了特定方法的实现标准, 通过_多态_也能使类型安全的语言变得更灵活. 
 
-> ### Poly what? 多什么态? 
+### Poly what? 多什么态? 
+
 > 多态含义很广, 其本质上是说一个实体拥有多种形式. 在本书中, 我们讲多态是一个接口有着多种实现. 比如 `UserRepositoryInterface` 可以有 MySQL 和 Redis 两种实现, 每一种实现都是 `UserRepositoryInterface` 的一个实例. 
 
 为了说明在强类型语言中接口的灵活性, 咱们来写一个酒店客房预订的代码. 考虑以下接口: 
 
 ```php
 interface ProviderInterface{
-	public function getLowestPrice($location);
-	public function book($location);
+    public function getLowestPrice($location);
+    public function book($location);
 }
 ```
 
@@ -373,8 +376,8 @@ interface ProviderInterface{
 class User{
 public function bookLocation(ProviderInterface $provider, $location)
 {
-	$amountCharged = $provider->book($location);
-	$this->logBookedLocation($location, $amountCharged);
+    $amountCharged = $provider->book($location);
+    $this->logBookedLocation($location, $amountCharged);
 }
 ```
 
@@ -384,8 +387,8 @@ public function bookLocation(ProviderInterface $provider, $location)
 $location = 'Hilton, Dallas';
 
 $cheapestProvider = $this->findCheapest($location, array(
-	new PricelineProvider, 
-	new OrbitzProvider, 
+    new PricelineProvider, 
+    new OrbitzProvider, 
 ));
 
 $user->bookLocation($cheapestProvider, $location);
@@ -393,7 +396,8 @@ $user->bookLocation($cheapestProvider, $location);
 
 太棒了! 不管哪家是最便宜的, 我们都能够将他传入 `User` 对象来预订房间了. 由于 `User` 对象只需要要有一个符合 `ProviderInterface` 约定的实例就可以预订房间, 所以未来有更多的酒店供应商我们的代码也可以很好的工作. 
 
-> ### Forget The Details 忘掉细节
+### Forget The Details 忘掉细节
+
 > 记住, 接口实际上不真正做任何事情. 它只是简单的定义了类们**必须**实现的一系列方法. 
 
 ## Interfaces & Team Development 接口与团队开发
@@ -402,7 +406,7 @@ $user->bookLocation($cheapestProvider, $location);
 
 ```php
 interface OrderRepositoryInterface {
-	public function getMostRecent(User $user);
+    public function getMostRecent(User $user);
 }
 ```
 
@@ -410,15 +414,15 @@ interface OrderRepositoryInterface {
 
 ```php
 class OrderController {
-	public function __construct(OrderRepositoryInterface $orders)
-	{
-		$this->orders = $orders;
-	}
-	public function getRecent()
-	{
-		$recent = $this->orders->getMostRecent(Auth::user());
-		return View::make('orders.recent', compact('recent'));
-	}
+    public function __construct(OrderRepositoryInterface $orders)
+    {
+        $this->orders = $orders;
+    }
+    public function getRecent()
+    {
+        $recent = $this->orders->getMostRecent(Auth::user());
+        return View::make('orders.recent', compact('recent'));
+    }
 }
 ```
 
@@ -426,10 +430,10 @@ class OrderController {
 
 ```php
 class DummyOrderRepository implements OrderRepositoryInterface {
-	public function getMostRecent(User $user)
-	{
-		return array('Order 1', 'Order 2', 'Order 3');
-	}
+    public function getMostRecent(User $user)
+    {
+        return array('Order 1', 'Order 2', 'Order 3');
+    }
 }
 ```
 
@@ -441,7 +445,7 @@ App::bind('OrderRepositoryInterface', 'DummyOrderRepository');
 
 接下来一旦后台开发者写完了真正的实现代码, 比如叫 `RedisOrderRepository` . 那么 IoC 容器就可以轻易的切换到真正的实现上. 整个应用就会使用从 Redis 读出来的数据. 
 
-> ### Interface As Schematic 接口就是大纲
+### Interface As Schematic 接口就是大纲
 > 接口在开发程序的"骨架"时非常有用. 在设计组件时, 使用接口进行设计和讨论都是对你的团队有益处的. 比如定义一个 `BillingNotifierInterface` 然后讨论他有什么方法. 在写任何实现代码前先用接口讨论好一套好的 API! 
 
 # Service Providers 服务提供者
@@ -452,12 +456,14 @@ App::bind('OrderRepositoryInterface', 'DummyOrderRepository');
 
 一个服务提供者必须有一个 `register` 方法. 你可以在这个方法里写 IoC 绑定. 当一个请求发过来, 程序框架刚启动时, 所有在你配置文件里的服务提供者的 `register` 方法就会被调用. 这在程序周期的很早的地方就会执行, 所以在你自己的引导代码 (比如那些在 `start` 目录里的文件) 里所有的服务已经准备好了. 
 
-> ### Register Vs. Boot 注册 Vs 引导代码
+### Register Vs. Boot 注册 Vs 引导代码
+
 > 永远不要在 `register` 方法里面使用任何服务. 该方法只是用来进行 IoC 绑定的地方. 所有关于绑定类后续的判断, 交互都要在 `boot` 方法里进行. 
 
 你用 Composer 安装的一些第三方包也会有服务提供者. 在第三方包的安装说明里一般都会告诉你要在 `providers` 数组里加上一行. 一旦你加上了, 那这个服务就算安装好了. 
 
-> ### Package Providers 包提供者
+### Package Providers 包提供者
+
 > 不是所有的第三方包都需要服务提供者. 事实上一个包并不需要服务提供者. 因为服务提供者只是一个用来自动初始化服务组件的地方, 一个方便管理引导代码和容器绑定的地方. 
 
 ### Deferred Providers 延迟加载的服务提供者
@@ -466,7 +472,8 @@ App::bind('OrderRepositoryInterface', 'DummyOrderRepository');
 
 为了达到只实例化需要的服务的提供者, Laravel 生成了"服务清单"并且储存在了 `app/storage/meta` 目录下. 这份清单列出了应用里所有的服务提供者, 包括容器绑定的名字也记录了. 这样, 当应用想让容器取出一个名为 `queue` 的绑定时, Laravel 知道需要先实例化并运行 `QueueServiceProvider` 因为在服务清单里记录着该服务提供者能提供 `queue` 的绑定. 如此这般框架就能够延迟加载每个请求需要的服务了, 性能大大提高. 
 
-> ### Manifest Generation 如何生成服务清单
+### Manifest Generation 如何生成服务清单
+
 > 当你在 `providers` 数组里新增一条, Laravel 在下一次请求时就会自动重新生成服务清单. 
 
 如果你有时间, 去看看服务清单文件里面的内容. 理解这个文件的结构有助于你对服务进行排错. 
@@ -475,25 +482,26 @@ App::bind('OrderRepositoryInterface', 'DummyOrderRepository');
 
 想制作一个结构优美的 Laravel 应用的话, 就要去学习如何用服务提供者来管理代码. 当你在注册 IoC 绑定的时候, 所有代码都杂乱的塞进了 `app/start` 路径下的文件里. 别再这样做了, 使用服务提供者来注册这些吧. 
 
-> ### Get It Started 万物之初
+### Get It Started 万物之初
+
 > 你应用的"启动"文件都储存在 `app/start` 目录下. 根据不同的请求入口, 系统会载入不同的启动文件. 在全局的 `start.php` 文件加载后, 系统会根据执行环境的不同来加载不同的启动文件. 此外, 在执行命令行程序时, `artisan.php` 文件会被载入. 
 
 咱们来考虑这个例子. 也许我们的应用正在使用 [Pusher](http://pusher.com) 来为客户推送消息. 为了将我们的应用和 Pusher 解耦, 我们要定义 `EventPusherInterface` 接口和对应的实现类 `PusherEventPusher` . 这样在需求变化或应用改进时, 我们就可以随时轻松的改变推送服务提供商. 
 
 ```php
 interface EventPusherInterface{
-	public function push($message, array $data = array());
+    public function push($message, array $data = array());
 }
 
 class PusherEventPusher implements EventPusherInterface{
-	public function __construct(PusherSdk $pusher)
-	{
-		$this->pusher = $pusher;
-	}
-	public function push($message, array $data = array())
-	{
-		// Push message via the Pusher SDK...
-	}
+    public function __construct(PusherSdk $pusher)
+    {
+        $this->pusher = $pusher;
+    }
+    public function push($message, array $data = array())
+    {
+        // Push message via the Pusher SDK...
+    }
 }
 ```
 
@@ -503,22 +511,23 @@ class PusherEventPusher implements EventPusherInterface{
 use Illuminate\Support\ServiceProvider;
 
 class EventPusherServiceProvider extends ServiceProvider {
-	public function register()
-	{
-		$this->app->singleton('PusherSdk', function()
-		{
-			return new PusherSdk('app-key', 'secret-key');
-		}
+    public function register()
+    {
+        $this->app->singleton('PusherSdk', function()
+        {
+            return new PusherSdk('app-key', 'secret-key');
+        }
 
-		$this->app->singleton('EventPusherInterface', 'PusherEventPusher');
-	}
+        $this->app->singleton('EventPusherInterface', 'PusherEventPusher');
+    }
 }
 
 ```
 
 很好! 我们对事件推送进行了清晰的抽象, 同时我们也有了一个很不错的地方进行注册, 绑定其他相关的东西到容器里. 最后一步只需要将 `EventPusherServiceProvider` 写入 `app/config/app.php` 文件内的 `providers` 数组里就可以了. 现在这个应用里的 `EventPusherInterface` 已经被绑定到了正确的实现类上. 
 
-> ### Should You Singleton? 要使用单例么? 
+### Should You Singleton? 要使用单例么? 
+
 > 用不用单例可以这样来考虑: 如果在一次请求周期中该类只需要有一个实例, 就使用 `singleton` ; 否则就使用 `bind` . 
 
 ```php
@@ -538,22 +547,24 @@ App::singleton('EventPusherInterface', 'PusherEventPusher');
 ```php
 public function boot()
 {
-	require_once __DIR__.'/events.php';
-	require_once __DIR__.'/routes.php';
+    require_once __DIR__.'/events.php';
+    require_once __DIR__.'/routes.php';
 }
 
 ```
 
 我们已经学习了依赖注入以及如何使用服务提供者来组织管理我们的项目. 这样我们的 Laravel 应用就有了一个很好的基础, 它结构优美并且易于维护和测试. 接下来, 我们将探索 Laravel 框架本身是如何使用服务提供者的, 并且深究其原理! 
 
-> ### Don't Box Yourself In 不要让条条框框限制你自己
+### Don't Box Yourself In 不要让条条框框限制你自己
+
 > 记住, 服务提供者不仅仅是专业的软件包才能使用. 请大胆的使用它来组织管理你的应用服务吧. 
 
 ## Providing The Core 核心也是服务提供者的模式
 
 你可能已经注意到, 在 `app` 配置文件里面已经有了很多服务提供者. 每一个都负责启动框架核心的一部分. 比如 `MigrationServiceProvider` 负责启动数据库迁移的类, 包括 Artisan 里面的命令. `EventServiceProvide` 负责启动和注册事件调度机制. 不同的服务提供者有着不同的复杂度, 但他们都负责启动核心的一部分. 
 
-> ### Meet Your Providers 和服务提供者们见见面
+### Meet Your Providers 和服务提供者们见见面
+
 > 理解 Laravel 核心的最好方法是去读它的核心服务源码. 如果你对这些服务的源码, 容器注册等都很熟悉, 那么你对 Laravel 是如何工作的将会有十分深刻的理解. 
 
 大部分的服务提供者是延迟加载的, 意味着并非所有请求都会调用到他们; 然而有一些很基础的服务是每一次请求都会被加载的, 比如 `FilesystemServiceProvide` 和 `ExceptionServiceProvider` . 有人会说核心服务提供者和应用程序容器_就是_Laravel. Laravel 其实是将这么多不同部分联系起来, 形成一个单一的, 内聚的整体的这么一个机制. 拿建筑来比喻, 那些服务提供者就是框架的预制模块. 
@@ -570,14 +581,15 @@ public function boot()
 
 为了做出好的程序设计, 最大的拦路虎就是一个简单的缩写词: M-V-C. 模型, 视图, 控制器主宰了 Web 框架的思想已经好多年了. 这种思想的流行某种程度上是托了 Ruby on Rails 愈加流行的福. 然而, 如果你问一个开发人员"模型"的定义是什么. 通常你会听到他嘟哝着什么"数据库"之类的东西. 这么说, 模型_就是_数据库了. 不管这意味着什么, 模型里包含了关于数据库的_一切_. 但是, 你很快就会知道, 你的应用程序需要的不仅仅是一个简单的数据库访问类. 他需要更多的逻辑如: 数据验证, 调用外部服务, 发送电子邮件, 等等更多. 
 
-> ### What Is A Model? 模型是啥? 
+### What Is A Model? 模型是啥? 
+
 > 单词"model"的含义太模糊了, 很难说明白准确的含义. 更具体来讲, 模型是用来将我们的应用划分成更小, 更清晰的类, 使得各代码部分有着明确的权责. 
 
 所以怎么解决这个问题 (译者注: 上文中"更多的业务逻辑") 呢? 很多开发者开始将业务逻辑包装到控制器里面. 当控制器庞大到一定规模, 他们将会需要重用业务逻辑. 大部分开发人员没有将这些业务逻辑提取到别的类里面, 而是错误的臆想他们_需要_在控制器里面调用别的控制器. 这种模式通常被称为"HMVC". 不幸的是, 这种模式通常也预示着糟糕的程序设计, 并且控制器已经太复杂了. 
 
-> ### HMVC (Usually) Indicates Poor Design
+### HMVC (Usually) Indicates Poor Design
 >
-> ### HMVC (通常) 预示着糟糕的设计. 
+### HMVC (通常) 预示着糟糕的设计. 
 >
 > 你觉得需要在控制器里面调用其他的控制器? 这通常预示着糟糕的程序设计并且你的控制器里面业务逻辑太多了. 把业务逻辑抽出来放到一个新的类里面, 这样你就可以在其他任何控制器里面调用了. 
 
@@ -587,7 +599,7 @@ public function boot()
 
 删掉你的 `models` 目录了么? 还没删就赶紧删了! 我们将要在 `app` 目录下创建个新的目录, 目录名就以我们这个应用的名字来命名, 这次我们就叫 `QuickBill` 吧. 在后续的讨论中, 我们在前面写的那些接口和类都会出现. 
 
-> ### Remember The Context 注意使用场景
+### Remember The Context 注意使用场景
 >
 > 记住, 如果你在写一个很小的 Laravel 应用, 那在 `models` 目录下写几个 Eloquent 模型其实挺合适的. 但在本章节, 我们主要关注如何开发更有合适"层次"架构的大型复杂项目. 
 
@@ -596,7 +608,7 @@ public function boot()
 ```json
 "autoload": {
 "psr-0":    {
-	"QuickBill":    "app/"
+    "QuickBill":    "app/"
 }
 }
 ```
@@ -608,25 +620,25 @@ public function boot()
 ```
 // app
 // QuickBill
-	// Repositories
-		-> UserRepository.php
-		-> PaymentRepository.php
-	// Billing
-		-> BillerInterface.php
-		-> StripeBiller.php
-	// Notifications
-		-> BillingNotifierInterface.php
-		-> SmsBillingNotifier.php
-	User.php
-	Payment.php
+    // Repositories
+        -> UserRepository.php
+        -> PaymentRepository.php
+    // Billing
+        -> BillerInterface.php
+        -> StripeBiller.php
+    // Notifications
+        -> BillingNotifierInterface.php
+        -> SmsBillingNotifier.php
+    User.php
+    Payment.php
 ```
 
-> ### What About Validation 数据验证怎么办? 
+### What About Validation 数据验证怎么办? 
 > 在哪儿进行数据验证常常困扰着开发人员. 可以考虑将数据验证方法写进你的"实体"类里面 (好比 `User.php` 和 `Payment.php` ) . 方法名可以设为 `validForCreation` 或 `hasValidDomain` . 或者你也可以专门创建个验证器类 `UserValidator` , 放到 `Validation` 命名空间下, 然后将这个验证器类注入到你的 repository 类里面. 两种方式你都可以试试, 看哪个你更喜欢! 
 
 摆脱了 `models` 目录后, 你通常就能克服心理障碍, 实现好的设计. 使得你能创建一个更合适的目录结构来为你的应用服务. 当然, 你建立的每一个应用程序都会有一定的相似之处, 因为每个复杂的应用程序都需要一个数据访问 (repository) 层, 一些外部服务层等等. 
 
-> ### Don't Fear Directories 别害怕目录
+### Don't Fear Directories 别害怕目录
 >
 > 不要惧怕建立目录来管理应用. 要常常将你的应用切割成小组件, 每一个组件都要有十分专注的职责. 跳出"模型"的框框来思考. 比如我们之前就说过, 你可以创建个 `Repositories` 目录来存放你所有的数据访问类. 
 
@@ -638,15 +650,15 @@ public function boot()
 
 ```php
 class BillingController extends BaseController{
-	public function __construct(BillerInterface $biller)
-	{
-		$this->biller = $biller;
-	}
-	public function postCharge()
-	{
-		$this->biller->chargeAccount(Auth::user(), Input::get('amount'));
-		return View::make('charge.success');
-	}
+    public function __construct(BillerInterface $biller)
+    {
+        $this->biller = $biller;
+    }
+    public function postCharge()
+    {
+        $this->biller->chargeAccount(Auth::user(), Input::get('amount'));
+        return View::make('charge.success');
+    }
 }
 
 ```
@@ -655,7 +667,7 @@ class BillingController extends BaseController{
 
 编写拥有高可维护性应用程序的关键之一, 就是责任分割. 要时常检查一个类是否管得太宽. 你要常常问自己"这个类需不需要关心 XXX 呢? "如果答案是否定的, 那么把这块逻辑抽出来放到另一个类里面, 然后用依赖注入的方式进行处理.  (译者注: 依赖注入的不同方式还记得么? 调用方法传参, 构造函数传参, 从 IoC 容器获取等等. ) 
 
-> ### Single Reason To Change
+### Single Reason To Change
 >
 > 如何判断一个类是否管得太宽, 有一个有用的方法就是检查你为什么要改这块儿代码. 举个例子: 当我们想调整通知逻辑的时候, 我们需要修改 `Biller` 的实现代码么? 当然不需要, `Biller` 的实现仅仅需要考虑支付, 它与通知逻辑应当仅通过约定来进行交互. 使用这种思路过一遍代码, 会让你很快找出应用中需要改进的地方. 
 
@@ -686,20 +698,20 @@ require_once __DIR__.'/../helpers.php';
 namespace QuickBill\Providers;
 use Illuminate\Support\ServiceProvider;
 class BillingEventsProvider extends ServiceProvider{
-	public function boot()
-	{
-		Event::listen('billing.failed', function($bill)
-		{
-			// Handle failed billing event...
-		});
-	}
+    public function boot()
+    {
+        Event::listen('billing.failed', function($bill)
+        {
+            // Handle failed billing event...
+        });
+    }
 }
 
 ```
 
 创建好服务提供者后, 就可以将它加入到 `app/config/app.php` 配置文件的 `providers` 数组里. 
 
-> #### Wear The Boot 注意启动流程
+#### Wear The Boot 注意启动流程
 >
 > 记住在上面的例子里面, 我们在 `boot` 方法里进行编写是有原因的. `register` 方法**只能**用来进行依赖注入绑定. 
 
@@ -713,23 +725,23 @@ namespace QuickBill\Providers;
 use App, Illuminate\Support\ServiceProvider;
 
 class QuickBillErrorProvider extends ServiceProvider {
-	public function register()
-	{    
-		//
-	}
+    public function register()
+    {    
+        //
+    }
 
-	public function boot()
-	{
-		App::error(function(BillingFailedException $e)
-		{
-			// Handle failed billing exceptions ...
-		});
-	}
+    public function boot()
+    {
+        App::error(function(BillingFailedException $e)
+        {
+            // Handle failed billing exceptions ...
+        });
+    }
 }
 
 ```
 
-> #### The Small Solution 简便做法
+#### The Small Solution 简便做法
 >
 > 当然如果你只有一两条简单的错误处理方法, 那么都写在"启动"文件里面也是一种又快又好的简便做法. 
 
@@ -742,15 +754,15 @@ class QuickBillErrorProvider extends ServiceProvider {
 ```
 // app
 // QuickBill
-	// Billing
-	// Extensions
-		//Pagination
-			-> Environment.php
-	// Providers
-		-> EventPusherServiceProvider.php
-	// Repositories
-	User.php
-	Payment.php
+    // Billing
+    // Extensions
+        //Pagination
+            -> Environment.php
+    // Providers
+        -> EventPusherServiceProvider.php
+    // Repositories
+    User.php
+    Payment.php
 
 ```
 
@@ -762,7 +774,7 @@ class QuickBillErrorProvider extends ServiceProvider {
 
 我们已经讨论了用 Laravel4 制作优美的程序架构的各个方面, 让我们再深入一些细节. 在本章, 我们将讨论如何解耦各种处理函数: 队列处理函数, 事件处理函数, 甚至其他"事件型"的结构如路由过滤器. 
 
-> ### Don't Clog Your Transport Layer 不要堵塞传输层
+### Don't Clog Your Transport Layer 不要堵塞传输层
 >
 > 大部分的"处理函数"可以被当作_传输层_组件. 也就是说, 队列触发器, 被触发的事件, 或者外部发来的请求等都可能调用处理函数. 可以把处理函数理解为控制器, 避免在里面堆积太多具体业务逻辑实现. 
 
@@ -772,20 +784,20 @@ class QuickBillErrorProvider extends ServiceProvider {
 
 ```php
 class SendSMS{
-	public function fire($job, $data)
-	{
-		$twilio = new Twilio_SMS($apiKey);
-		$twilio->sendTextMessage(array(
-			'to'=> $data['user']['phone_number'], 
-			'message'=> $data['message'], 
-		));
-		$user = User::find($data['user']['id']);
-		$user->messages()->create(array(
-			'to'=> $data['user']['phone_number'], 
-			'message'=> $data['message'], 
-		));
-		$job->delete();
-	}
+    public function fire($job, $data)
+    {
+        $twilio = new Twilio_SMS($apiKey);
+        $twilio->sendTextMessage(array(
+            'to'=> $data['user']['phone_number'], 
+            'message'=> $data['message'], 
+        ));
+        $user = User::find($data['user']['id']);
+        $user->messages()->create(array(
+            'to'=> $data['user']['phone_number'], 
+            'message'=> $data['message'], 
+        ));
+        $job->delete();
+    }
 }
 
 ```
@@ -798,21 +810,21 @@ class SendSMS{
 
 ```php
 class User extends Eloquent {
-	/**
-	 * Send the User an SMS message
-	 *
-	 * [@param](https://my.oschina.net/u/2303379) SmsCourierInterface $courier
-	 * [@param](https://my.oschina.net/u/2303379) string $message
-	 * [@return](https://my.oschina.net/u/556800) SmsMessage
-	 */
-	public function sendSmsMessage(SmsCourierInterface $courier, $message)
-	{
-		$courier->sendMessage($this->phone_number, $message);
-		return $this->sms()->create(array(
-			'to'=> $this->phone_number, 
-			'message'=> $message, 
-		));
-	}
+    /**
+     * Send the User an SMS message
+     *
+     * [@param](https://my.oschina.net/u/2303379) SmsCourierInterface $courier
+     * [@param](https://my.oschina.net/u/2303379) string $message
+     * [@return](https://my.oschina.net/u/556800) SmsMessage
+     */
+    public function sendSmsMessage(SmsCourierInterface $courier, $message)
+    {
+        $courier->sendMessage($this->phone_number, $message);
+        return $this->sms()->create(array(
+            'to'=> $this->phone_number, 
+            'message'=> $message, 
+        ));
+    }
 }
 
 ```
@@ -821,17 +833,17 @@ class User extends Eloquent {
 
 ```php
 class SendSMS {
-	public function __construct(UserRepository $users, SmsCourierInterface $courier)
-	{
-		$this->users = $users;
-		$this->courier = $courier;
-	}
-	public function fire($job, $data)
-	{
-		$user = $this->users->find($data['user']['id']);
-		$user->sendSmsMessage($this->courier, $data['message']);
-		$job->delete();
-	}
+    public function __construct(UserRepository $users, SmsCourierInterface $courier)
+    {
+        $this->users = $users;
+        $this->courier = $courier;
+    }
+    public function fire($job, $data)
+    {
+        $user = $this->users->find($data['user']['id']);
+        $user->sendSmsMessage($this->courier, $data['message']);
+        $job->delete();
+    }
 }
 
 ```
@@ -840,32 +852,32 @@ class SendSMS {
 
 ```php
 class SmsTest extends PHPUnit_Framework_TestCase {
-	public function testUserCanBeSentSmsMessages()
-	{
-		/**
-		 * Arrage ...
-		 */
-		$user = Mockery::mock('User[sms]');
-		$relation = Mockery::mock('StdClass');
-		$courier = Mockery::mock('SmsCourierInterface');
+    public function testUserCanBeSentSmsMessages()
+    {
+        /**
+         * Arrage ...
+         */
+        $user = Mockery::mock('User[sms]');
+        $relation = Mockery::mock('StdClass');
+        $courier = Mockery::mock('SmsCourierInterface');
 
-		$user->shouldReceive('sms')->once()->andReturn($relation);
+        $user->shouldReceive('sms')->once()->andReturn($relation);
 
-		$relation->shouldReceive('create')->once()->with(array(
-			'to' => '555-555-5555', 
-			'message' => 'Test', 
-		));
+        $relation->shouldReceive('create')->once()->with(array(
+            'to' => '555-555-5555', 
+            'message' => 'Test', 
+        ));
 
-		$courier->shouldReceive('sendMessage')->once()->with(
-			'555-555-5555', 'Test'
-		);
+        $courier->shouldReceive('sendMessage')->once()->with(
+            '555-555-5555', 'Test'
+        );
 
-		/**
-		 * Act ...
-		 */
-		$user->sms_number = '555-555-5555'; //译者注: 应当为 phone_number
-		$user->sendMessage($courier, 'Test');
-	}
+        /**
+         * Act ...
+         */
+        $user->sms_number = '555-555-5555'; //译者注: 应当为 phone_number
+        $user->sendMessage($courier, 'Test');
+    }
 }
 
 ```
@@ -877,7 +889,7 @@ class SmsTest extends PHPUnit_Framework_TestCase {
 ```php
 Route::filter('premium', function()
 {
-	return Auth::user() && Auth::user()->plan == 'premium';
+    return Auth::user() && Auth::user()->plan == 'premium';
 });
 
 ```
@@ -889,14 +901,14 @@ Route::filter('premium', function()
 ```php
 Route::filter('premium', function()
 {
-	return Auth::user() && Auth::user()->isPremium();
+    return Auth::user() && Auth::user()->isPremium();
 });
 
 ```
 
 小小的改变就带来巨大的效果, 并且代价也很小. 我们将判断用户是否使用高级套餐的逻辑放在了用户模型里, 这样就从路由过滤器里去掉了对套餐判断的实现细节. 我们的过滤器不再需要知道具体怎么判断用户是不是高级套餐了, 它只要简单的把这个问题交给用户模型. 现在如果我们想调整高级套餐在数据库里的细节, 也不必再去改动路由过滤器了! 
 
-> ### Who Is Responsible? 谁负责? 
+### Who Is Responsible? 谁负责? 
 >
 > 在这里我们又一次讨论了_责任_的概念. 记住, 始终保持一个类应该有什么样的责任, 应该知道什么. 避免在处理函数这种传输层直接编写太多你应用的业务逻辑. 
 
@@ -910,7 +922,7 @@ Route::filter('premium', function()
 
 Laravel 组件通常有两种扩展方式: 在 IoC 容器里面绑定新实现, 或者用 `Manager` 类注册一个扩展, 该扩展采用了工厂模式实现. 在本章中我们将探索不同的扩展方式并检查我们都需要些什么代码. 
 
-> ### Methods Of Extension 扩展方式
+### Methods Of Extension 扩展方式
 >
 > 要记住 Laravel 通常有以下两种扩展方式: 通过 IoC 绑定和通过 `Manager` 类 (下文译作"管理类") . 其中管理类实现了工厂设计模式, 负责组件的实例化. 比如缓存和会话机制. 
 
@@ -920,7 +932,7 @@ Laravel 有好多 `Manager` 类用来管理基于驱动的组件的生成过程.
 
 每个管理类都包含名为 `extend` 的方法, 该方法可用于将新功能注入到管理类中. 下面我们将逐个介绍管理类, 为你展示如何注入自定义的驱动. 
 
-> ### Learn About Your Managers 如何了解你的管理类
+### Learn About Your Managers 如何了解你的管理类
 >
 > 请花点时间看看 Laravel 中各个 `Manager` 类的代码, 比如 `CacheManager` 和 `SessionManager` . 通过阅读这些代码能让你对 Laravel 的管理类机制更加清楚透彻. 所有的管理类都继承自 `Illuminate\Support\Manager` 基类, 该基类为每一个管理类提供了一些有效且通用的功能. 
 
@@ -931,7 +943,7 @@ Laravel 有好多 `Manager` 类用来管理基于驱动的组件的生成过程.
 ```php
 Cache::extend('mongo', function($app)
 {
-	// Return Illuminate\Cache\Repository instance...
+    // Return Illuminate\Cache\Repository instance...
 });
 
 ```
@@ -942,13 +954,13 @@ Cache::extend('mongo', function($app)
 
 ```php
 class MongoStore implements Illuminate\Cache\StoreInterface {
-	public function get($key) {}
-	public function put($key, $value, $minutes) {}
-	public function increment($key, $value = 1) {}
-	public function decrement($key, $value = 1) {}
-	public function forever($key, $value) {}
-	public function forget($key) {}
-	public function flush() {}
+    public function get($key) {}
+    public function put($key, $value, $minutes) {}
+    public function increment($key, $value = 1) {}
+    public function decrement($key, $value = 1) {}
+    public function forever($key, $value) {}
+    public function forget($key) {}
+    public function flush() {}
 }
 ```
 
@@ -958,7 +970,7 @@ class MongoStore implements Illuminate\Cache\StoreInterface {
 use Illuminate\Cache\Repository;
 Cache::extend('mongo', function($app)
 {
-	return new Repository(new MongoStore);
+    return new Repository(new MongoStore);
 }
 
 ```
@@ -967,7 +979,7 @@ Cache::extend('mongo', function($app)
 
 如果你不知道要把自定义的缓存驱动代码放到哪儿, 可以考虑放到 Packagist 里! 或者你也可以在你应用的主目录下创建一个 `Extensions` 目录. 比如, 你的应用叫做 `Snappy` , 你可以将缓存扩展代码放到 `app/Snappy/Extensions/MongoStore.php` . 不过请记住 Laravel 没有对应用程序的结构做硬性规定, 所以你可以按任意你喜欢的方式组织你的代码. 
 
-> ### Where To Extend 在哪儿调用 Extend 方法? 
+### Where To Extend 在哪儿调用 Extend 方法? 
 >
 > 如果你还发愁在哪儿放注册代码, 先考虑放到服务提供者里吧. 我们之前就讲过, 使用服务提供者是一种非常棒的管理你应用代码的途径. 
 
@@ -987,12 +999,12 @@ Session::extend('mongo', function($app)
 
 ```php
 class MongoHandler implements SessionHandlerInterface {
-	public function open($savePath, $sessionName) {}
-	public function close() {}
-	public function read($sessionId) {}
-	public function write($sessionId, $data) {}
-	public function destroy($sessionId) {}
-	public function gc($lifetime) {}
+    public function open($savePath, $sessionName) {}
+    public function close() {}
+    public function read($sessionId) {}
+    public function write($sessionId, $data) {}
+    public function destroy($sessionId) {}
+    public function gc($lifetime) {}
 }
 
 ```
@@ -1011,14 +1023,14 @@ class MongoHandler implements SessionHandlerInterface {
 ```php
 Session::extend('mongo', function($app)
 {
-	return new MongoHandler;
+    return new MongoHandler;
 });
 
 ```
 
 注册完毕后, 我们就可以在 `app/config/session.php` 配置文件里使用 `mongo` 驱动了. 
 
-> ### Share Your Knowledge 分享你的知识
+### Share Your Knowledge 分享你的知识
 >
 > 你要是写了个自定义的会话处理器, 别忘了在 Packagist 上分享啊! 
 
@@ -1041,9 +1053,9 @@ Auth::extend('riak', function($app)
 
 ```php
 interface UserProviderInterface {
-	public function retrieveById($identifier);
-	public function retrieveByCredentials(array $credentials);
-	public function validateCredentials(UserInterface $user, array $credentials);
+    public function retrieveById($identifier);
+    public function retrieveByCredentials(array $credentials);
+    public function validateCredentials(UserInterface $user, array $credentials);
 }
 
 ```
@@ -1059,8 +1071,8 @@ interface UserProviderInterface {
 
 ```php
 interface UserInterface {
-	public function getAuthIdentifier();
-	public function getAuthPassword();
+    public function getAuthIdentifier();
+    public function getAuthPassword();
 }
 
 ```
@@ -1072,7 +1084,7 @@ interface UserInterface {
 ```php
 Auth::extend('riak', function($app)
 {
-	return new RiakUserProvider($app['riak.connection']);
+    return new RiakUserProvider($app['riak.connection']);
 });
 
 ```
@@ -1097,15 +1109,15 @@ class Environment extends \Illuminate\Pagination\Environment {
 
 ```php
 class SnappyPaginationProvider extends PaginationServiceProvider {
-	public function boot()
-	{
-		App::bind('paginator', function()
-		{
-			return new Snappy\Extensions\Pagination\Environment;
-		}
+    public function boot()
+    {
+        App::bind('paginator', function()
+        {
+            return new Snappy\Extensions\Pagination\Environment;
+        }
 
-		parent::boot();
-	}
+        parent::boot();
+    }
 }
 
 ```
@@ -1168,33 +1180,33 @@ Application::requestClass('QuickBill\Extensions\Request');
 
 ```php
 class OrderProcessor {
-	public function __construct(BillerInterface $biller)
-	{
-		$this->biller = $biller;
-	}
-	public function process(Order $order)
-	{
-		$recent = $this->getRecentOrderCount($order);
-		if($recent > 0)
-		{
-			throw new Exception('Duplicate order likely.');
-		}
+    public function __construct(BillerInterface $biller)
+    {
+        $this->biller = $biller;
+    }
+    public function process(Order $order)
+    {
+        $recent = $this->getRecentOrderCount($order);
+        if($recent > 0)
+        {
+            throw new Exception('Duplicate order likely.');
+        }
 
-		$this->biller->bill($order->account->id, $order->amount);
+        $this->biller->bill($order->account->id, $order->amount);
 
-		DB::table('orders')->insert(array(
-			'account'    =>    $order->account->id, 
-			'amount'    =>    $order->amount, 
-			'created_at'=>    Carbon::now()
-		));
-	}
-	protected function getRecentOrderCount(Order $order)
-	{
-		$timestamp = Carbon::now()->subMinutes(5);
-		return DB::table('orders')->where('account', $order->account->id)
-												->where('created_at', '>=', $timestamps)
-												->count();
-	}
+        DB::table('orders')->insert(array(
+            'account'    =>    $order->account->id, 
+            'amount'    =>    $order->amount, 
+            'created_at'=>    Carbon::now()
+        ));
+    }
+    protected function getRecentOrderCount(Order $order)
+    {
+        $timestamp = Carbon::now()->subMinutes(5);
+        return DB::table('orders')->where('account', $order->account->id)
+                                                ->where('created_at', '>=', $timestamps)
+                                                ->count();
+    }
 }
 ```
 
@@ -1204,22 +1216,22 @@ class OrderProcessor {
 
 ```php
 class OrderRepository {
-	public function getRecentOrderCount(Account $account)
-	{
-		$timestamp = Carbon::now()->subMinutes(5);
-		return DB::table('orders')->where('account', $account->id)
-												->where('created_at', '>=', $timestamp)
-												->count();
-	}
+    public function getRecentOrderCount(Account $account)
+    {
+        $timestamp = Carbon::now()->subMinutes(5);
+        return DB::table('orders')->where('account', $account->id)
+                                                ->where('created_at', '>=', $timestamp)
+                                                ->count();
+    }
 
-	public function logOrder(Order $order)
-	{
-		DB::table('orders')->insert(array(
-			'account'    =>    $order->account->id, 
-			'amount'    =>    $order->amount, 
-			'created_at'=>    Carbon::now()
-		));
-	}
+    public function logOrder(Order $order)
+    {
+        DB::table('orders')->insert(array(
+            'account'    =>    $order->account->id, 
+            'amount'    =>    $order->amount, 
+            'created_at'=>    Carbon::now()
+        ));
+    }
 }
 
 ```
@@ -1228,25 +1240,25 @@ class OrderRepository {
 
 ```php
 class OrderProcessor {
-	public function __construct(BillerInterface $biller, OrderRepository $orders)
-	{
-		$this->biller = $biller;
-		$this->orders = $orders;
-	}
+    public function __construct(BillerInterface $biller, OrderRepository $orders)
+    {
+        $this->biller = $biller;
+        $this->orders = $orders;
+    }
 
-	public function process(Order $order)
-	{
-		$recent = $this->orders->getRecentOrderCount($order->account);
+    public function process(Order $order)
+    {
+        $recent = $this->orders->getRecentOrderCount($order->account);
 
-		if($recent > 0)
-		{
-			throw new Exception('Duplicate order likely.');
-		}
+        if($recent > 0)
+        {
+            throw new Exception('Duplicate order likely.');
+        }
 
-		$this->biller->bill($order->account->id, $order->amount);
+        $this->biller->bill($order->account->id, $order->amount);
 
-		$this->orders->logOrder($order);
-	}
+        $this->orders->logOrder($order);
+    }
 }
 ```
 
@@ -1260,7 +1272,7 @@ class OrderProcessor {
 
 在一个应用的生命周期里, 大部分时间都花在了向现有代码库增加功能, 而非一直从零开始写新功能. 正像你所想的那样, 这会是一个繁琐且令人痛苦的过程. 当你修改代码的时候, 你可能引入新的程序错误, 或者将原来管用的功能搞坏掉. 理想情况下, 我们应该可以像写全新的代码一样, 来快速且简单的修改现有的代码. 只要采用开放封闭原则来正确的设计我们的应用程序, 那么这是可以做到的! 
 
-> ### Open Closed Principle 开放封闭原则
+### Open Closed Principle 开放封闭原则
 >
 > 开放封闭原则规定代码对扩展是开放的, 对修改是封闭的. 
 
@@ -1273,7 +1285,7 @@ $recent = $this->orders->getRecentOrderCount($order->account);
 
 if($recent > 0)
 {
-	throw new Exception('Duplicate order likely.');
+    throw new Exception('Duplicate order likely.');
 }
 
 ```
@@ -1284,7 +1296,7 @@ if($recent > 0)
 
 ```php
 interface OrderValidatorInterface {
-	public function validate(Order $order);
+    public function validate(Order $order);
 }
 
 ```
@@ -1293,18 +1305,18 @@ interface OrderValidatorInterface {
 
 ```php
 class RecentOrderValidator implements OrderValidatorInterface {
-	public function __construct(OrderRepository $orders)
-	{
-		$this->orders = $orders;
-	}
-	public function validate(Order $order)
-	{
-		$recent = $this->orders->getRecentOrderCount($order->account);
-		if($recent > 0)
-		{
-			throw new Exception('Duplicate order likely.');
-		}
-	}
+    public function __construct(OrderRepository $orders)
+    {
+        $this->orders = $orders;
+    }
+    public function validate(Order $order)
+    {
+        $recent = $this->orders->getRecentOrderCount($order->account);
+        if($recent > 0)
+        {
+            throw new Exception('Duplicate order likely.');
+        }
+    }
 }
 ```
 
@@ -1312,13 +1324,13 @@ class RecentOrderValidator implements OrderValidatorInterface {
 
 ```php
 class SuspendedAccountValidator implements OrderValidatorInterface {
-	public function validate(Order $order)
-	{
-		if($order->account->isSuspended())
-		{
-			throw new Exception("Suspended accounts may not order.");
-		}
-	}
+    public function validate(Order $order)
+    {
+        if($order->account->isSuspended())
+        {
+            throw new Exception("Suspended accounts may not order.");
+        }
+    }
 }
 ```
 
@@ -1326,12 +1338,12 @@ class SuspendedAccountValidator implements OrderValidatorInterface {
 
 ```php
 class OrderProcessor {
-	public function __construct(BillerInterface $biller, OrderRepository $orders, array $validators = array())
-	{
-		$this->biller = $bller;
-		$this->orders = $orders;
-		$this->validators = $validators;
-	}
+    public function __construct(BillerInterface $biller, OrderRepository $orders, array $validators = array())
+    {
+        $this->biller = $bller;
+        $this->orders = $orders;
+        $this->validators = $validators;
+    }
 }
 ```
 
@@ -1340,12 +1352,12 @@ class OrderProcessor {
 ```php
 public function process(Order $order)
 {
-	foreach($this->validators as $validator)
-	{
-		$validator->validate($order);
-	}
+    foreach($this->validators as $validator)
+    {
+        $validator->validate($order);
+    }
 
-	// Process valid order...
+    // Process valid order...
 }
 ```
 
@@ -1354,21 +1366,21 @@ public function process(Order $order)
 ```php
 App::bind('OrderProcessor', function()
 {
-	return new OrderProcessor(
-		App::make('BillerInterface'), 
-		App::make('OrderRepository'), 
-		array(
-			App::make('RecentOrderValidator'), 
-			App::make('SuspendedAccountValidator')
-		)
-	);
+    return new OrderProcessor(
+        App::make('BillerInterface'), 
+        App::make('OrderRepository'), 
+        array(
+            App::make('RecentOrderValidator'), 
+            App::make('SuspendedAccountValidator')
+        )
+    );
 });
 
 ```
 
 在现有代码里付出些小努力, 做一些小改动之后, 我们现在可以添加删除新的验证规则而不必修改任何一行现有代码了. 每一个新的验证规则就是对 `OrderValidatorInterface` 的一个实现类, 然后注册进 IoC 容器里. 不必再为那个又大又笨的 `process` 方法做单元测试了, 我们现在可以单独测试每一个验证规则. 现在, 我们的代码对扩展是_开放_的, 对修改是_封闭_的. 
 
-> ### Leaky Abstractions 抽象的漏洞
+### Leaky Abstractions 抽象的漏洞
 >
 > 小心那些缺少实现细节的依赖 (译者注: 比如上面的 RecentOrderValidator) . 当一个依赖的实现需要改变时, 不应该要求它的调用者做任何修改. 当需要调用者进行修改时, 这就意味着该依赖_遗漏_了一些实现的细节. 当你的抽象有漏洞的话, 开放封闭原则就不管用了. 
 
@@ -1380,7 +1392,7 @@ App::bind('OrderProcessor', function()
 
 别担心, 里氏替换原则读起来吓人学起来简单. 该原则要求: 一个抽象的任意一个实现, 可以被用在任何需要该抽象的地方. 读起来绕口, 用普通人的话来解释一下. 该原则规定: 如果某处代码使用了一个接口的一个实现类, 那么在这里也可以直接使用该接口的任何其他实现类, 不用做出任何修改. 
 
-> ### Liskov Substitution Principle 里氏替换原则
+### Liskov Substitution Principle 里氏替换原则
 >
 > 该原则规定对象应该可以被该对象子类的实例所替换, 并且不会影响到程序的正确性. 
 
@@ -1391,8 +1403,8 @@ App::bind('OrderProcessor', function()
 ```php
 public function process(Order $order)
 {
-	// Validate order...
-	$this->orders->logOrder($order);
+    // Validate order...
+    $this->orders->logOrder($order);
 }
 
 ```
@@ -1401,18 +1413,18 @@ public function process(Order $order)
 
 ```php
 class DatabaseOrderRepository implements OrderRepositoryInterface {
-	protected $connection;
-	public function connect($username, $password)
-	{
-		$this->connection = new DatabaseConnection($username, $password);
-	}
+    protected $connection;
+    public function connect($username, $password)
+    {
+        $this->connection = new DatabaseConnection($username, $password);
+    }
 
-	public function logOrder(Order $order)
-	{
-		$this->connection->run('insert into orders values (?, ?)', array(
-			$order->id, $order->amount
-		));
-	}
+    public function logOrder(Order $order)
+    {
+        $this->connection->run('insert into orders values (?, ?)', array(
+            $order->id, $order->amount
+        ));
+    }
 }
 ```
 
@@ -1421,13 +1433,13 @@ class DatabaseOrderRepository implements OrderRepositoryInterface {
 ```php
 public function process(Order $order)
 {
-	// Validate order...
+    // Validate order...
 
-	if($this->repository instanceof DatabaseOrderRepository)
-	{
-		$this->repository->connect('root', 'password');
-	}
-	$this->repository->logOrder($order);
+    if($this->repository instanceof DatabaseOrderRepository)
+    {
+        $this->repository->connect('root', 'password');
+    }
+    $this->repository->logOrder($order);
 }
 ```
 
@@ -1437,22 +1449,22 @@ public function process(Order $order)
 
 ```php
 class DatabaseOrderRepository implements OrderRepositoryInterface {
-	protected $connector;
-	public function __construct(DatabaseConnector $connector)
-	{
-		$this->connector = $connector;
-	}
-	public function connect()
-	{
-		return $this->connector->bootConnection();
-	}
-	public function logOrder(Order $order)
-	{
-		$connection = $this->connect();
-		$connection->run('insert into orders values (?, ?)', array(
-			$order->id, $order->amount
-		));
-	}
+    protected $connector;
+    public function __construct(DatabaseConnector $connector)
+    {
+        $this->connector = $connector;
+    }
+    public function connect()
+    {
+        return $this->connector->bootConnection();
+    }
+    public function logOrder(Order $order)
+    {
+        $connection = $this->connect();
+        $connection->run('insert into orders values (?, ?)', array(
+            $order->id, $order->amount
+        ));
+    }
 }
 ```
 
@@ -1461,9 +1473,9 @@ class DatabaseOrderRepository implements OrderRepositoryInterface {
 ```php
 public function process(Order $order)
 {
-	// Validate order...
+    // Validate order...
 
-	$this->repository->logOrder($order);
+    $this->repository->logOrder($order);
 }
 
 ```
@@ -1472,7 +1484,7 @@ public function process(Order $order)
 
 还要注意如果不遵守里氏替换原则, 那后果可能会影响到我们之前已经讨论过的其他原则. 不遵守里氏替换原则, 那么开放封闭原则一定也会被打破. 因为, 如果调用者必须检查实例属于哪个子类的, 那一旦有个新的子类, 调用者就得做出改变.  (译者注: 这就违背了对修改封闭的原则. ) 
 
-> ### Watch For Leaks 小心遗漏
+### Watch For Leaks 小心遗漏
 >
 > 你可能注意到这个原则和上一章节提到的"抽象的漏洞"密切相关. 我们的数据库资料库的抽象漏洞就是没有遵守里氏替换原则的第一迹象. 要留意那些漏洞! 
 
@@ -1486,7 +1498,7 @@ public function process(Order $order)
 
 "臃肿"的接口, 有着很多不是所有的实现类都需要的方法. 与其写这样的接口, 不如将其拆分成多个小巧的接口, 里面的方法都是各自领域所需要的. 这样将臃肿接口拆成小巧, 功能集中的接口后, 我们就可以使用小接口来编码, 而不必为我们不需要的功能买单. 
 
-> ### Interface Segregation Principle 接口隔离原则
+### Interface Segregation Principle 接口隔离原则
 >
 > 该原则规定, 一个接口的一个实现类, 不应该去实现那些自己用不到的方法. 如果需要, 那就是接口设计有问题, 违背了接口隔离原则. 
 
@@ -1496,12 +1508,12 @@ public function process(Order $order)
 
 ```php
 interface SessionHandlerInterface {
-	public function close();
-	public function destroy($sessionId);
-	public function gc($maxLifetime);
-	public function open($savePath, $name);
-	public function read($sesssionId);
-	public function write($sessionId, $sessionData);
+    public function close();
+    public function destroy($sessionId);
+    public function gc($maxLifetime);
+    public function open($savePath, $name);
+    public function read($sesssionId);
+    public function write($sessionId, $sessionData);
 }
 
 ```
@@ -1512,7 +1524,7 @@ interface SessionHandlerInterface {
 
 ```php
 interface GarbageCollectorInterface {
-	public function gc($maxLifetime);
+    public function gc($maxLifetime);
 }
 
 ```
@@ -1523,14 +1535,14 @@ interface GarbageCollectorInterface {
 
 ```php
 class Contact extends Eloquent {
-	public function getNameAttribute()
-	{
-		return $this->attributes['name'];
-	}
-	public function getEmailAttribute()
-	{
-		return $this->attributes['email'];
-	}
+    public function getNameAttribute()
+    {
+        return $this->attributes['name'];
+    }
+    public function getEmailAttribute()
+    {
+        return $this->attributes['email'];
+    }
 }
 
 ```
@@ -1539,10 +1551,10 @@ class Contact extends Eloquent {
 
 ```php
 class PasswordReminder {
-	public function remind(Contact $contact, $view)
-	{
-		// Send password reminder e-mail...
-	}
+    public function remind(Contact $contact, $view)
+    {
+        // Send password reminder e-mail...
+    }
 }
 ```
 
@@ -1552,7 +1564,7 @@ class PasswordReminder {
 
 ```php
 interface RemindableInterface {
-	public function getReminderEmail();
+    public function getReminderEmail();
 }
 ```
 
@@ -1561,10 +1573,10 @@ interface RemindableInterface {
 ```
 <!-- lang:php -->
 class Contact extends Eloquent implements RemindableInterface {
-	public function getReminderEmail()
-	{
-		return $this->email;
-	}
+    public function getReminderEmail()
+    {
+        return $this->email;
+    }
 }
 
 ```
@@ -1572,16 +1584,16 @@ class Contact extends Eloquent implements RemindableInterface {
 
 ```php
 class PasswordReminder {
-	public function remind(RemindableInterface $remindable, $view)
-	{
-		// Send password reminder e-mail...
-	}
+    public function remind(RemindableInterface $remindable, $view)
+    {
+        // Send password reminder e-mail...
+    }
 }
 ```
 
 通过这小小的改动, 我们已经移除了密码找回组件里不必要的依赖, 并且使它足够灵活能使用任何实现了 `RemindableInterface` 的类或 ORM. 这其实正是 Laravel 的密码找回组件如何保持与数据库 ORM 无关的秘诀! 
 
-> ### Knowledge Is Power 知识就是力量
+### Knowledge Is Power 知识就是力量
 >
 > 我们再次发现了一个使类知道太多东西的陷阱. 通过小心留意是否让一个类知道了太多, 我们就可以遵守所有的"坚实"原则. 
 
@@ -1591,7 +1603,7 @@ class PasswordReminder {
 
 在整个"坚实"原则概述的旅途中, 我们到达最后一站了! 最后的原则是依赖反转原则, 它规定高等级的代码不应该依赖 (迁就) 低等级的代码. 首先, 高等级的代码应该依赖 (遵从) 着抽象层, 抽象层就像是"中间人"一样, 负责连接着高等级和低等级的代码. 其次, 抽象定义不应该依赖 (迁就) 着具体实现, 但具体实现应该依赖 (遵从) 着抽象定义. 如果这些东西让你极端困惑, 别担心. 接下来我们会将这两方面统统介绍给你. 
 
-> ### Dependency Inversion Principle 依赖反转原则
+### Dependency Inversion Principle 依赖反转原则
 >
 > 该原则要求高等级代码不应该迁就低等级代码, 抽象定义不应该迁就具体实现. 
 
@@ -1601,18 +1613,18 @@ class PasswordReminder {
 
 ```php
 class Authenticator {
-	public function __construct(DatabaseConnection $db)
-	{
-		$this->db = $db;
-	}
-	public function findUser($id)
-	{
-		return $this->db->exec('select * from users where id = ?', array($id));
-	}
-	public function authenticate($credentials)
-	{
-		// Authenticate the user...
-	}
+    public function __construct(DatabaseConnection $db)
+    {
+        $this->db = $db;
+    }
+    public function findUser($id)
+    {
+        return $this->db->exec('select * from users where id = ?', array($id));
+    }
+    public function authenticate($credentials)
+    {
+        // Authenticate the user...
+    }
 }
 
 ```
@@ -1623,8 +1635,8 @@ class Authenticator {
 
 ```php
 interface UserProviderInterface {
-	public function find($id);
-	public function findByUsername($username);
+    public function find($id);
+    public function findByUsername($username);
 }
 
 ```
@@ -1633,20 +1645,20 @@ interface UserProviderInterface {
 
 ```php
 class Authenticator {
-	public function __construct(UserProviderInterface $users, HasherInterface $hash)
-	{
-		$this->hash = $hash;
-		$this->users = $users;
-	}
-	public function findUser($id)
-	{
-		return $this->users->find($id);
-	}
-	public function authenticate($credentials)
-	{
-		$user = $this->users->findByUsername($credentials['username']);
-		return $this->hash->make($credentials['password']) == $user->password;
-	}
+    public function __construct(UserProviderInterface $users, HasherInterface $hash)
+    {
+        $this->hash = $hash;
+        $this->users = $users;
+    }
+    public function findUser($id)
+    {
+        return $this->users->find($id);
+    }
+    public function authenticate($credentials)
+    {
+        $user = $this->users->findByUsername($credentials['username']);
+        return $this->hash->make($credentials['password']) == $user->password;
+    }
 }
 
 ```
@@ -1657,24 +1669,24 @@ class Authenticator {
 
 ```php
 class RedisUserProvider implements UserProviderInterface {
-	public function __construct(RedisConnection $redis)
-	{
-		$this->redis = $redis;
-	}
-	public function find($id)
-	{
-		$this->redis->get('users:'.$id);
-	}
-	public function findByUsername($username)
-	{
-		$id = $this->redis->get('user:id:'.$username);
-		return $this->find($id);
-	}
+    public function __construct(RedisConnection $redis)
+    {
+        $this->redis = $redis;
+    }
+    public function find($id)
+    {
+        $this->redis->get('users:'.$id);
+    }
+    public function findByUsername($username)
+    {
+        $id = $this->redis->get('user:id:'.$username);
+        return $this->find($id);
+    }
 }
 
 ```
 
-> ### Inverted Thinking 反转的思维
+### Inverted Thinking 反转的思维
 >
 > 贯彻这一原则会_反转_好多开发者设计应用的方式. 不再将高级代码直接和低级代码以"自上而下"的方式耦合在一起, 这个原则提出**无论**高级还是低级代码都要依赖于一个高层次的抽象. 
 
