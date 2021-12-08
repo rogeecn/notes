@@ -19,7 +19,7 @@ tags: ["docker", "镜像"]
 第一个阶段我们在 go 环境下, 编译出我们的可执行二进制文件. 
 
 构建配置如下: 
-
+<!--more-->
 ```bash
 FROM golang:1.17-alpine3.13 as builder
 RUN mkdir /src
