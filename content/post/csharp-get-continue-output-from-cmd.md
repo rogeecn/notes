@@ -1,5 +1,5 @@
 ---
-title: "c# - 如何从命令中获取输出以实时显示在 Form 的控件中? "
+title: "c#从命令中获取输出实时显示在控件中 "
 date: 2021-12-09T10:58:02+08:00
 draft: false
 tags: ["C#", "WinForms"]
@@ -11,6 +11,7 @@ The shell command (cmd.exe) is run first, using `start /WAIT` as parameter. More
 
 [StandardOutput](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.standardoutput?view=netframework-4.7.2#System_Diagnostics_Process_StandardOutput), [StandardError](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.standarderror?view=netframework-4.7.2#System_Diagnostics_Process_StandardError) and [StandardInput](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.standardinput?view=net-6.0) are all redirected, setting [RedirectStandardOutput](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo.redirectstandardoutput?view=net-6.0), [RedirectStandardError](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo.redirectstandarderror?view=net-6.0) and [RedirectStandardInput](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo.redirectstandardinput?view=net-6.0) properties of the [ProcessStartInfo](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo?view=net-6.0) to true.
 <!-- more -->
+
 The console Output stream, when written to, will raise the [OutputDataReceived](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.outputdatareceived?view=net-6.0) event; it's content can be read from the e.Data member of the [DataReceivedEventArgs](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.datareceivedeventargs?view=net-6.0).
 StandardError will use its ErrorDataReceived event for the same purpose.
 You could use a single event handler for both the events, but, after some testing, you might realize that is probably not a good idea. Having them separated avoids some weird overlapping and allows to easily tell apart errors from normal output (as a note, you can find programs that write to the error Stream instead of the output Stream).
