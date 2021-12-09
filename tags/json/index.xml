@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JSON on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/json/</link><description>Recent content in JSON on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 16:02:38 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/json/index.xml" rel="self" type="application/rss+xml"/><item><title>Dart 解析 Laravel 数据结构</title><link>http://notes.711xd.com/post/dart-parse-laravel-response/</link><pubDate>Fri, 26 Nov 2021 16:02:38 +0800</pubDate><guid>http://notes.711xd.com/post/dart-parse-laravel-response/</guid><description>&lt;h2 id="数据json内容">数据JSON内容：&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="p">{&lt;/span>
+&lt;span class="nt">&amp;#34;message&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;json_message_data&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nt">&amp;#34;errors&amp;#34;&lt;/span>&lt;span class="p">:{&lt;/span>
+&lt;span class="nt">&amp;#34;name&amp;#34;&lt;/span>&lt;span class="p">:[&lt;/span>
+&lt;span class="s2">&amp;#34;name_message_nnn&amp;#34;&lt;/span>
+&lt;span class="p">],&lt;/span>
+&lt;span class="nt">&amp;#34;user&amp;#34;&lt;/span>&lt;span class="p">:[&lt;/span>
+&lt;span class="s2">&amp;#34;user_message&amp;#34;&lt;/span>
+&lt;span class="p">]&lt;/span>
+&lt;span class="p">},&lt;/span>
+&lt;span class="nt">&amp;#34;data&amp;#34;&lt;/span>&lt;span class="p">:{&lt;/span>
+&lt;span class="nt">&amp;#34;username&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="s2">&amp;#34;Rogee&amp;#34;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

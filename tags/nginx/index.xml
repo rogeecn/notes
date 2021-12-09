@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nginx on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/nginx/</link><description>Recent content in Nginx on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 03 Dec 2021 10:08:53 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/nginx/index.xml" rel="self" type="application/rss+xml"/><item><title>Nginx的 HTTP 499 状态码问题</title><link>http://notes.711xd.com/post/nginx-status-code-499/</link><pubDate>Fri, 03 Dec 2021 10:08:53 +0800</pubDate><guid>http://notes.711xd.com/post/nginx-status-code-499/</guid><description>&lt;h2 id="1前言">1、前言&lt;/h2>
+&lt;p>今天在处理一个客户问题，遇到 Nginx access log 中出现大量的 &lt;code>499&lt;/code> 状态码。实际场景是：客户的域名通过 cname 解析到我们的 Nginx 反向代理集群上来，客户的 Web 服务是由一个负载均衡提供外网 IP 进行访问，负载均衡后面挂了多个内网 web 站点业务服务器。出现的访问日志如下所示：&lt;/p>
+&lt;p>&lt;img src="305504-20170625232821913-1629695159.png" alt="img">&lt;/p></description></item><item><title>Nginx 微信图片反向代理</title><link>http://notes.711xd.com/post/nginx-wechat-image-reverse-proxy/</link><pubDate>Fri, 26 Nov 2021 16:17:42 +0800</pubDate><guid>http://notes.711xd.com/post/nginx-wechat-image-reverse-proxy/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx" data-lang="nginx">&lt;span class="k">server&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kn">listen&lt;/span> &lt;span class="mi">80&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">server_name&lt;/span> &lt;span class="s">qimg.jdwan.com&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">access_log&lt;/span> &lt;span class="no">off&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">location&lt;/span> &lt;span class="s">/&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kn">resolver&lt;/span> &lt;span class="mi">114&lt;/span>&lt;span class="s">.114.114.114&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">set&lt;/span> &lt;span class="nv">$proxy_to&lt;/span> &lt;span class="s">http:/&lt;/span>&lt;span class="nv">$uri&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">proxy_set_header&lt;/span> &lt;span class="s">Referer&lt;/span> &lt;span class="s">http://mp.weixin.qq.com&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">proxy_set_header&lt;/span> &lt;span class="s">X-Real-IP&lt;/span> &lt;span class="nv">$remote_addr&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">proxy_set_header&lt;/span> &lt;span class="s">X-Forwarded-For&lt;/span> &lt;span class="nv">$proxy_add_x_forwarded_for&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">proxy_pass&lt;/span> &lt;span class="nv">$proxy_to&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">expires&lt;/span> &lt;span class="s">365d&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Laravel Nginx 配置</title><link>http://notes.711xd.com/post/laravel-nginx-conf/</link><pubDate>Fri, 26 Nov 2021 15:46:20 +0800</pubDate><guid>http://notes.711xd.com/post/laravel-nginx-conf/</guid><description>&lt;h2 id="精简版">精简版&lt;/h2>
+&lt;h3 id="serverconf">server.conf&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx" data-lang="nginx">&lt;span class="k">server&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kn">listen&lt;/span> &lt;span class="mi">80&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">server_name&lt;/span> &lt;span class="s">example.com&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">root&lt;/span> &lt;span class="s">/example.com/public&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">include&lt;/span> &lt;span class="s">presets.d/laravel.conf&lt;/span>
+&lt;span class="err">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="presetsdlaravelconf">presets.d/laravel.conf&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx" data-lang="nginx">&lt;span class="k">add_header&lt;/span> &lt;span class="s">X-Frame-Options&lt;/span> &lt;span class="s">&amp;#34;SAMEORIGIN&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">add_header&lt;/span> &lt;span class="s">X-XSS-Protection&lt;/span> &lt;span class="s">&amp;#34;1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">mode=block&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">add_header&lt;/span> &lt;span class="s">X-Content-Type-Options&lt;/span> &lt;span class="s">&amp;#34;nosniff&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">index&lt;/span> &lt;span class="s">index.html&lt;/span> &lt;span class="s">index.htm&lt;/span> &lt;span class="s">index.php&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">charset&lt;/span> &lt;span class="s">utf-8&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="s">/&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kn">try_files&lt;/span> &lt;span class="nv">$uri&lt;/span> &lt;span class="nv">$uri/&lt;/span> &lt;span class="s">/index.php?&lt;/span>&lt;span class="nv">$query_string&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">/favicon.ico&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="kn">access_log&lt;/span> &lt;span class="no">off&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="kn">log_not_found&lt;/span> &lt;span class="no">off&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">/robots.txt&lt;/span>  &lt;span class="p">{&lt;/span> &lt;span class="kn">access_log&lt;/span> &lt;span class="no">off&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="kn">log_not_found&lt;/span> &lt;span class="no">off&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="k">error_page&lt;/span> &lt;span class="mi">404&lt;/span> &lt;span class="s">/index.php&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="p">~&lt;/span> &lt;span class="sr">\.php$&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kn">fastcgi_pass&lt;/span> &lt;span class="s">unix:/var/run/php/php7.2-fpm.sock&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">fastcgi_index&lt;/span> &lt;span class="s">index.php&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">fastcgi_param&lt;/span> &lt;span class="s">SCRIPT_FILENAME&lt;/span> &lt;span class="nv">$realpath_root$fastcgi_script_name&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">include&lt;/span> &lt;span class="s">fastcgi_params&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="p">~&lt;/span> &lt;span class="sr">/\.(?!well-known).*&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kn">deny&lt;/span> &lt;span class="s">all&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

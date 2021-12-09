@@ -1,0 +1,1443 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>服务巡检脚本 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70"><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/server-check-script/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="服务巡检脚本">
+<meta property="og:description" content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/server-check-script/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-11-26T15:53:41+08:00">
+<meta property="article:modified_time" content="2021-11-26T16:31:21+08:00">
+<meta itemprop=name content="服务巡检脚本">
+<meta itemprop=description content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70"><meta itemprop=datePublished content="2021-11-26T15:53:41+08:00">
+<meta itemprop=dateModified content="2021-11-26T16:31:21+08:00">
+<meta itemprop=wordCount content="8566">
+<meta itemprop=keywords content="Linux,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="服务巡检脚本">
+<meta name=twitter:description content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>服务巡检脚本</h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents></nav>
+</div>
+</div>
+<div class=post-content>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span><span class=lnt>203
+</span><span class=lnt>204
+</span><span class=lnt>205
+</span><span class=lnt>206
+</span><span class=lnt>207
+</span><span class=lnt>208
+</span><span class=lnt>209
+</span><span class=lnt>210
+</span><span class=lnt>211
+</span><span class=lnt>212
+</span><span class=lnt>213
+</span><span class=lnt>214
+</span><span class=lnt>215
+</span><span class=lnt>216
+</span><span class=lnt>217
+</span><span class=lnt>218
+</span><span class=lnt>219
+</span><span class=lnt>220
+</span><span class=lnt>221
+</span><span class=lnt>222
+</span><span class=lnt>223
+</span><span class=lnt>224
+</span><span class=lnt>225
+</span><span class=lnt>226
+</span><span class=lnt>227
+</span><span class=lnt>228
+</span><span class=lnt>229
+</span><span class=lnt>230
+</span><span class=lnt>231
+</span><span class=lnt>232
+</span><span class=lnt>233
+</span><span class=lnt>234
+</span><span class=lnt>235
+</span><span class=lnt>236
+</span><span class=lnt>237
+</span><span class=lnt>238
+</span><span class=lnt>239
+</span><span class=lnt>240
+</span><span class=lnt>241
+</span><span class=lnt>242
+</span><span class=lnt>243
+</span><span class=lnt>244
+</span><span class=lnt>245
+</span><span class=lnt>246
+</span><span class=lnt>247
+</span><span class=lnt>248
+</span><span class=lnt>249
+</span><span class=lnt>250
+</span><span class=lnt>251
+</span><span class=lnt>252
+</span><span class=lnt>253
+</span><span class=lnt>254
+</span><span class=lnt>255
+</span><span class=lnt>256
+</span><span class=lnt>257
+</span><span class=lnt>258
+</span><span class=lnt>259
+</span><span class=lnt>260
+</span><span class=lnt>261
+</span><span class=lnt>262
+</span><span class=lnt>263
+</span><span class=lnt>264
+</span><span class=lnt>265
+</span><span class=lnt>266
+</span><span class=lnt>267
+</span><span class=lnt>268
+</span><span class=lnt>269
+</span><span class=lnt>270
+</span><span class=lnt>271
+</span><span class=lnt>272
+</span><span class=lnt>273
+</span><span class=lnt>274
+</span><span class=lnt>275
+</span><span class=lnt>276
+</span><span class=lnt>277
+</span><span class=lnt>278
+</span><span class=lnt>279
+</span><span class=lnt>280
+</span><span class=lnt>281
+</span><span class=lnt>282
+</span><span class=lnt>283
+</span><span class=lnt>284
+</span><span class=lnt>285
+</span><span class=lnt>286
+</span><span class=lnt>287
+</span><span class=lnt>288
+</span><span class=lnt>289
+</span><span class=lnt>290
+</span><span class=lnt>291
+</span><span class=lnt>292
+</span><span class=lnt>293
+</span><span class=lnt>294
+</span><span class=lnt>295
+</span><span class=lnt>296
+</span><span class=lnt>297
+</span><span class=lnt>298
+</span><span class=lnt>299
+</span><span class=lnt>300
+</span><span class=lnt>301
+</span><span class=lnt>302
+</span><span class=lnt>303
+</span><span class=lnt>304
+</span><span class=lnt>305
+</span><span class=lnt>306
+</span><span class=lnt>307
+</span><span class=lnt>308
+</span><span class=lnt>309
+</span><span class=lnt>310
+</span><span class=lnt>311
+</span><span class=lnt>312
+</span><span class=lnt>313
+</span><span class=lnt>314
+</span><span class=lnt>315
+</span><span class=lnt>316
+</span><span class=lnt>317
+</span><span class=lnt>318
+</span><span class=lnt>319
+</span><span class=lnt>320
+</span><span class=lnt>321
+</span><span class=lnt>322
+</span><span class=lnt>323
+</span><span class=lnt>324
+</span><span class=lnt>325
+</span><span class=lnt>326
+</span><span class=lnt>327
+</span><span class=lnt>328
+</span><span class=lnt>329
+</span><span class=lnt>330
+</span><span class=lnt>331
+</span><span class=lnt>332
+</span><span class=lnt>333
+</span><span class=lnt>334
+</span><span class=lnt>335
+</span><span class=lnt>336
+</span><span class=lnt>337
+</span><span class=lnt>338
+</span><span class=lnt>339
+</span><span class=lnt>340
+</span><span class=lnt>341
+</span><span class=lnt>342
+</span><span class=lnt>343
+</span><span class=lnt>344
+</span><span class=lnt>345
+</span><span class=lnt>346
+</span><span class=lnt>347
+</span><span class=lnt>348
+</span><span class=lnt>349
+</span><span class=lnt>350
+</span><span class=lnt>351
+</span><span class=lnt>352
+</span><span class=lnt>353
+</span><span class=lnt>354
+</span><span class=lnt>355
+</span><span class=lnt>356
+</span><span class=lnt>357
+</span><span class=lnt>358
+</span><span class=lnt>359
+</span><span class=lnt>360
+</span><span class=lnt>361
+</span><span class=lnt>362
+</span><span class=lnt>363
+</span><span class=lnt>364
+</span><span class=lnt>365
+</span><span class=lnt>366
+</span><span class=lnt>367
+</span><span class=lnt>368
+</span><span class=lnt>369
+</span><span class=lnt>370
+</span><span class=lnt>371
+</span><span class=lnt>372
+</span><span class=lnt>373
+</span><span class=lnt>374
+</span><span class=lnt>375
+</span><span class=lnt>376
+</span><span class=lnt>377
+</span><span class=lnt>378
+</span><span class=lnt>379
+</span><span class=lnt>380
+</span><span class=lnt>381
+</span><span class=lnt>382
+</span><span class=lnt>383
+</span><span class=lnt>384
+</span><span class=lnt>385
+</span><span class=lnt>386
+</span><span class=lnt>387
+</span><span class=lnt>388
+</span><span class=lnt>389
+</span><span class=lnt>390
+</span><span class=lnt>391
+</span><span class=lnt>392
+</span><span class=lnt>393
+</span><span class=lnt>394
+</span><span class=lnt>395
+</span><span class=lnt>396
+</span><span class=lnt>397
+</span><span class=lnt>398
+</span><span class=lnt>399
+</span><span class=lnt>400
+</span><span class=lnt>401
+</span><span class=lnt>402
+</span><span class=lnt>403
+</span><span class=lnt>404
+</span><span class=lnt>405
+</span><span class=lnt>406
+</span><span class=lnt>407
+</span><span class=lnt>408
+</span><span class=lnt>409
+</span><span class=lnt>410
+</span><span class=lnt>411
+</span><span class=lnt>412
+</span><span class=lnt>413
+</span><span class=lnt>414
+</span><span class=lnt>415
+</span><span class=lnt>416
+</span><span class=lnt>417
+</span><span class=lnt>418
+</span><span class=lnt>419
+</span><span class=lnt>420
+</span><span class=lnt>421
+</span><span class=lnt>422
+</span><span class=lnt>423
+</span><span class=lnt>424
+</span><span class=lnt>425
+</span><span class=lnt>426
+</span><span class=lnt>427
+</span><span class=lnt>428
+</span><span class=lnt>429
+</span><span class=lnt>430
+</span><span class=lnt>431
+</span><span class=lnt>432
+</span><span class=lnt>433
+</span><span class=lnt>434
+</span><span class=lnt>435
+</span><span class=lnt>436
+</span><span class=lnt>437
+</span><span class=lnt>438
+</span><span class=lnt>439
+</span><span class=lnt>440
+</span><span class=lnt>441
+</span><span class=lnt>442
+</span><span class=lnt>443
+</span><span class=lnt>444
+</span><span class=lnt>445
+</span><span class=lnt>446
+</span><span class=lnt>447
+</span><span class=lnt>448
+</span><span class=lnt>449
+</span><span class=lnt>450
+</span><span class=lnt>451
+</span><span class=lnt>452
+</span><span class=lnt>453
+</span><span class=lnt>454
+</span><span class=lnt>455
+</span><span class=lnt>456
+</span><span class=lnt>457
+</span><span class=lnt>458
+</span><span class=lnt>459
+</span><span class=lnt>460
+</span><span class=lnt>461
+</span><span class=lnt>462
+</span><span class=lnt>463
+</span><span class=lnt>464
+</span><span class=lnt>465
+</span><span class=lnt>466
+</span><span class=lnt>467
+</span><span class=lnt>468
+</span><span class=lnt>469
+</span><span class=lnt>470
+</span><span class=lnt>471
+</span><span class=lnt>472
+</span><span class=lnt>473
+</span><span class=lnt>474
+</span><span class=lnt>475
+</span><span class=lnt>476
+</span><span class=lnt>477
+</span><span class=lnt>478
+</span><span class=lnt>479
+</span><span class=lnt>480
+</span><span class=lnt>481
+</span><span class=lnt>482
+</span><span class=lnt>483
+</span><span class=lnt>484
+</span><span class=lnt>485
+</span><span class=lnt>486
+</span><span class=lnt>487
+</span><span class=lnt>488
+</span><span class=lnt>489
+</span><span class=lnt>490
+</span><span class=lnt>491
+</span><span class=lnt>492
+</span><span class=lnt>493
+</span><span class=lnt>494
+</span><span class=lnt>495
+</span><span class=lnt>496
+</span><span class=lnt>497
+</span><span class=lnt>498
+</span><span class=lnt>499
+</span><span class=lnt>500
+</span><span class=lnt>501
+</span><span class=lnt>502
+</span><span class=lnt>503
+</span><span class=lnt>504
+</span><span class=lnt>505
+</span><span class=lnt>506
+</span><span class=lnt>507
+</span><span class=lnt>508
+</span><span class=lnt>509
+</span><span class=lnt>510
+</span><span class=lnt>511
+</span><span class=lnt>512
+</span><span class=lnt>513
+</span><span class=lnt>514
+</span><span class=lnt>515
+</span><span class=lnt>516
+</span><span class=lnt>517
+</span><span class=lnt>518
+</span><span class=lnt>519
+</span><span class=lnt>520
+</span><span class=lnt>521
+</span><span class=lnt>522
+</span><span class=lnt>523
+</span><span class=lnt>524
+</span><span class=lnt>525
+</span><span class=lnt>526
+</span><span class=lnt>527
+</span><span class=lnt>528
+</span><span class=lnt>529
+</span><span class=lnt>530
+</span><span class=lnt>531
+</span><span class=lnt>532
+</span><span class=lnt>533
+</span><span class=lnt>534
+</span><span class=lnt>535
+</span><span class=lnt>536
+</span><span class=lnt>537
+</span><span class=lnt>538
+</span><span class=lnt>539
+</span><span class=lnt>540
+</span><span class=lnt>541
+</span><span class=lnt>542
+</span><span class=lnt>543
+</span><span class=lnt>544
+</span><span class=lnt>545
+</span><span class=lnt>546
+</span><span class=lnt>547
+</span><span class=lnt>548
+</span><span class=lnt>549
+</span><span class=lnt>550
+</span><span class=lnt>551
+</span><span class=lnt>552
+</span><span class=lnt>553
+</span><span class=lnt>554
+</span><span class=lnt>555
+</span><span class=lnt>556
+</span><span class=lnt>557
+</span><span class=lnt>558
+</span><span class=lnt>559
+</span><span class=lnt>560
+</span><span class=lnt>561
+</span><span class=lnt>562
+</span><span class=lnt>563
+</span><span class=lnt>564
+</span><span class=lnt>565
+</span><span class=lnt>566
+</span><span class=lnt>567
+</span><span class=lnt>568
+</span><span class=lnt>569
+</span><span class=lnt>570
+</span><span class=lnt>571
+</span><span class=lnt>572
+</span><span class=lnt>573
+</span><span class=lnt>574
+</span><span class=lnt>575
+</span><span class=lnt>576
+</span><span class=lnt>577
+</span><span class=lnt>578
+</span><span class=lnt>579
+</span><span class=lnt>580
+</span><span class=lnt>581
+</span><span class=lnt>582
+</span><span class=lnt>583
+</span><span class=lnt>584
+</span><span class=lnt>585
+</span><span class=lnt>586
+</span><span class=lnt>587
+</span><span class=lnt>588
+</span><span class=lnt>589
+</span><span class=lnt>590
+</span><span class=lnt>591
+</span><span class=lnt>592
+</span><span class=lnt>593
+</span><span class=lnt>594
+</span><span class=lnt>595
+</span><span class=lnt>596
+</span><span class=lnt>597
+</span><span class=lnt>598
+</span><span class=lnt>599
+</span><span class=lnt>600
+</span><span class=lnt>601
+</span><span class=lnt>602
+</span><span class=lnt>603
+</span><span class=lnt>604
+</span><span class=lnt>605
+</span><span class=lnt>606
+</span><span class=lnt>607
+</span><span class=lnt>608
+</span><span class=lnt>609
+</span><span class=lnt>610
+</span><span class=lnt>611
+</span><span class=lnt>612
+</span><span class=lnt>613
+</span><span class=lnt>614
+</span><span class=lnt>615
+</span><span class=lnt>616
+</span><span class=lnt>617
+</span><span class=lnt>618
+</span><span class=lnt>619
+</span><span class=lnt>620
+</span><span class=lnt>621
+</span><span class=lnt>622
+</span><span class=lnt>623
+</span><span class=lnt>624
+</span><span class=lnt>625
+</span><span class=lnt>626
+</span><span class=lnt>627
+</span><span class=lnt>628
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
+</span><span class=cp></span><span class=c1>#参数定义</span>
+<span class=nv>date</span><span class=o>=</span><span class=sb>`</span>date +<span class=s2>&#34;%Y-%m-%d-%H:%M:%S&#34;</span><span class=sb>`</span>
+<span class=nv>centosVersion</span><span class=o>=</span><span class=k>$(</span>awk <span class=s1>&#39;{print $(NF-1)}&#39;</span> /etc/redhat-release<span class=k>)</span>
+<span class=nv>VERSION</span><span class=o>=</span><span class=sb>`</span>date +%F<span class=sb>`</span>
+<span class=c1>#日志相关</span>
+<span class=nv>LOGPATH</span><span class=o>=</span><span class=s2>&#34;/tmp/awr&#34;</span>
+<span class=o>[</span> -e <span class=nv>$LOGPATH</span> <span class=o>]</span> <span class=o>||</span> mkdir -p <span class=nv>$LOGPATH</span>
+<span class=nv>RESULTFILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$LOGPATH</span><span class=s2>/HostCheck-`hostname`-`date +%Y%m%d`.txt&#34;</span>
+
+<span class=c1>#调用函数库</span>
+<span class=o>[</span> -f /etc/init.d/functions <span class=o>]</span> <span class=o>&amp;&amp;</span> <span class=nb>source</span> /etc/init.d/functions
+<span class=nb>export</span> <span class=nv>PATH</span><span class=o>=</span>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+<span class=nb>source</span> /etc/profile
+
+
+<span class=c1>#root用户执行脚本</span>
+<span class=o>[</span> <span class=k>$(</span>id -u<span class=k>)</span> -gt <span class=m>0</span> <span class=o>]</span> <span class=o>&amp;&amp;</span> <span class=nb>echo</span> <span class=s2>&#34;请用root用户执行此脚本！&#34;</span> <span class=o>&amp;&amp;</span> <span class=nb>exit</span> <span class=m>1</span>
+
+ 
+<span class=k>function</span> version<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=si>${</span><span class=nv>date</span><span class=si>}</span><span class=s2>] &gt;&gt;&gt; `hostname -s` 主机巡检&#34;</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getSystemStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m****************************************************系统检查****************************************************\033[0m&#34;</span>
+    <span class=k>if</span> <span class=o>[</span> -e /etc/sysconfig/i18n <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+        <span class=nv>default_LANG</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>grep <span class=s2>&#34;LANG=&#34;</span> /etc/sysconfig/i18n <span class=p>|</span> grep -v <span class=s2>&#34;^#&#34;</span> <span class=p>|</span> awk -F <span class=s1>&#39;&#34;&#39;</span> <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span><span class=s2>&#34;</span>
+    <span class=k>else</span>
+        <span class=nv>default_LANG</span><span class=o>=</span><span class=nv>$LANG</span>
+    <span class=k>fi</span>
+    <span class=nb>export</span> <span class=nv>LANG</span><span class=o>=</span><span class=s2>&#34;en_US.UTF-8&#34;</span>
+    <span class=nv>Release</span><span class=o>=</span><span class=k>$(</span>cat /etc/redhat-release 2&gt;/dev/null<span class=k>)</span>
+    <span class=nv>Kernel</span><span class=o>=</span><span class=k>$(</span>uname -r<span class=k>)</span>
+    <span class=nv>OS</span><span class=o>=</span><span class=k>$(</span>uname -o<span class=k>)</span>
+    <span class=nv>Hostname</span><span class=o>=</span><span class=k>$(</span>uname -n<span class=k>)</span>
+    <span class=nv>SELinux</span><span class=o>=</span><span class=k>$(</span>/usr/sbin/sestatus <span class=p>|</span> grep <span class=s2>&#34;SELinux status: &#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $3}&#39;</span><span class=k>)</span>
+    <span class=nv>LastReboot</span><span class=o>=</span><span class=k>$(</span>who -b <span class=p>|</span> awk <span class=s1>&#39;{print $3,$4}&#39;</span><span class=k>)</span>
+    <span class=nv>uptime</span><span class=o>=</span><span class=k>$(</span>uptime <span class=p>|</span> sed <span class=s1>&#39;s/.*up \([^,]*\), .*/\1/&#39;</span><span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;     系统：</span><span class=nv>$OS</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34; 发行版本：</span><span class=nv>$Release</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;     内核：</span><span class=nv>$Kernel</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;   主机名：</span><span class=nv>$Hostname</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;  SELinux：</span><span class=nv>$SELinux</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;语言/编码：</span><span class=nv>$default_LANG</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34; 当前时间：</span><span class=k>$(</span>date +<span class=s1>&#39;%F %T&#39;</span><span class=k>)</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34; 最后启动：</span><span class=nv>$LastReboot</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34; 运行时间：</span><span class=nv>$uptime</span><span class=s2>&#34;</span>
+    <span class=nb>export</span> <span class=nv>LANG</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$default_LANG</span><span class=s2>&#34;</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getCpuStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m****************************************************CPU检查*****************************************************\033[0m&#34;</span>
+    <span class=nv>Physical_CPUs</span><span class=o>=</span><span class=k>$(</span>grep <span class=s2>&#34;physical id&#34;</span> /proc/cpuinfo<span class=p>|</span> sort <span class=p>|</span> uniq <span class=p>|</span> wc -l<span class=k>)</span>
+    <span class=nv>Virt_CPUs</span><span class=o>=</span><span class=k>$(</span>grep <span class=s2>&#34;processor&#34;</span> /proc/cpuinfo <span class=p>|</span> wc -l<span class=k>)</span>
+    <span class=nv>CPU_Kernels</span><span class=o>=</span><span class=k>$(</span>grep <span class=s2>&#34;cores&#34;</span> /proc/cpuinfo<span class=p>|</span>uniq<span class=p>|</span> awk -F <span class=s1>&#39;: &#39;</span> <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span>
+    <span class=nv>CPU_Type</span><span class=o>=</span><span class=k>$(</span>grep <span class=s2>&#34;model name&#34;</span> /proc/cpuinfo <span class=p>|</span> awk -F <span class=s1>&#39;: &#39;</span> <span class=s1>&#39;{print $2}&#39;</span> <span class=p>|</span> sort <span class=p>|</span> uniq<span class=k>)</span>
+    <span class=nv>CPU_Arch</span><span class=o>=</span><span class=k>$(</span>uname -m<span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;物理CPU个数:</span><span class=nv>$Physical_CPUs</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;逻辑CPU个数:</span><span class=nv>$Virt_CPUs</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;每CPU核心数:</span><span class=nv>$CPU_Kernels</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;    CPU型号:</span><span class=nv>$CPU_Type</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;    CPU架构:</span><span class=nv>$CPU_Arch</span><span class=s2>&#34;</span>
+<span class=o>}</span>
+
+<span class=k>function</span> getMemStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span>  -e <span class=s2>&#34;\033[33m**************************************************内存检查*****************************************************\033[0m&#34;</span>
+    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$centosVersion</span> &lt; <span class=m>7</span> <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+        free -mo
+    <span class=k>else</span>
+        free -h
+    <span class=k>fi</span>
+    <span class=c1>#报表信息</span>
+    <span class=nv>MemTotal</span><span class=o>=</span><span class=k>$(</span>grep MemTotal /proc/meminfo<span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span>  <span class=c1>#KB</span>
+    <span class=nv>MemFree</span><span class=o>=</span><span class=k>$(</span>grep MemFree /proc/meminfo<span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span>    <span class=c1>#KB</span>
+    <span class=nb>let</span> <span class=nv>MemUsed</span><span class=o>=</span>MemTotal-MemFree
+    <span class=nv>MemPercent</span><span class=o>=</span><span class=k>$(</span>awk <span class=s2>&#34;BEGIN {if(</span><span class=nv>$MemTotal</span><span class=s2>==0){printf 100}else{printf \&#34;%.2f\&#34;,</span><span class=nv>$MemUsed</span><span class=s2>*100/</span><span class=nv>$MemTotal</span><span class=s2>}}&#34;</span><span class=k>)</span> 
+<span class=o>}</span>
+
+<span class=k>function</span> getDiskStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m**************************************************磁盘检查******************************************************\033[0m&#34;</span>
+    df -hiP <span class=p>|</span> sed <span class=s1>&#39;s/Mounted on/Mounted/&#39;</span>&gt; /tmp/inode
+    df -hTP <span class=p>|</span> sed <span class=s1>&#39;s/Mounted on/Mounted/&#39;</span>&gt; /tmp/disk 
+    join /tmp/disk /tmp/inode <span class=p>|</span> awk <span class=s1>&#39;{print $1,$2,&#34;|&#34;,$3,$4,$5,$6,&#34;|&#34;,$8,$9,$10,$11,&#34;|&#34;,$12}&#39;</span><span class=p>|</span> column -t
+    <span class=c1>#报表信息</span>
+    <span class=nv>diskdata</span><span class=o>=</span><span class=k>$(</span>df -TP <span class=p>|</span> sed <span class=s1>&#39;1d&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;$2!=&#34;tmpfs&#34;{print}&#39;</span><span class=k>)</span> <span class=c1>#KB</span>
+    <span class=nv>disktotal</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$diskdata</span><span class=s2>&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{total+=$3}END{print total}&#39;</span><span class=k>)</span> <span class=c1>#KB</span>
+    <span class=nv>diskused</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$diskdata</span><span class=s2>&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{total+=$4}END{print total}&#39;</span><span class=k>)</span>  <span class=c1>#KB</span>
+    <span class=nv>diskfree</span><span class=o>=</span><span class=k>$((</span>disktotal-diskused<span class=k>))</span> <span class=c1>#KB</span>
+    <span class=nv>diskusedpercent</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$disktotal</span> <span class=nv>$diskused</span> <span class=p>|</span> awk <span class=s1>&#39;{if($1==0){printf 100}else{printf &#34;%.2f&#34;,$2*100/$1}}&#39;</span><span class=k>)</span> 
+    <span class=nv>inodedata</span><span class=o>=</span><span class=k>$(</span>df -iTP <span class=p>|</span> sed <span class=s1>&#39;1d&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;$2!=&#34;tmpfs&#34;{print}&#39;</span><span class=k>)</span>
+    <span class=nv>inodetotal</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$inodedata</span><span class=s2>&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{total+=$3}END{print total}&#39;</span><span class=k>)</span>
+    <span class=nv>inodeused</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$inodedata</span><span class=s2>&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{total+=$4}END{print total}&#39;</span><span class=k>)</span>
+    <span class=nv>inodefree</span><span class=o>=</span><span class=k>$((</span>inodetotal-inodeused<span class=k>))</span>
+    <span class=nv>inodeusedpercent</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$inodetotal</span> <span class=nv>$inodeused</span> <span class=p>|</span> awk <span class=s1>&#39;{if($1==0){printf 100}else{printf &#34;%.2f&#34;,$2*100/$1}}&#39;</span><span class=k>)</span>
+<span class=o>}</span>
+
+
+
+<span class=k>function</span> get_resource<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m**************************************************资源消耗统计**************************************************\033[0m&#34;</span>
+
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m*************带宽资源消耗统计*************\033[0m&#34;</span>
+  <span class=c1>#用数组存放网卡名</span>
+    <span class=nv>nic</span><span class=o>=(</span><span class=sb>`</span>ifconfig <span class=p>|</span> grep ^<span class=o>[</span>a-z<span class=o>]</span> <span class=p>|</span> grep -vE <span class=s1>&#39;lo|docker0&#39;</span><span class=p>|</span> awk -F: <span class=s1>&#39;{print $1}&#39;</span><span class=sb>`</span><span class=o>)</span>
+  <span class=nv>time</span><span class=o>=</span><span class=sb>`</span>date <span class=s2>&#34;+%Y-%m-%d %k:%M&#34;</span><span class=sb>`</span>
+  <span class=nv>num</span><span class=o>=</span><span class=m>0</span>
+  
+    <span class=k>for</span> <span class=o>((</span><span class=nv>i</span><span class=o>=</span>0<span class=p>;</span>i&lt;<span class=si>${#</span><span class=nv>nic</span><span class=p>[@]</span><span class=si>}</span><span class=p>;</span>i++<span class=o>))</span>
+  <span class=k>do</span>
+     <span class=c1>#循环五次，避免看到的是偶然的数据</span>
+       <span class=k>while</span> <span class=o>((</span> <span class=nv>$num</span>&lt;<span class=m>5</span> <span class=o>))</span>
+     <span class=k>do</span>
+       <span class=nv>rx_before</span><span class=o>=</span><span class=k>$(</span>cat /proc/net/dev <span class=p>|</span> grep <span class=s1>&#39;${nic[$i]}&#39;</span> <span class=p>|</span> tr : <span class=s2>&#34; &#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span>
+         <span class=nv>tx_before</span><span class=o>=</span><span class=k>$(</span>cat /proc/net/dev <span class=p>|</span> grep <span class=s1>&#39;${nic[$i]}&#39;</span> <span class=p>|</span> tr : <span class=s2>&#34; &#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $10}&#39;</span><span class=k>)</span>
+     sleep <span class=m>2</span>
+     <span class=c1>#用sed先获取第7列,再用awk获取第2列，再cut切割,从第7个到最后，即只切割网卡流量数字部分</span>
+         <span class=nv>rx_after</span><span class=o>=</span><span class=k>$(</span>cat /proc/net/dev <span class=p>|</span> grep <span class=s1>&#39;${nic[$i]}&#39;</span> <span class=p>|</span> tr : <span class=s2>&#34; &#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span>
+         <span class=nv>tx_after</span><span class=o>=</span><span class=k>$(</span>cat /proc/net/dev <span class=p>|</span> grep <span class=s1>&#39;${nic[$i]}&#39;</span> <span class=p>|</span> tr : <span class=s2>&#34; &#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $10}&#39;</span><span class=k>)</span>
+     <span class=c1>#注意下面截取的相差2秒的两个时刻的累计和发送的bytes(即累计传送和接收的位)</span>
+         <span class=nv>rx_result</span><span class=o>=</span>$<span class=o>[(</span>rx_after-rx_before<span class=o>)</span>/1024/1024/2*8<span class=o>]</span>
+         <span class=nv>tx_result</span><span class=o>=</span>$<span class=o>[(</span>tx_after-tx_before<span class=o>)</span>/1024/1024/2*8<span class=o>]</span>
+     <span class=nb>echo</span>  <span class=s2>&#34;</span><span class=nv>$time</span><span class=s2> Now_In_Speed: </span><span class=nv>$rx_result</span><span class=s2> Mbps  Now_OUt_Speed: </span><span class=nv>$tx_result</span><span class=s2> Mbps&#34;</span> &gt;&gt; /tmp/network.txt
+     <span class=nb>let</span> <span class=s2>&#34;num++&#34;</span>
+     <span class=k>done</span>
+     <span class=c1>#注意下面grep后面的$time变量要用双引号括起来</span>
+       <span class=nv>rx_result</span><span class=o>=</span><span class=k>$(</span>cat /tmp/network.txt<span class=p>|</span>grep <span class=s2>&#34;</span><span class=nv>$time</span><span class=s2>&#34;</span><span class=p>|</span>awk <span class=s1>&#39;{In+=$4}END{print In}&#39;</span><span class=k>)</span>
+       <span class=nv>tx_result</span><span class=o>=</span><span class=k>$(</span>cat /tmp/network.txt<span class=p>|</span>grep <span class=s2>&#34;</span><span class=nv>$time</span><span class=s2>&#34;</span><span class=p>|</span>awk <span class=s1>&#39;{Out+=$7}END{print Out}&#39;</span><span class=k>)</span>
+       <span class=nv>In_Speed</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;scale=2;</span><span class=nv>$rx_result</span><span class=s2>/5&#34;</span><span class=p>|</span>bc<span class=k>)</span>
+       <span class=nv>Out_Speed</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;scale=2;</span><span class=nv>$tx_result</span><span class=s2>/5&#34;</span><span class=p>|</span>bc<span class=k>)</span>
+       <span class=nb>echo</span> -e  <span class=s2>&#34;\033[32m In_Speed_average: </span><span class=nv>$In_Speed</span><span class=s2> Mbps Out_Speed_average: </span><span class=nv>$Out_Speed</span><span class=s2> Mbps! \033[0m&#34;</span> 
+  <span class=k>done</span>
+
+
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m*************CPU资源消耗统计*************\033[0m&#34;</span>
+
+    <span class=c1>#使用vmstat 1 5命令统计5秒内的使用情况，再计算每秒使用情况</span>
+  <span class=nv>total</span><span class=o>=</span><span class=sb>`</span>vmstat <span class=m>1</span> 5<span class=p>|</span>awk <span class=s1>&#39;{x+=$13;y+=$14}END{print x+y}&#39;</span><span class=sb>`</span>
+  <span class=nv>cpu_average</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;scale=2;</span><span class=nv>$total</span><span class=s2>/5&#34;</span><span class=p>|</span>bc<span class=k>)</span>
+  
+  <span class=c1>#判断CPU使用率（浮点数与整数比较）</span>
+  <span class=k>if</span> <span class=o>[</span> <span class=sb>`</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>cpu_average</span><span class=si>}</span><span class=s2> &gt; 70&#34;</span> <span class=p>|</span> bc<span class=sb>`</span> -eq <span class=m>1</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+      <span class=nb>echo</span> -e  <span class=s2>&#34;\033[31m Total CPU is already use: </span><span class=si>${</span><span class=nv>cpu_average</span><span class=si>}</span><span class=s2>%,请及时处理！\033[0m&#34;</span> 
+    <span class=k>else</span> 
+      <span class=nb>echo</span> -e  <span class=s2>&#34;\033[32m Total CPU is already use: </span><span class=si>${</span><span class=nv>cpu_average</span><span class=si>}</span><span class=s2>%! \033[0m&#34;</span> 
+    <span class=k>fi</span>
+
+
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m*************磁盘资源消耗统计*************\033[0m&#34;</span>
+    <span class=c1>#磁盘使用情况(注意：需要用sed先进行格式化才能进行累加处理)</span>
+    <span class=nv>disk_used</span><span class=o>=</span><span class=k>$(</span>df -m <span class=p>|</span> sed <span class=s1>&#39;1d;/ /!N;s/\n//;s/ \+/ /;&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;{used+=$3} END{print used}&#39;</span><span class=k>)</span>
+    <span class=nv>disk_totalSpace</span><span class=o>=</span><span class=k>$(</span>df -m <span class=p>|</span> sed <span class=s1>&#39;1d;/ /!N;s/\n//;s/ \+/ /;&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;{totalSpace+=$2} END{print totalSpace}&#39;</span><span class=k>)</span>
+    <span class=nv>disk_all</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;scale=4;</span><span class=nv>$disk_used</span><span class=s2>/</span><span class=nv>$disk_totalSpace</span><span class=s2>&#34;</span> <span class=p>|</span> bc<span class=k>)</span>
+    <span class=nv>disk_percent1</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$disk_all</span> <span class=p>|</span> cut -c 2-3<span class=k>)</span>
+    <span class=nv>disk_percent2</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$disk_all</span> <span class=p>|</span> cut -c 4-5<span class=k>)</span>
+    <span class=nv>disk_warning</span><span class=o>=</span><span class=sb>`</span>df -m <span class=p>|</span> sed <span class=s1>&#39;1d;/ /!N;s/\n//;s/ \+/ /;&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;{if ($5&gt;85) print $6 &#34;目录使用率：&#34; $5;} &#39;</span><span class=sb>`</span>
+    
+  <span class=nb>echo</span> -e  <span class=s2>&#34;\033[32m Total disk has used: </span><span class=nv>$disk_percent1</span><span class=s2>.</span><span class=nv>$disk_percent2</span><span class=s2>% \033[0m&#34;</span> 
+    <span class=c1>#echo -e &#34;\t\t..&#34; 表示换行</span>
+  <span class=k>if</span> <span class=o>[</span> -n  <span class=s2>&#34;</span><span class=nv>$disk_warning</span><span class=s2>&#34;</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+      <span class=nb>echo</span> -e <span class=s2>&#34;\033[31m</span><span class=si>${</span><span class=nv>disk_warning</span><span class=si>}</span><span class=s2> \n [Error]以上目录使用率超过85%，请及时处理！\033[0m&#34;</span> 
+  <span class=k>fi</span>
+  
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m*************内存资源消耗统计*************\033[0m&#34;</span>
+  
+    <span class=c1>#获得系统总内存</span>
+  <span class=nv>memery_all</span><span class=o>=</span><span class=k>$(</span>free -m <span class=p>|</span> awk <span class=s1>&#39;NR==2&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span>
+  <span class=c1>#获得占用内存（操作系统 角度）</span>
+  <span class=nv>system_memery_used</span><span class=o>=</span><span class=k>$(</span>free -m <span class=p>|</span> awk <span class=s1>&#39;NR==2&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $3}&#39;</span><span class=k>)</span>
+  <span class=c1>#获得buffer、cache占用内存，当内存不够时会及时回收，所以这两部分可用于可用内存的计算</span>
+  <span class=nv>buffer_used</span><span class=o>=</span><span class=k>$(</span>free -m <span class=p>|</span> awk <span class=s1>&#39;NR==2&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $6}&#39;</span><span class=k>)</span>
+  <span class=nv>cache_used</span><span class=o>=</span><span class=k>$(</span>free -m <span class=p>|</span> awk <span class=s1>&#39;NR==2&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $7}&#39;</span><span class=k>)</span>
+  <span class=c1>#获得被使用内存，所以这部分可用于可用内存的计算，注意计算方法</span>
+  <span class=nv>actual_used_all</span><span class=o>=</span>$<span class=o>[</span>memery_all-<span class=o>(</span>free+buffer_used+cache_used<span class=o>)]</span>
+  <span class=c1>#获得实际占用的内存</span>
+  <span class=nv>actual_used_all</span><span class=o>=</span><span class=sb>`</span>expr <span class=nv>$memery_all</span> - <span class=nv>$free</span> + <span class=nv>$buffer_used</span> + <span class=nv>$cache_used</span> <span class=sb>`</span>
+    <span class=nv>memery_percent</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;scale=4;</span><span class=nv>$system_memery_used</span><span class=s2> / </span><span class=nv>$memery_all</span><span class=s2>&#34;</span> <span class=p>|</span> bc<span class=k>)</span>
+    <span class=nv>memery_percent2</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;scale=4; </span><span class=nv>$actual_used_all</span><span class=s2> / </span><span class=nv>$memery_all</span><span class=s2>&#34;</span> <span class=p>|</span> bc<span class=k>)</span>
+    <span class=nv>percent_part1</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$memery_percent</span> <span class=p>|</span> cut -c 2-3<span class=k>)</span>
+    <span class=nv>percent_part2</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$memery_percent</span> <span class=p>|</span> cut -c 4-5<span class=k>)</span>
+    <span class=nv>percent_part11</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$memery_percent2</span> <span class=p>|</span> cut -c 2-3<span class=k>)</span>
+    <span class=nv>percent_part22</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$memery_percent2</span> <span class=p>|</span> cut -c 4-5<span class=k>)</span>
+    
+  <span class=c1>#获得占用内存（操作系统角度）</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[32m system memery is already use: </span><span class=nv>$percent_part1</span><span class=s2>.</span><span class=nv>$percent_part2</span><span class=s2>% \033[0m&#34;</span>
+    <span class=c1>#获得实际内存占用率</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[32m actual memery is already use: </span><span class=nv>$percent_part11</span><span class=s2>.</span><span class=nv>$percent_part22</span><span class=s2>% \033[0m&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[32m buffer is already used : </span><span class=nv>$buffer_used</span><span class=s2> M \033[0m&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[32m cache is already used : </span><span class=nv>$cache_used</span><span class=s2> M \033[0m&#34;</span>
+<span class=o>}</span>
+
+
+
+<span class=k>function</span> getServiceStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m*************************************************服务检查*******************************************************\033[0m&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$centosVersion</span> &gt; <span class=m>7</span> <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+        <span class=nv>conf</span><span class=o>=</span><span class=k>$(</span>systemctl list-unit-files --type<span class=o>=</span>service --state<span class=o>=</span>enabled --no-pager <span class=p>|</span> grep <span class=s2>&#34;enabled&#34;</span><span class=k>)</span>
+        <span class=nv>process</span><span class=o>=</span><span class=k>$(</span>systemctl list-units --type<span class=o>=</span>service --state<span class=o>=</span>running --no-pager <span class=p>|</span> grep <span class=s2>&#34;.service&#34;</span><span class=k>)</span>      
+    <span class=k>else</span>
+        <span class=nv>conf</span><span class=o>=</span><span class=k>$(</span>/sbin/chkconfig <span class=p>|</span> grep -E <span class=s2>&#34;:on|:启用&#34;</span><span class=k>)</span>
+        <span class=nv>process</span><span class=o>=</span><span class=k>$(</span>/sbin/service --status-all 2&gt;/dev/null <span class=p>|</span> grep -E <span class=s2>&#34;is running|正在运行&#34;</span><span class=k>)</span>        
+    <span class=k>fi</span>
+  <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m******************服务配置******************\033[0m&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$conf</span><span class=s2>&#34;</span>  <span class=p>|</span> column -t
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+  <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m**************正在运行的服务****************\033[0m&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$process</span><span class=s2>&#34;</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getAutoStartStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m***********************************************自启动检查*******************************************************\033[0m&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m****************自启动命令*****************\033[0m&#34;</span>
+  <span class=nv>conf</span><span class=o>=</span><span class=k>$(</span>grep -v <span class=s2>&#34;^#&#34;</span> /etc/rc.d/rc.local<span class=p>|</span> sed <span class=s1>&#39;/^$/d&#39;</span><span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$conf</span><span class=s2>&#34;</span>  
+<span class=o>}</span>
+
+
+<span class=k>function</span> getLoginStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m************************************************登录检查********************************************************\033[0m&#34;</span>
+    last <span class=p>|</span> head 
+<span class=o>}</span>
+
+<span class=k>function</span> getNetworkStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m************************************************网络检查********************************************************\033[0m&#34;</span>
+    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$centosVersion</span> &lt; <span class=m>7</span> <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+        /sbin/ifconfig -a <span class=p>|</span> grep -v packets <span class=p>|</span> grep -v collisions <span class=p>|</span> grep -v i
+    net6
+    <span class=k>else</span>
+        <span class=c1>#ip a</span>
+        <span class=k>for</span> i in <span class=k>$(</span>ip link <span class=p>|</span> grep BROADCAST <span class=p>|</span> awk -F: <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span><span class=p>;</span><span class=k>do</span> ip add show <span class=nv>$i</span> <span class=p>|</span> grep -E <span class=s2>&#34;BROADCAST|global&#34;</span><span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span> <span class=p>|</span> tr <span class=s1>&#39;\n&#39;</span> <span class=s1>&#39; &#39;</span> <span class=p>;</span><span class=nb>echo</span> <span class=s2>&#34;&#34;</span> <span class=p>;</span><span class=k>done</span>
+    <span class=k>fi</span>
+    <span class=nv>GATEWAY</span><span class=o>=</span><span class=k>$(</span>ip route <span class=p>|</span> grep default <span class=p>|</span> awk <span class=s1>&#39;{print $3}&#39;</span><span class=k>)</span>
+    <span class=nv>DNS</span><span class=o>=</span><span class=k>$(</span>grep nameserver /etc/resolv.conf<span class=p>|</span> grep -v <span class=s2>&#34;#&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span> <span class=p>|</span> tr <span class=s1>&#39;\n&#39;</span> <span class=s1>&#39;,&#39;</span> <span class=p>|</span> sed <span class=s1>&#39;s/,$//&#39;</span><span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;网关：</span><span class=nv>$GATEWAY</span><span class=s2> &#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;DNS：</span><span class=nv>$DNS</span><span class=s2>&#34;</span>
+    <span class=c1>#报表信息</span>
+    <span class=nv>IP</span><span class=o>=</span><span class=k>$(</span>ip -f inet addr <span class=p>|</span> grep -v 127.0.0.1 <span class=p>|</span>  grep inet <span class=p>|</span> awk <span class=s1>&#39;{print $NF,$2}&#39;</span> <span class=p>|</span> tr <span class=s1>&#39;\n&#39;</span> <span class=s1>&#39;,&#39;</span> <span class=p>|</span> sed <span class=s1>&#39;s/,$//&#39;</span><span class=k>)</span>
+    <span class=nv>MAC</span><span class=o>=</span><span class=k>$(</span>ip link <span class=p>|</span> grep -v <span class=s2>&#34;LOOPBACK\|loopback&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span> <span class=p>|</span> sed <span class=s1>&#39;N;s/\n//&#39;</span> <span class=p>|</span> tr <span class=s1>&#39;\n&#39;</span> <span class=s1>&#39;,&#39;</span> <span class=p>|</span> sed <span class=s1>&#39;s/,$//&#39;</span><span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+ping -c <span class=m>4</span> www.baidu.com &gt;/dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+<span class=k>if</span> <span class=o>[</span> <span class=nv>$?</span> -eq <span class=m>0</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+   <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+   <span class=nb>echo</span> -e <span class=s2>&#34;\033[32m网络连接：正常！\033[0m&#34;</span> 
+<span class=k>else</span>
+   <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+   <span class=nb>echo</span> -e <span class=s2>&#34;\033[31m网络连接：异常！\033[0m&#34;</span> 
+<span class=k>fi</span> 
+<span class=o>}</span>
+
+
+<span class=k>function</span> getListenStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span>  -e <span class=s2>&#34;\033[33m***********************************************监听检查********************************************************\033[0m&#34;</span>
+    <span class=nv>TCPListen</span><span class=o>=</span><span class=k>$(</span>ss -ntul <span class=p>|</span> column -t<span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$TCPListen</span><span class=s2>&#34;</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getCronStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m**********************************************计划任务检查******************************************************\033[0m&#34;</span>
+    <span class=nv>Crontab</span><span class=o>=</span><span class=m>0</span>
+    <span class=k>for</span> shell in <span class=k>$(</span>grep -v <span class=s2>&#34;/sbin/nologin&#34;</span> /etc/shells<span class=k>)</span><span class=p>;</span><span class=k>do</span>
+        <span class=k>for</span> user in <span class=k>$(</span>grep <span class=s2>&#34;</span><span class=nv>$shell</span><span class=s2>&#34;</span> /etc/passwd<span class=p>|</span> awk -F: <span class=s1>&#39;{print $1}&#39;</span><span class=k>)</span><span class=p>;</span><span class=k>do</span>
+            crontab -l -u <span class=nv>$user</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+            <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+            <span class=k>if</span> <span class=o>[</span> <span class=nv>$status</span> -eq <span class=m>0</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+                <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m************</span><span class=nv>$user用户的定时任务</span><span class=s2>**************\033[0m&#34;</span>
+                crontab -l -u <span class=nv>$user</span>
+                <span class=nb>let</span> <span class=nv>Crontab</span><span class=o>=</span>Crontab+<span class=k>$(</span>crontab -l -u <span class=nv>$user</span> <span class=p>|</span> wc -l<span class=k>)</span>
+                <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+            <span class=k>fi</span>
+        <span class=k>done</span>
+    <span class=k>done</span>
+    <span class=c1>#计划任务</span>
+    <span class=c1>#find /etc/cron* -type f | xargs -i ls -l {} | column  -t</span>
+    <span class=c1>#let Crontab=Crontab+$(find /etc/cron* -type f | wc -l) </span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getHowLongAgo<span class=o>(){</span>
+    <span class=c1># 计算一个时间戳离现在有多久了</span>
+    <span class=nv>datetime</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$*</span><span class=s2>&#34;</span>
+    <span class=o>[</span> -z <span class=s2>&#34;</span><span class=nv>$datetime</span><span class=s2>&#34;</span> <span class=o>]</span> <span class=o>&amp;&amp;</span> <span class=nb>echo</span> <span class=sb>`</span>stat /etc/passwd<span class=p>|</span>awk <span class=s2>&#34;NR==6&#34;</span><span class=sb>`</span>
+    <span class=nv>Timestamp</span><span class=o>=</span><span class=k>$(</span>date +%s -d <span class=s2>&#34;</span><span class=nv>$datetime</span><span class=s2>&#34;</span><span class=k>)</span>  
+    <span class=nv>Now_Timestamp</span><span class=o>=</span><span class=k>$(</span>date +%s<span class=k>)</span>
+    <span class=nv>Difference_Timestamp</span><span class=o>=</span><span class=k>$((</span><span class=nv>$Now_Timestamp</span><span class=o>-</span><span class=nv>$Timestamp</span><span class=k>))</span>
+    <span class=nv>days</span><span class=o>=</span>0<span class=p>;</span><span class=nv>hours</span><span class=o>=</span>0<span class=p>;</span><span class=nv>minutes</span><span class=o>=</span>0<span class=p>;</span>
+    <span class=nv>sec_in_day</span><span class=o>=</span><span class=k>$((</span><span class=m>60</span><span class=o>*</span><span class=m>60</span><span class=o>*</span><span class=m>24</span><span class=k>))</span><span class=p>;</span>
+    <span class=nv>sec_in_hour</span><span class=o>=</span><span class=k>$((</span><span class=m>60</span><span class=o>*</span><span class=m>60</span><span class=k>))</span><span class=p>;</span>
+    <span class=nv>sec_in_minute</span><span class=o>=</span><span class=m>60</span>
+    <span class=k>while</span> <span class=o>((</span> <span class=k>$((</span><span class=nv>$Difference_Timestamp</span><span class=o>-</span><span class=nv>$sec_in_day</span><span class=k>))</span> &gt; <span class=m>1</span> <span class=o>))</span>
+    <span class=k>do</span>
+        <span class=nb>let</span> <span class=nv>Difference_Timestamp</span><span class=o>=</span>Difference_Timestamp-sec_in_day
+        <span class=nb>let</span> days++
+    <span class=k>done</span>
+    <span class=k>while</span> <span class=o>((</span> <span class=k>$((</span><span class=nv>$Difference_Timestamp</span><span class=o>-</span><span class=nv>$sec_in_hour</span><span class=k>))</span> &gt; <span class=m>1</span> <span class=o>))</span>
+    <span class=k>do</span>
+        <span class=nb>let</span> <span class=nv>Difference_Timestamp</span><span class=o>=</span>Difference_Timestamp-sec_in_hour
+        <span class=nb>let</span> hours++
+    <span class=k>done</span>
+    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$days</span><span class=s2> 天 </span><span class=nv>$hours</span><span class=s2> 小时前&#34;</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getUserLastLogin<span class=o>(){</span>
+    <span class=c1># 获取用户最近一次登录的时间，含年份</span>
+    <span class=c1># 很遗憾last命令不支持显示年份，只有&#34;last -t YYYYMMDDHHMMSS&#34;表示某个时间之间的登录，我</span>
+    <span class=c1># 们只能用最笨的方法了，对比今天之前和今年元旦之前（或者去年之前和前年之前……）某个用户</span>
+    <span class=c1># 登录次数，如果登录统计次数有变化，则说明最近一次登录是今年。</span>
+    <span class=nv>username</span><span class=o>=</span><span class=nv>$1</span>
+    : <span class=si>${</span><span class=nv>username</span><span class=p>:=</span><span class=s2>&#34;`whoami`&#34;</span><span class=si>}</span>
+    <span class=nv>thisYear</span><span class=o>=</span><span class=k>$(</span>date +%Y<span class=k>)</span>
+    <span class=nv>oldesYear</span><span class=o>=</span><span class=k>$(</span>last <span class=p>|</span> tail -n1 <span class=p>|</span> awk <span class=s1>&#39;{print $NF}&#39;</span><span class=k>)</span>
+    <span class=k>while</span><span class=o>((</span> <span class=nv>$thisYear</span> &gt;<span class=o>=</span> <span class=nv>$oldesYear</span><span class=o>))</span><span class=p>;</span><span class=k>do</span>
+        <span class=nv>loginBeforeToday</span><span class=o>=</span><span class=k>$(</span>last <span class=nv>$username</span> <span class=p>|</span> grep <span class=nv>$username</span> <span class=p>|</span> wc -l<span class=k>)</span>
+        <span class=nv>loginBeforeNewYearsDayOfThisYear</span><span class=o>=</span><span class=k>$(</span>last <span class=nv>$username</span> -t <span class=nv>$thisYear</span><span class=s2>&#34;0101000000&#34;</span> <span class=p>|</span> grep <span class=nv>$username</span> <span class=p>|</span> wc -l<span class=k>)</span>
+        <span class=k>if</span> <span class=o>[</span> <span class=nv>$loginBeforeToday</span> -eq <span class=m>0</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+            <span class=nb>echo</span> <span class=s2>&#34;从未登录过&#34;</span>
+            <span class=nb>break</span>
+        <span class=k>elif</span> <span class=o>[</span> <span class=nv>$loginBeforeToday</span> -gt <span class=nv>$loginBeforeNewYearsDayOfThisYear</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+            <span class=nv>lastDateTime</span><span class=o>=</span><span class=k>$(</span>last -i <span class=nv>$username</span> <span class=p>|</span> head -n1 <span class=p>|</span> awk <span class=s1>&#39;{for(i=4;i&lt;(NF-2);i++)printf&#34;%s &#34;,$i}&#39;</span><span class=k>)</span><span class=s2>&#34; </span><span class=nv>$thisYear</span><span class=s2>&#34;</span> 
+            <span class=nv>lastDateTime</span><span class=o>=</span><span class=k>$(</span>date <span class=s2>&#34;+%Y-%m-%d %H:%M:%S&#34;</span> -d <span class=s2>&#34;</span><span class=nv>$lastDateTime</span><span class=s2>&#34;</span><span class=k>)</span>
+            <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$lastDateTime</span><span class=s2>&#34;</span>
+            <span class=nb>break</span>
+        <span class=k>else</span>
+            <span class=nv>thisYear</span><span class=o>=</span><span class=k>$((</span>thisYear-1<span class=k>))</span>
+        <span class=k>fi</span>
+    <span class=k>done</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getUserStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m*************************************************用户检查*******************************************************\033[0m&#34;</span>
+    <span class=c1>#/etc/passwd 最后修改时间</span>
+    <span class=nv>pwdfile</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>cat /etc/passwd<span class=k>)</span><span class=s2>&#34;</span>
+    <span class=nv>Modify</span><span class=o>=</span><span class=k>$(</span>stat /etc/passwd <span class=p>|</span> grep Modify <span class=p>|</span> tr <span class=s1>&#39;.&#39;</span> <span class=s1>&#39; &#39;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $2,$3}&#39;</span><span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;/etc/passwd: </span><span class=nv>$Modify</span><span class=s2> (</span><span class=k>$(</span>getHowLongAgo <span class=nv>$Modify</span><span class=k>)</span><span class=s2>)&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m******************特权用户******************\033[0m&#34;</span>
+    <span class=nv>RootUser</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+    <span class=k>for</span> user in <span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$pwdfile</span><span class=s2>&#34;</span> <span class=p>|</span> awk -F: <span class=s1>&#39;{print $1}&#39;</span><span class=k>)</span><span class=p>;</span><span class=k>do</span>
+        <span class=k>if</span> <span class=o>[</span> <span class=k>$(</span>id -u <span class=nv>$user</span><span class=k>)</span> -eq <span class=m>0</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+            <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$user</span><span class=s2>&#34;</span>
+            <span class=nv>RootUser</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$RootUser</span><span class=s2>,</span><span class=nv>$user</span><span class=s2>&#34;</span>
+        <span class=k>fi</span>
+    <span class=k>done</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+  <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m******************用户列表******************\033[0m&#34;</span>
+    <span class=nv>USERs</span><span class=o>=</span><span class=m>0</span>
+    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=k>$(</span>
+    <span class=nb>echo</span> <span class=s2>&#34;用户名 UID GID HOME SHELL 最后一次登录&#34;</span>
+    <span class=k>for</span> shell in <span class=k>$(</span>grep -v <span class=s2>&#34;/sbin/nologin&#34;</span> /etc/shells<span class=k>)</span><span class=p>;</span><span class=k>do</span>
+        <span class=k>for</span> username in <span class=k>$(</span>grep <span class=s2>&#34;</span><span class=nv>$shell</span><span class=s2>&#34;</span> /etc/passwd<span class=p>|</span> awk -F: <span class=s1>&#39;{print $1}&#39;</span><span class=k>)</span><span class=p>;</span><span class=k>do</span>
+            <span class=nv>userLastLogin</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>getUserLastLogin <span class=nv>$username</span><span class=k>)</span><span class=s2>&#34;</span>
+            <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$pwdfile</span><span class=s2>&#34;</span> <span class=p>|</span> grep -w <span class=s2>&#34;</span><span class=nv>$username</span><span class=s2>&#34;</span> <span class=p>|</span>grep -w <span class=s2>&#34;</span><span class=nv>$shell</span><span class=s2>&#34;</span><span class=p>|</span> awk -F: -v <span class=nv>lastlogin</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$userLastLogin</span><span class=s2>&#34;</span> <span class=p>|</span> tr <span class=s1>&#39; &#39;</span> <span class=s1>&#39;_&#39;</span><span class=k>)</span><span class=s2>&#34;</span> <span class=s1>&#39;{print $1,$3,$4,$6,$7,lastlogin}&#39;</span>
+        <span class=k>done</span>
+        <span class=nb>let</span> <span class=nv>USERs</span><span class=o>=</span>USERs+<span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$pwdfile</span><span class=s2>&#34;</span> <span class=p>|</span> grep <span class=s2>&#34;</span><span class=nv>$shell</span><span class=s2>&#34;</span><span class=p>|</span> wc -l<span class=k>)</span>
+    <span class=k>done</span>
+    <span class=k>)</span><span class=s2>&#34;</span> <span class=p>|</span> column -t
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+  <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m******************空密码用户****************\033[0m&#34;</span>
+    <span class=nv>USEREmptyPassword</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+    <span class=k>for</span> shell in <span class=k>$(</span>grep -v <span class=s2>&#34;/sbin/nologin&#34;</span> /etc/shells<span class=k>)</span><span class=p>;</span><span class=k>do</span>
+            <span class=k>for</span> user in <span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$pwdfile</span><span class=s2>&#34;</span> <span class=p>|</span> grep <span class=s2>&#34;</span><span class=nv>$shell</span><span class=s2>&#34;</span> <span class=p>|</span> cut -d: -f1<span class=k>)</span><span class=p>;</span><span class=k>do</span>
+            <span class=nv>r</span><span class=o>=</span><span class=k>$(</span>awk -F: <span class=s1>&#39;$2==&#34;!!&#34;{print $1}&#39;</span> /etc/shadow <span class=p>|</span> grep -w <span class=nv>$user</span><span class=k>)</span>
+            <span class=k>if</span> <span class=o>[</span> ! -z <span class=nv>$r</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+                <span class=nb>echo</span> <span class=nv>$r</span>
+                <span class=nv>USEREmptyPassword</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$USEREmptyPassword</span><span class=s2>,&#34;</span><span class=nv>$r</span>
+            <span class=k>fi</span>
+        <span class=k>done</span>    
+    <span class=k>done</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+  <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m*****************相同ID用户*****************\033[0m&#34;</span>
+    <span class=nv>USERTheSameUID</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+    <span class=nv>UIDs</span><span class=o>=</span><span class=k>$(</span>cut -d: -f3 /etc/passwd <span class=p>|</span> sort <span class=p>|</span> uniq -c <span class=p>|</span> awk <span class=s1>&#39;$1&gt;1{print $2}&#39;</span><span class=k>)</span>
+    <span class=k>for</span> uid in <span class=nv>$UIDs</span><span class=p>;</span><span class=k>do</span>
+        <span class=nb>echo</span> -n <span class=s2>&#34;</span><span class=nv>$uid</span><span class=s2>&#34;</span><span class=p>;</span>
+        <span class=nv>USERTheSameUID</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$uid</span><span class=s2>&#34;</span>
+        <span class=nv>r</span><span class=o>=</span><span class=k>$(</span>awk -F: <span class=s1>&#39;ORS=&#34;&#34;;$3==&#39;</span><span class=s2>&#34;</span><span class=nv>$uid</span><span class=s2>&#34;</span><span class=s1>&#39;{print &#34;:&#34;,$1}&#39;</span> /etc/passwd<span class=k>)</span>
+        <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$r</span><span class=s2>&#34;</span>
+        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+        <span class=nv>USERTheSameUID</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$USERTheSameUID</span><span class=s2> </span><span class=nv>$r</span><span class=s2>,&#34;</span>
+    <span class=k>done</span> 
+<span class=o>}</span>
+
+
+<span class=k>function</span> getPasswordStatus <span class=o>{</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m*************************************************密码检查*******************************************************\033[0m&#34;</span>
+    <span class=nv>pwdfile</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>cat /etc/passwd<span class=k>)</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m****************密码过期检查****************\033[0m&#34;</span>
+    <span class=nv>result</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+    <span class=k>for</span> shell in <span class=k>$(</span>grep -v <span class=s2>&#34;/sbin/nologin&#34;</span> /etc/shells<span class=k>)</span><span class=p>;</span><span class=k>do</span>
+        <span class=k>for</span> user in <span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$pwdfile</span><span class=s2>&#34;</span> <span class=p>|</span> grep <span class=s2>&#34;</span><span class=nv>$shell</span><span class=s2>&#34;</span> <span class=p>|</span> cut -d: -f1<span class=k>)</span><span class=p>;</span><span class=k>do</span>
+            <span class=nv>get_expiry_date</span><span class=o>=</span><span class=k>$(</span>/usr/bin/chage -l <span class=nv>$user</span> <span class=p>|</span> grep <span class=s1>&#39;Password expires&#39;</span> <span class=p>|</span> cut -d: -f2<span class=k>)</span>
+            <span class=k>if</span> <span class=o>[[</span> <span class=nv>$get_expiry_date</span> <span class=o>=</span> <span class=s1>&#39; never&#39;</span> <span class=o>||</span> <span class=nv>$get_expiry_date</span> <span class=o>=</span> <span class=s1>&#39;never&#39;</span> <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+                <span class=nb>printf</span> <span class=s2>&#34;%-15s 永不过期\n&#34;</span> <span class=nv>$user</span>
+                <span class=nv>result</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$result</span><span class=s2>,</span><span class=nv>$user</span><span class=s2>:never&#34;</span>
+            <span class=k>else</span>
+                <span class=nv>password_expiry_date</span><span class=o>=</span><span class=k>$(</span>date -d <span class=s2>&#34;</span><span class=nv>$get_expiry_date</span><span class=s2>&#34;</span> <span class=s2>&#34;+%s&#34;</span><span class=k>)</span>
+                <span class=nv>current_date</span><span class=o>=</span><span class=k>$(</span>date <span class=s2>&#34;+%s&#34;</span><span class=k>)</span>
+                <span class=nv>diff</span><span class=o>=</span><span class=k>$((</span><span class=nv>$password_expiry_date</span><span class=o>-</span><span class=nv>$current_date</span><span class=k>))</span>
+                <span class=nb>let</span> <span class=nv>DAYS</span><span class=o>=</span><span class=k>$((</span><span class=nv>$diff</span><span class=o>/(</span><span class=m>60</span><span class=o>*</span><span class=m>60</span><span class=o>*</span><span class=m>24</span><span class=k>))</span><span class=o>)</span>
+                <span class=nb>printf</span> <span class=s2>&#34;%-15s %s天后过期\n&#34;</span> <span class=nv>$user</span> <span class=nv>$DAYS</span>
+                <span class=nv>result</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$result</span><span class=s2>,</span><span class=nv>$user</span><span class=s2>:</span><span class=nv>$DAYS</span><span class=s2> days&#34;</span>
+            <span class=k>fi</span>
+        <span class=k>done</span>
+    <span class=k>done</span>
+    <span class=nv>report_PasswordExpiry</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$result</span> <span class=p>|</span> sed <span class=s1>&#39;s/^,//&#39;</span><span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+  <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m****************密码策略检查****************\033[0m&#34;</span>
+    grep -v <span class=s2>&#34;#&#34;</span> /etc/login.defs <span class=p>|</span> grep -E <span class=s2>&#34;PASS_MAX_DAYS|PASS_MIN_DAYS|PASS_MIN_LEN|PASS_WARN_AGE&#34;</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getSudoersStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m**********************************************Sudoers检查*******************************************************\033[0m&#34;</span>
+    <span class=nv>conf</span><span class=o>=</span><span class=k>$(</span>grep -v <span class=s2>&#34;^#&#34;</span> /etc/sudoers<span class=p>|</span> grep -v <span class=s2>&#34;^Defaults&#34;</span> <span class=p>|</span> sed <span class=s1>&#39;/^$/d&#39;</span><span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$conf</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getInstalledStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m*************************************************软件检查*******************************************************\033[0m&#34;</span>
+    rpm -qa --last <span class=p>|</span> head <span class=p>|</span> column -t 
+<span class=o>}</span>
+
+
+<span class=k>function</span> getProcessStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m*************************************************进程检查*******************************************************\033[0m&#34;</span>
+    <span class=k>if</span> <span class=o>[</span> <span class=k>$(</span>ps -ef <span class=p>|</span> grep defunct <span class=p>|</span> grep -v grep <span class=p>|</span> wc -l<span class=k>)</span> -ge <span class=m>1</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+        <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m***************僵尸进程***************\033[0m&#34;</span>
+        ps -ef <span class=p>|</span> head -n1
+        ps -ef <span class=p>|</span> grep defunct <span class=p>|</span> grep -v grep
+    <span class=k>fi</span>
+  <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m************CPU占用TOP 10进程*************\033[0m&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;用户 进程ID %CPU 命令 
+</span><span class=s2>  </span><span class=k>$(</span>ps aux <span class=p>|</span> awk <span class=s1>&#39;{print $1, $2, $3, $11}&#39;</span> <span class=p>|</span> sort -k3rn <span class=p>|</span> head -n <span class=m>10</span> <span class=k>)</span><span class=s2>&#34;</span><span class=p>|</span> column -t 
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m************内存占用TOP 10进程*************\033[0m&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;用户 进程ID %MEM 虚拟内存  常驻内存 命令 
+</span><span class=s2>  </span><span class=k>$(</span>ps aux <span class=p>|</span> awk <span class=s1>&#39;{print $1, $2, $4, $5, $6, $11}&#39;</span> <span class=p>|</span> sort -k3rn <span class=p>|</span> head -n <span class=m>10</span> <span class=k>)</span><span class=s2>&#34;</span><span class=p>|</span> column -t 
+  <span class=c1>#echo &#34;&#34;</span>
+    <span class=c1>#echo -e &#34;\033[36m************SWAP占用TOP 10进程*************\033[0m&#34;</span>
+  <span class=c1>#awk: fatal: cannot open file `/proc/18713/smaps&#39; for reading (No such file or directory)</span>
+  <span class=c1>#for i in `cd /proc;ls |grep &#34;^[0-9]&#34;|awk &#39; $0 &gt;100&#39;`;do awk &#39;{if (-f /proc/$i/smaps) print &#34;$i file is not exist&#34;; else print &#34;$i&#34;}&#39;;done</span>
+  <span class=c1>#    for i in `cd /proc;ls |grep &#34;^[0-9]&#34;|awk &#39; $0 &gt;100&#39;` ;do awk &#39;/Swap:/{a=a+$2}END{print &#39;&#34;$i&#34;&#39;,a/1024&#34;M&#34;}&#39; /proc/$i/smaps ;done |sort -k2nr &gt; /tmp/swap.txt</span>
+  <span class=c1>#echo -e &#34;进程ID SWAP使用 $(cat /tmp/swap.txt|grep -v awk | head -n 10)&#34;| column -t</span>
+<span class=o>}</span>
+
+
+
+<span class=k>function</span> getSyslogStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m***********************************************syslog检查*******************************************************\033[0m&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;SYSLOG服务状态：</span><span class=k>$(</span>getState rsyslog<span class=k>)</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m***************rsyslog配置******************\033[0m&#34;</span>
+    cat /etc/rsyslog.conf 2&gt;/dev/null <span class=p>|</span> grep -v <span class=s2>&#34;^#&#34;</span> <span class=p>|</span> grep -v <span class=s2>&#34;^\\</span>$<span class=s2>&#34;</span> <span class=p>|</span> sed <span class=s1>&#39;/^$/d&#39;</span>  <span class=p>|</span> column -t
+<span class=o>}</span>
+
+
+<span class=k>function</span> getFirewallStatus<span class=o>(){</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m***********************************************防火墙检查*******************************************************\033[0m&#34;</span>
+
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m****************防火墙状态******************\033[0m&#34;</span>
+    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$centosVersion</span> <span class=o>=</span> <span class=m>7</span> <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+        systemctl status firewalld &gt;/dev/null  2&gt;<span class=p>&amp;</span><span class=m>1</span>
+        <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+        <span class=k>if</span> <span class=o>[</span> <span class=nv>$status</span> -eq <span class=m>0</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+                <span class=nv>s</span><span class=o>=</span><span class=s2>&#34;active&#34;</span>
+        <span class=k>elif</span> <span class=o>[</span> <span class=nv>$status</span> -eq <span class=m>3</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+                <span class=nv>s</span><span class=o>=</span><span class=s2>&#34;inactive&#34;</span>
+        <span class=k>elif</span> <span class=o>[</span> <span class=nv>$status</span> -eq <span class=m>4</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+                <span class=nv>s</span><span class=o>=</span><span class=s2>&#34;permission denied&#34;</span>
+        <span class=k>else</span>
+                <span class=nv>s</span><span class=o>=</span><span class=s2>&#34;unknown&#34;</span>
+        <span class=k>fi</span>
+    <span class=k>else</span>
+        <span class=nv>s</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>getState iptables<span class=k>)</span><span class=s2>&#34;</span>
+    <span class=k>fi</span>
+    <span class=nb>echo</span> <span class=s2>&#34;firewalld: </span><span class=nv>$s</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m****************防火墙配置******************\033[0m&#34;</span>
+    cat /etc/sysconfig/firewalld 2&gt;/dev/null
+<span class=o>}</span>
+
+
+<span class=k>function</span> getSNMPStatus<span class=o>(){</span>
+    <span class=c1>#SNMP服务状态，配置等</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m***********************************************SNMP检查*********************************************************\033[0m&#34;</span>
+    <span class=nv>status</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>getState snmpd<span class=k>)</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;SNMP服务状态：</span><span class=nv>$status</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=k>if</span> <span class=o>[</span> -e /etc/snmp/snmpd.conf <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+        <span class=nb>echo</span> <span class=s2>&#34;/etc/snmp/snmpd.conf&#34;</span>
+        <span class=nb>echo</span> <span class=s2>&#34;--------------------&#34;</span>
+        cat /etc/snmp/snmpd.conf 2&gt;/dev/null <span class=p>|</span> grep -v <span class=s2>&#34;^#&#34;</span> <span class=p>|</span> sed <span class=s1>&#39;/^$/d&#39;</span>
+    <span class=k>fi</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getState<span class=o>(){</span>
+    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$centosVersion</span> &lt; <span class=m>7</span> <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+        <span class=k>if</span> <span class=o>[</span> -e <span class=s2>&#34;/etc/init.d/</span><span class=nv>$1</span><span class=s2>&#34;</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+            <span class=k>if</span> <span class=o>[</span> <span class=sb>`</span>/etc/init.d/<span class=nv>$1</span> status 2&gt;/dev/null <span class=p>|</span> grep -E <span class=s2>&#34;is running|正在运行&#34;</span> <span class=p>|</span> wc -l<span class=sb>`</span> -ge <span class=m>1</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+                <span class=nv>r</span><span class=o>=</span><span class=s2>&#34;active&#34;</span>
+            <span class=k>else</span>
+                <span class=nv>r</span><span class=o>=</span><span class=s2>&#34;inactive&#34;</span>
+            <span class=k>fi</span>
+        <span class=k>else</span>
+            <span class=nv>r</span><span class=o>=</span><span class=s2>&#34;unknown&#34;</span>
+        <span class=k>fi</span>
+    <span class=k>else</span>
+        <span class=c1>#CentOS 7+</span>
+        <span class=nv>r</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>systemctl is-active <span class=nv>$1</span> 2&gt;<span class=p>&amp;</span>1<span class=k>)</span><span class=s2>&#34;</span>
+    <span class=k>fi</span>
+    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$r</span><span class=s2>&#34;</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getSSHStatus<span class=o>(){</span>
+    <span class=c1>#SSHD服务状态，配置,受信任主机等</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m************************************************SSH检查*********************************************************\033[0m&#34;</span>
+    <span class=c1>#检查受信任主机</span>
+    <span class=nv>pwdfile</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>cat /etc/passwd<span class=k>)</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;SSH服务状态：</span><span class=k>$(</span>getState sshd<span class=k>)</span><span class=s2>&#34;</span>
+    <span class=nv>Protocol_Version</span><span class=o>=</span><span class=k>$(</span>cat /etc/ssh/sshd_config <span class=p>|</span> grep Protocol <span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span>
+    <span class=nb>echo</span> <span class=s2>&#34;SSH协议版本：</span><span class=nv>$Protocol_Version</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m****************信任主机******************\033[0m&#34;</span>
+    <span class=nv>authorized</span><span class=o>=</span><span class=m>0</span>
+    <span class=k>for</span> user in <span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$pwdfile</span><span class=s2>&#34;</span> <span class=p>|</span> grep /bin/bash <span class=p>|</span> awk -F: <span class=s1>&#39;{print $1}&#39;</span><span class=k>)</span><span class=p>;</span><span class=k>do</span>
+        <span class=nv>authorize_file</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$pwdfile</span><span class=s2>&#34;</span> <span class=p>|</span> grep -w <span class=nv>$user</span> <span class=p>|</span> awk -F: <span class=s1>&#39;{printf $6&#34;/.ssh/authorized_keys&#34;}&#39;</span><span class=k>)</span>
+        <span class=nv>authorized_host</span><span class=o>=</span><span class=k>$(</span>cat <span class=nv>$authorize_file</span> 2&gt;/dev/null <span class=p>|</span> awk <span class=s1>&#39;{print $3}&#39;</span> <span class=p>|</span> tr <span class=s1>&#39;\n&#39;</span> <span class=s1>&#39;,&#39;</span> <span class=p>|</span> sed <span class=s1>&#39;s/,$//&#39;</span><span class=k>)</span>
+        <span class=k>if</span> <span class=o>[</span> ! -z <span class=nv>$authorized_host</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+            <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$user</span><span class=s2> 授权 \&#34;</span><span class=nv>$authorized_host</span><span class=s2>\&#34; 无密码访问&#34;</span>
+        <span class=k>fi</span>
+        <span class=nb>let</span> <span class=nv>authorized</span><span class=o>=</span>authorized+<span class=k>$(</span>cat <span class=nv>$authorize_file</span> 2&gt;/dev/null <span class=p>|</span> awk <span class=s1>&#39;{print $3}&#39;</span><span class=p>|</span>wc -l<span class=k>)</span>
+    <span class=k>done</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m*******是否允许ROOT远程登录***************\033[0m&#34;</span>
+    <span class=nv>config</span><span class=o>=</span><span class=k>$(</span>cat /etc/ssh/sshd_config <span class=p>|</span> grep PermitRootLogin<span class=k>)</span>
+    <span class=nv>firstChar</span><span class=o>=</span><span class=si>${</span><span class=nv>config</span><span class=p>:</span><span class=nv>0</span><span class=p>:</span><span class=nv>1</span><span class=si>}</span>
+    <span class=k>if</span> <span class=o>[</span> <span class=nv>$firstChar</span> <span class=o>==</span> <span class=s2>&#34;#&#34;</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+        <span class=nv>PermitRootLogin</span><span class=o>=</span><span class=s2>&#34;yes&#34;</span> 
+    <span class=k>else</span>
+        <span class=nv>PermitRootLogin</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=nv>$config</span> <span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span><span class=k>)</span>
+    <span class=k>fi</span>
+    <span class=nb>echo</span> <span class=s2>&#34;PermitRootLogin </span><span class=nv>$PermitRootLogin</span><span class=s2>&#34;</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m*************ssh服务配置******************\033[0m&#34;</span>
+    cat /etc/ssh/sshd_config <span class=p>|</span> grep -v <span class=s2>&#34;^#&#34;</span> <span class=p>|</span> sed <span class=s1>&#39;/^$/d&#39;</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> getNTPStatus<span class=o>(){</span>
+    <span class=c1>#NTP服务状态，当前时间，配置等</span>
+    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+    <span class=nb>echo</span> -e <span class=s2>&#34;\033[33m***********************************************NTP检查**********************************************************\033[0m&#34;</span>
+    <span class=k>if</span> <span class=o>[</span> -e /etc/ntp.conf <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+        <span class=nb>echo</span> <span class=s2>&#34;NTP服务状态：</span><span class=k>$(</span>getState ntpd<span class=k>)</span><span class=s2>&#34;</span>
+        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+        <span class=nb>echo</span> -e <span class=s2>&#34;\033[36m*************NTP服务配置******************\033[0m&#34;</span>
+        cat /etc/ntp.conf 2&gt;/dev/null <span class=p>|</span> grep -v <span class=s2>&#34;^#&#34;</span> <span class=p>|</span> sed <span class=s1>&#39;/^$/d&#39;</span>
+    <span class=k>fi</span>
+<span class=o>}</span>
+
+
+<span class=k>function</span> check<span class=o>(){</span>
+    version
+    getSystemStatus
+  get_resource
+    getCpuStatus
+    getMemStatus
+    getDiskStatus
+    getNetworkStatus
+    getListenStatus
+    getProcessStatus
+    getServiceStatus
+    getAutoStartStatus
+    getLoginStatus
+    getCronStatus
+    getUserStatus
+    getPasswordStatus
+    getSudoersStatus
+    getFirewallStatus
+    getSSHStatus
+    getSyslogStatus
+    getSNMPStatus
+    getNTPStatus
+    getInstalledStatus
+<span class=o>}</span>
+<span class=c1>#执行检查并保存检查结果</span>
+check &gt; <span class=nv>$RESULTFILE</span>
+<span class=nb>echo</span> -e <span class=s2>&#34;\033[44;37m 主机巡检结果存放在：</span><span class=nv>$RESULTFILE</span><span class=s2>   \033[0m&#34;</span>
+
+<span class=c1>#上传检查结果的文件</span>
+<span class=c1>#curl -F &#34;filename=@$RESULTFILE&#34; &#34;$uploadHostDailyCheckApi&#34; 2&gt;/dev/null</span>
+cat <span class=nv>$RESULTFILE</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-11-26
+<a href=https://github.com/rogeecn/notes/commit/8dc87a73a3f2da82883c4dc2f9a7d61a70e53f9a title=post>(8dc87a7)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/linux/>Linux</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/free-ssl-cert/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">免费 SSL 证书</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/use-wget-to-crawl-hole-site/>
+<span class="next-text nav-default">使用wget命令爬取整站</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-11-26 15:53:41 \u002b0800 \u002b0800',title:'服务巡检脚本',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

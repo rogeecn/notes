@@ -1,0 +1,309 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>分阶段构建 Docker 镜像 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="编写 Dockerfile
+ 什么是 Dockerfile ? Dockerfile 是一个用来构建镜像的文本文件, 文本内容包含了一条条构建镜像所需的指令和说明.
+ 第一阶段构建 为了使我们最后构建出来的镜像尽量的小, 我们最好是分阶段构建.
+第一个阶段我们在 go 环境下, 编译出我们的可执行二进制文件.
+构建配置如下:
+"><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/docker-image-with-steps/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="分阶段构建 Docker 镜像">
+<meta property="og:description" content="编写 Dockerfile
+
+什么是 Dockerfile ?
+Dockerfile 是一个用来构建镜像的文本文件, 文本内容包含了一条条构建镜像所需的指令和说明.
+
+第一阶段构建
+为了使我们最后构建出来的镜像尽量的小, 我们最好是分阶段构建.
+第一个阶段我们在 go 环境下, 编译出我们的可执行二进制文件.
+构建配置如下:">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/docker-image-with-steps/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-12-08T17:14:37+08:00">
+<meta property="article:modified_time" content="2021-12-08T17:20:32+08:00">
+<meta itemprop=name content="分阶段构建 Docker 镜像">
+<meta itemprop=description content="编写 Dockerfile
+
+什么是 Dockerfile ?
+Dockerfile 是一个用来构建镜像的文本文件, 文本内容包含了一条条构建镜像所需的指令和说明.
+
+第一阶段构建
+为了使我们最后构建出来的镜像尽量的小, 我们最好是分阶段构建.
+第一个阶段我们在 go 环境下, 编译出我们的可执行二进制文件.
+构建配置如下:"><meta itemprop=datePublished content="2021-12-08T17:14:37+08:00">
+<meta itemprop=dateModified content="2021-12-08T17:20:32+08:00">
+<meta itemprop=wordCount content="614">
+<meta itemprop=keywords content="docker,镜像,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="分阶段构建 Docker 镜像">
+<meta name=twitter:description content="编写 Dockerfile
+
+什么是 Dockerfile ?
+Dockerfile 是一个用来构建镜像的文本文件, 文本内容包含了一条条构建镜像所需的指令和说明.
+
+第一阶段构建
+为了使我们最后构建出来的镜像尽量的小, 我们最好是分阶段构建.
+第一个阶段我们在 go 环境下, 编译出我们的可执行二进制文件.
+构建配置如下:"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>分阶段构建 Docker 镜像</h1>
+<div class=post-meta>
+<span class=post-time> 2021-12-08 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href=#第一阶段构建>第一阶段构建</a></li>
+<li><a href=#第二阶段构建>第二阶段构建</a></li>
+<li><a href=#打包镜像>打包镜像</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<p>编写 Dockerfile</p>
+<blockquote>
+<p>什么是 Dockerfile ?
+Dockerfile 是一个用来构建镜像的文本文件, 文本内容包含了一条条构建镜像所需的指令和说明.</p>
+</blockquote>
+<h3 id=第一阶段构建>第一阶段构建</h3>
+<p>为了使我们最后构建出来的镜像尽量的小, 我们最好是分阶段构建.</p>
+<p>第一个阶段我们在 go 环境下, 编译出我们的可执行二进制文件.</p>
+<p>构建配置如下:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>FROM golang:1.17-alpine3.13 as builder
+RUN mkdir /src
+RUN sed -i <span class=s1>&#39;s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g&#39;</span> /etc/apk/repositories
+<span class=c1># 安装依赖库 GCC 这些, 根据实际情况考虑是否安装</span>
+RUN apk add build-base
+ADD . /src
+WORKDIR /src
+RUN go env -w <span class=nv>GOPROXY</span><span class=o>=</span>https://goproxy.cn, direct <span class=o>&amp;&amp;</span> go mod tidy
+RUN <span class=nv>GOPROXY</span><span class=o>=</span>https://goproxy.cn go build -o app main.go  <span class=o>&amp;&amp;</span> chmod +x app
+</code></pre></td></tr></table>
+</div>
+</div><p>关键点解释:</p>
+<ul>
+<li>From 基于那个基础镜像, 这里我们基于 go 的 1.17 版本构建, 这里最好和你本地开发环境的 go 版本保持一致.</li>
+<li>RUN go env 这一行是设置 go mod 的代理, 以及根据 go.mod 文件安装依赖</li>
+</ul>
+<p>其他的应该都不难理解, 有问题欢迎留言.</p>
+<h3 id=第二阶段构建>第二阶段构建</h3>
+<p>第一阶段构建完毕, 我们就能得到一个可执行的二进制文件 app 了.</p>
+<p>此时我们就需要进入第二阶段构建, 真正的构建出生产用的镜像, 直接上代码:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>FROM alpine:3.12
+ENV <span class=nv>ZONEINFO</span><span class=o>=</span>/app/zoneinfo.zip
+RUN mkdir /app
+WORKDIR /app
+
+COPY --from<span class=o>=</span>builder /usr/local/go/lib/time/zoneinfo.zip /app
+COPY --from<span class=o>=</span>builder /src/app /app
+ENTRYPOINT  <span class=o>[</span><span class=s2>&#34;./app&#34;</span><span class=o>]</span>
+EXPOSE <span class=m>80</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>关键点解释:</p>
+<ul>
+<li>第一个 COPY 是复制第一阶段里面的时区, 可以根据实际情况选择是否复制.</li>
+<li>第二个 COPY 是把 app 二进制文件复制到这个镜像里面.</li>
+</ul>
+<p>注意这两个 COPY 都是 &ndash;from=builder , 这里的 builder 和第一阶段的 as builder 是一一对应的.</p>
+<p>最后把以上两个阶段的构建代码都复制到 Dockerfile 里面就结束了.</p>
+<h3 id=打包镜像>打包镜像</h3>
+<p>配置文件好了, 剩下就是构建镜像了, 直接基于 Dockerfile 文件用 docker 打包即可!</p>
+<p>所以需要在安装好 docker 环境的机器上才能构建 docker 镜像.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>docker build -t gin-deom:v1 .
+</code></pre></td></tr></table>
+</div>
+</div><p>这里的 gin-deom:v1 就是你的镜像名字了, 我这里是随便写的, 实际生产中肯定是域名 + 镜像名字 + 版本号这样的格式.</p>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-12-08
+<a href=https://github.com/rogeecn/notes/commit/21387ae13de38faa56f2c7d6e9ebd0c54141a99b title=update>(21387ae)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/docker/>docker</a>
+<a href=/tags/%E9%95%9C%E5%83%8F/>镜像</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/csharp-get-continue-output-from-cmd/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">c#从命令中获取输出实时显示在控件中 </span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/laravel-baicaiyuan-dao-sanweishuwu/>
+<span class="next-text nav-default">Laravel - 从百草园到三味书屋</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-12-08 17:14:37 \u002b0800 \u002b0800',title:'分阶段构建 Docker 镜像',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cert on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/cert/</link><description>Recent content in cert on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 15:54:36 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/cert/index.xml" rel="self" type="application/rss+xml"/><item><title>免费 SSL 证书</title><link>http://notes.711xd.com/post/free-ssl-cert/</link><pubDate>Fri, 26 Nov 2021 15:54:36 +0800</pubDate><guid>http://notes.711xd.com/post/free-ssl-cert/</guid><description>&lt;h2 id="zerossl">ZeroSSL&lt;/h2>
+&lt;p>&lt;a href="https://zerossl.com/">https://zerossl.com/&lt;/a>&lt;/p>
+&lt;p>免费用户&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>支持使用 API方式生成。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>90天一续费&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>不能支持泛域名解析&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>官方有工具可以自动生成： &lt;a href="https://github.com/zerossl/zerossl-bot">https://github.com/zerossl/zerossl-bot&lt;/a> 需要注册一个账号 ZeroSSL账号&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="lets-encrypt">Let&amp;rsquo;s Encrypt  &lt;/h2>
+&lt;p>&lt;a href="https://letsencrypt.org/">https://letsencrypt.org/&lt;/a>&lt;/p>
+&lt;p>生成脚本使用：&lt;a href="https://github.com/acmesh-official/acme.sh">acme.sh&lt;/a> 可以一键生成证书，90天一过期，支持泛域名解析。
+&lt;a href="https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E">acme.sh 中文说明&lt;/a>&lt;/p></description></item></channel></rss>

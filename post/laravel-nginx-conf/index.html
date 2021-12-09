@@ -1,0 +1,561 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Laravel Nginx 配置 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="精简版 server.conf 1 2 3 4 5 6  server { listen 80; server_name example.com; root /example.com/public; include presets.d/laravel.conf }   presets.d/laravel.conf 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  add_header X-Frame-Options &amp;#34;SAMEORIGIN&amp;#34;; add_header X-XSS-Protection &amp;#34;1; mode=block&amp;#34;; add_header X-Content-Type-Options &amp;#34;nosniff&amp;#34;; index index.html index.htm index.php; charset utf-8; location / { try_files $uri $uri/ /index.php?$query_string; } location = /favicon.ico { access_log off; log_not_found off; } location = /robots.txt { access_log off; log_not_found off; } error_page 404 /index.php; location ~ \.php$ { fastcgi_pass unix:/var/run/php/php7.2-fpm.sock; fastcgi_index index.php; fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name; include fastcgi_params; } location ~ /\.(?!well-known).* { deny all; }   "><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/laravel-nginx-conf/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Laravel Nginx 配置">
+<meta property="og:description" content="精简版
+server.conf
+
+
+1
+2
+3
+4
+5
+6
+
+
+server {
+    listen 80;
+    server_name example.com;
+    root /example.com/public;
+    include presets.d/laravel.conf
+}
+
+
+presets.d/laravel.conf
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+
+
+add_header X-Frame-Options &#34;SAMEORIGIN&#34;;
+add_header X-XSS-Protection &#34;1; mode=block&#34;;
+add_header X-Content-Type-Options &#34;nosniff&#34;;
+index index.html index.htm index.php;
+charset utf-8;
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+location = /favicon.ico { access_log off; log_not_found off; }
+location = /robots.txt  { access_log off; log_not_found off; }
+error_page 404 /index.php;
+location ~ \.php$ {
+    fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    include fastcgi_params;
+}
+location ~ /\.(?!well-known).* {
+    deny all;
+}
+
+
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/laravel-nginx-conf/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-11-26T15:46:20+08:00">
+<meta property="article:modified_time" content="2021-11-26T16:31:21+08:00">
+<meta itemprop=name content="Laravel Nginx 配置">
+<meta itemprop=description content="精简版
+server.conf
+
+
+1
+2
+3
+4
+5
+6
+
+
+server {
+    listen 80;
+    server_name example.com;
+    root /example.com/public;
+    include presets.d/laravel.conf
+}
+
+
+presets.d/laravel.conf
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+
+
+add_header X-Frame-Options &#34;SAMEORIGIN&#34;;
+add_header X-XSS-Protection &#34;1; mode=block&#34;;
+add_header X-Content-Type-Options &#34;nosniff&#34;;
+index index.html index.htm index.php;
+charset utf-8;
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+location = /favicon.ico { access_log off; log_not_found off; }
+location = /robots.txt  { access_log off; log_not_found off; }
+error_page 404 /index.php;
+location ~ \.php$ {
+    fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    include fastcgi_params;
+}
+location ~ /\.(?!well-known).* {
+    deny all;
+}
+
+
+"><meta itemprop=datePublished content="2021-11-26T15:46:20+08:00">
+<meta itemprop=dateModified content="2021-11-26T16:31:21+08:00">
+<meta itemprop=wordCount content="715">
+<meta itemprop=keywords content="Laravel,Nginx,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Laravel Nginx 配置">
+<meta name=twitter:description content="精简版
+server.conf
+
+
+1
+2
+3
+4
+5
+6
+
+
+server {
+    listen 80;
+    server_name example.com;
+    root /example.com/public;
+    include presets.d/laravel.conf
+}
+
+
+presets.d/laravel.conf
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+
+
+add_header X-Frame-Options &#34;SAMEORIGIN&#34;;
+add_header X-XSS-Protection &#34;1; mode=block&#34;;
+add_header X-Content-Type-Options &#34;nosniff&#34;;
+index index.html index.htm index.php;
+charset utf-8;
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+location = /favicon.ico { access_log off; log_not_found off; }
+location = /robots.txt  { access_log off; log_not_found off; }
+error_page 404 /index.php;
+location ~ \.php$ {
+    fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    include fastcgi_params;
+}
+location ~ /\.(?!well-known).* {
+    deny all;
+}
+
+
+"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Laravel Nginx 配置</h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#精简版>精简版</a>
+<ul>
+<li><a href=#serverconf>server.conf</a></li>
+<li><a href=#presetsdlaravelconf>presets.d/laravel.conf</a></li>
+</ul>
+</li>
+<li><a href=#带解释版>带解释版</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<h2 id=精简版>精简版</h2>
+<h3 id=serverconf>server.conf</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-nginx data-lang=nginx><span class=k>server</span> <span class=p>{</span>
+    <span class=kn>listen</span> <span class=mi>80</span><span class=p>;</span>
+    <span class=kn>server_name</span> <span class=s>example.com</span><span class=p>;</span>
+    <span class=kn>root</span> <span class=s>/example.com/public</span><span class=p>;</span>
+    <span class=kn>include</span> <span class=s>presets.d/laravel.conf</span>
+<span class=err>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=presetsdlaravelconf>presets.d/laravel.conf</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-nginx data-lang=nginx><span class=k>add_header</span> <span class=s>X-Frame-Options</span> <span class=s>&#34;SAMEORIGIN&#34;</span><span class=p>;</span>
+<span class=k>add_header</span> <span class=s>X-XSS-Protection</span> <span class=s>&#34;1</span><span class=p>;</span> <span class=k>mode=block&#34;</span><span class=p>;</span>
+<span class=k>add_header</span> <span class=s>X-Content-Type-Options</span> <span class=s>&#34;nosniff&#34;</span><span class=p>;</span>
+<span class=k>index</span> <span class=s>index.html</span> <span class=s>index.htm</span> <span class=s>index.php</span><span class=p>;</span>
+<span class=k>charset</span> <span class=s>utf-8</span><span class=p>;</span>
+<span class=k>location</span> <span class=s>/</span> <span class=p>{</span>
+    <span class=kn>try_files</span> <span class=nv>$uri</span> <span class=nv>$uri/</span> <span class=s>/index.php?</span><span class=nv>$query_string</span><span class=p>;</span>
+<span class=p>}</span>
+<span class=k>location</span> <span class=p>=</span> <span class=s>/favicon.ico</span> <span class=p>{</span> <span class=kn>access_log</span> <span class=no>off</span><span class=p>;</span> <span class=kn>log_not_found</span> <span class=no>off</span><span class=p>;</span> <span class=p>}</span>
+<span class=k>location</span> <span class=p>=</span> <span class=s>/robots.txt</span>  <span class=p>{</span> <span class=kn>access_log</span> <span class=no>off</span><span class=p>;</span> <span class=kn>log_not_found</span> <span class=no>off</span><span class=p>;</span> <span class=p>}</span>
+<span class=k>error_page</span> <span class=mi>404</span> <span class=s>/index.php</span><span class=p>;</span>
+<span class=k>location</span> <span class=p>~</span> <span class=sr>\.php$</span> <span class=p>{</span>
+    <span class=kn>fastcgi_pass</span> <span class=s>unix:/var/run/php/php7.2-fpm.sock</span><span class=p>;</span>
+    <span class=kn>fastcgi_index</span> <span class=s>index.php</span><span class=p>;</span>
+    <span class=kn>fastcgi_param</span> <span class=s>SCRIPT_FILENAME</span> <span class=nv>$realpath_root$fastcgi_script_name</span><span class=p>;</span>
+    <span class=kn>include</span> <span class=s>fastcgi_params</span><span class=p>;</span>
+<span class=p>}</span>
+<span class=k>location</span> <span class=p>~</span> <span class=sr>/\.(?!well-known).*</span> <span class=p>{</span>
+    <span class=kn>deny</span> <span class=s>all</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=带解释版>带解释版</h2>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-nginx data-lang=nginx><span class=k>server</span> <span class=p>{</span>
+    <span class=c1># 监听 HTTP 协议默认的 [80] 端口。
+</span><span class=c1></span>    <span class=kn>listen</span> <span class=mi>80</span><span class=p>;</span>
+    <span class=c1># 绑定主机名 [example.com]。
+</span><span class=c1></span>    <span class=kn>server_name</span> <span class=s>example.com</span><span class=p>;</span>
+    <span class=c1># 服务器站点根目录 [/example.com/public]。
+</span><span class=c1></span>    <span class=kn>root</span> <span class=s>/example.com/public</span><span class=p>;</span>
+    <span class=c1># 添加几条有关安全的响应头；与 Google+ 的配置类似，详情参见文末。
+</span><span class=c1></span>    <span class=kn>add_header</span> <span class=s>X-Frame-Options</span> <span class=s>&#34;SAMEORIGIN&#34;</span><span class=p>;</span>
+    <span class=kn>add_header</span> <span class=s>X-XSS-Protection</span> <span class=s>&#34;1</span><span class=p>;</span> <span class=kn>mode=block&#34;</span><span class=p>;</span>
+    <span class=kn>add_header</span> <span class=s>X-Content-Type-Options</span> <span class=s>&#34;nosniff&#34;</span><span class=p>;</span>
+    <span class=c1># 站点默认页面；可指定多个，将顺序查找。
+</span><span class=c1></span>    <span class=c1># 例如，访问 http://example.com/ Nginx 将首先尝试「站点根目录/index.html」是否存在，不存在则继续尝试「站点根目录/index.htm」，以此类推...
+</span><span class=c1></span>    <span class=kn>index</span> <span class=s>index.html</span> <span class=s>index.htm</span> <span class=s>index.php</span><span class=p>;</span>
+    <span class=c1># 指定字符集为 UTF-8
+</span><span class=c1></span>    <span class=kn>charset</span> <span class=s>utf-8</span><span class=p>;</span>
+    <span class=c1># Laravel 默认重写规则；删除将导致 Laravel 路由失效且 Nginx 响应 404。
+</span><span class=c1></span>    <span class=kn>location</span> <span class=s>/</span> <span class=p>{</span>
+        <span class=kn>try_files</span> <span class=nv>$uri</span> <span class=nv>$uri/</span> <span class=s>/index.php?</span><span class=nv>$query_string</span><span class=p>;</span>
+    <span class=p>}</span>
+    <span class=c1># 关闭 [/favicon.ico] 和 [/robots.txt] 的访问日志。
+</span><span class=c1></span>    <span class=c1># 并且即使它们不存在，也不写入错误日志。
+</span><span class=c1></span>    <span class=kn>location</span> <span class=p>=</span> <span class=s>/favicon.ico</span> <span class=p>{</span> <span class=kn>access_log</span> <span class=no>off</span><span class=p>;</span> <span class=kn>log_not_found</span> <span class=no>off</span><span class=p>;</span> <span class=p>}</span>
+    <span class=kn>location</span> <span class=p>=</span> <span class=s>/robots.txt</span>  <span class=p>{</span> <span class=kn>access_log</span> <span class=no>off</span><span class=p>;</span> <span class=kn>log_not_found</span> <span class=no>off</span><span class=p>;</span> <span class=p>}</span>
+    <span class=c1># 将 [404] 错误交给 [/index.php] 处理，表示由 Laravel 渲染美观的错误页面。
+</span><span class=c1></span>    <span class=kn>error_page</span> <span class=mi>404</span> <span class=s>/index.php</span><span class=p>;</span>
+    <span class=c1># URI 符合正则表达式 [\.php$] 的请求将进入此段配置
+</span><span class=c1></span>    <span class=kn>location</span> <span class=p>~</span> <span class=sr>\.php$</span> <span class=p>{</span>
+        <span class=c1># 配置 FastCGI 服务地址，可以为 IP:端口，也可以为 Unix socket。
+</span><span class=c1></span>        <span class=kn>fastcgi_pass</span> <span class=s>unix:/var/run/php/php7.2-fpm.sock</span><span class=p>;</span>
+        <span class=c1># 配置 FastCGI 的主页为 index.php。
+</span><span class=c1></span>        <span class=kn>fastcgi_index</span> <span class=s>index.php</span><span class=p>;</span>
+        <span class=c1># 配置 FastCGI 参数 SCRIPT_FILENAME 为 $realpath_root$fastcgi_script_name。
+</span><span class=c1></span>        <span class=kn>fastcgi_param</span> <span class=s>SCRIPT_FILENAME</span> <span class=nv>$realpath_root$fastcgi_script_name</span><span class=p>;</span>
+        <span class=c1># 引用更多默认的 FastCGI 参数。
+</span><span class=c1></span>        <span class=kn>include</span> <span class=s>fastcgi_params</span><span class=p>;</span>
+    <span class=p>}</span>
+    <span class=c1># 通俗地说，以上配置将所有 URI 以 .php 结尾的请求，全部交给 PHP-FPM 处理。
+</span><span class=c1></span>    <span class=c1># 除符合正则表达式 [/\.(?!well-known).*] 之外的 URI，全部拒绝访问
+</span><span class=c1></span>    <span class=c1># 也就是说，拒绝公开以 [.] 开头的目录，[.well-known] 除外
+</span><span class=c1></span>    <span class=kn>location</span> <span class=p>~</span> <span class=sr>/\.(?!well-known).*</span> <span class=p>{</span>
+        <span class=kn>deny</span> <span class=s>all</span><span class=p>;</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-11-26
+<a href=https://github.com/rogeecn/notes/commit/8dc87a73a3f2da82883c4dc2f9a7d61a70e53f9a title=post>(8dc87a7)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/laravel/>Laravel</a>
+<a href=/tags/nginx/>Nginx</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/laravel-awesome-extensions/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">Laravel 一些不错的扩展</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/laravel-artisan-everywhere/>
+<span class="next-text nav-default">Laravel Artisan 命令任意执行</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-11-26 15:46:20 \u002b0800 \u002b0800',title:'Laravel Nginx 配置',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

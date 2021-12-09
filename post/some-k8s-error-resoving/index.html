@@ -1,0 +1,568 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Kubernetes 相关问题 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="K8s kubectl error：c-bash: _get_comp_words_by_ref: command not found 故障现象：
+1  source &amp;lt;(kubectl completion bash)   运行kubectl tab时出现以下报错
+1  [root@master bin]# kubectl c-bash: _get_comp_words_by_ref: command not found   解决方法：
+"><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/some-k8s-error-resoving/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Kubernetes 相关问题">
+<meta property="og:description" content="K8s kubectl error：c-bash: _get_comp_words_by_ref: command not found
+故障现象：
+
+
+1
+
+
+source <(kubectl completion bash)
+
+
+运行kubectl tab时出现以下报错
+
+
+1
+
+
+[root@master bin]# kubectl c-bash: _get_comp_words_by_ref: command not found
+
+
+解决方法：">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/some-k8s-error-resoving/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-11-26T15:33:03+08:00">
+<meta property="article:modified_time" content="2021-11-26T16:31:21+08:00">
+<meta itemprop=name content="Kubernetes 相关问题">
+<meta itemprop=description content="K8s kubectl error：c-bash: _get_comp_words_by_ref: command not found
+故障现象：
+
+
+1
+
+
+source <(kubectl completion bash)
+
+
+运行kubectl tab时出现以下报错
+
+
+1
+
+
+[root@master bin]# kubectl c-bash: _get_comp_words_by_ref: command not found
+
+
+解决方法："><meta itemprop=datePublished content="2021-11-26T15:33:03+08:00">
+<meta itemprop=dateModified content="2021-11-26T16:31:21+08:00">
+<meta itemprop=wordCount content="1302">
+<meta itemprop=keywords content="Kubernetes,k8s,error,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Kubernetes 相关问题">
+<meta name=twitter:description content="K8s kubectl error：c-bash: _get_comp_words_by_ref: command not found
+故障现象：
+
+
+1
+
+
+source <(kubectl completion bash)
+
+
+运行kubectl tab时出现以下报错
+
+
+1
+
+
+[root@master bin]# kubectl c-bash: _get_comp_words_by_ref: command not found
+
+
+解决方法："><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Kubernetes 相关问题</h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#k8s-kubectl-errorc-bash-_get_comp_words_by_ref-command-not-found>K8s kubectl error：c-bash: _get_comp_words_by_ref: command not found</a></li>
+<li><a href=#解决kubectl-get-pods时报错-no-resources-found>解决kubectl get pods时报错 No resources found.</a>
+<ul>
+<li><a href=#测试>测试</a></li>
+<li><a href=#参考文章>参考文章</a></li>
+</ul>
+</li>
+<li><a href=#pod-with-imagepullbackoff-back-off-pulling-image-registryaccessredhatcomrhel7pod-infrastructurelatest>&ldquo;POD&rdquo; with ImagePullBackOff: &ldquo;Back-off pulling image &ldquo;registry.access.redhat.com/rhel7/pod-infrastructure:latest&rdquo;&rdquo;</a></li>
+<li><a href=#nodeport-无法访问>nodeport 无法访问</a>
+<ul>
+<li><a href=#solution>Solution</a></li>
+</ul>
+</li>
+<li><a href=#解决flannel下k8s-pod及容器无法跨主机互通问题>解决flannel下k8s pod及容器无法跨主机互通问题</a></li>
+<li><a href=#k8s-113部署pod和node中无法ping同cluster-ip>k8s 1.13部署pod和node中无法ping同cluster ip</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<h2 id=k8s-kubectl-errorc-bash-_get_comp_words_by_ref-command-not-found>K8s kubectl error：c-bash: _get_comp_words_by_ref: command not found</h2>
+<p>故障现象：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nb>source</span> &lt;<span class=o>(</span>kubectl completion bash<span class=o>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>运行kubectl tab时出现以下报错</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@master bin<span class=o>]</span><span class=c1># kubectl c-bash: _get_comp_words_by_ref: command not found</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>解决方法：</p>
+<p>1.安装bash-completion</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@master bin<span class=o>]</span><span class=c1># yum install bash-completion -y</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>2.执行bash_completion</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@master bin<span class=o>]</span><span class=c1># source /usr/share/bash-completion/bash_completion</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>3.重新加载kubectl completion</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@master bin<span class=o>]</span><span class=c1># source &lt;(kubectl completion bash)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>4.又能开心的用tab了</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@master bin<span class=o>]</span><span class=c1># kubectl create clusterrolebinding </span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=解决kubectl-get-pods时报错-no-resources-found>解决kubectl get pods时报错 No resources found.</h2>
+<p>原因: 暂时没有找到，启动什么的无异常，网上搜索后初步判断:systemd 单元文件包含ServiceAccount许可控制器，需要指定所需的签名密钥，详见Gitbub。</p>
+<p>解决方案
+跳过ServiceAccount(未成功)
+打开kube-apiserver配置文件:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo vim /etc/kubernetes/apiserver
+</code></pre></td></tr></table>
+</div>
+</div><p>找到如下代码</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=s2>&#34;KUBE_ADMISSION_CONTROL=&#34;</span>--admission_control<span class=o>=</span>NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota<span class=s2>&#34;
+</span></code></pre></td></tr></table>
+</div>
+</div><p>去掉ServiceAccount，保存退出。</p>
+<p>重启该项服务</p>
+<p>启动报错，此方案不通</p>
+<p>配置ServiceAccount(成功)</p>
+<p>生成密钥到kube配置文件目录</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>openssl genrsa -out /etc/kubernetes/serviceaccount.key <span class=m>2048</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>打开kube-apiserver配置文件:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo vim /etc/kubernetes/apiserver
+</code></pre></td></tr></table>
+</div>
+</div><p>追加如下内容：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nv>KUBE_API_ARGS</span><span class=o>=</span><span class=s2>&#34;--service_account_key_file=/etc/kubernetes/serviceaccount.key&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>打开controller-manager配置文件:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo vim /etc/kubernetes/controller-manager
+</code></pre></td></tr></table>
+</div>
+</div><p>重写如下内容</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nv>KUBE_CONTROLLER_MANAGER_ARGS</span><span class=o>=</span><span class=s2>&#34;--service_account_private_key_file=/etc/kubernetes/serviceaccount.key&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>重启相关项服务：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo systemctl restart etcd kube-apiserver kube-controller-manager kube-scheduler kube-proxy kubelet
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=测试>测试</h3>
+<p>键入:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo kubectl get pods
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=参考文章>参考文章</h3>
+<ul>
+<li>
+<p>Pods test failures after master upgrade 0.19.3 → 0.21.2 <a href=https://github.com/kubernetes/kubernetes/issues/11355#issuecomment-127378691>https://github.com/kubernetes/kubernetes/issues/11355#issuecomment-127378691</a></p>
+</li>
+<li>
+<p>解决k8s创建pod报错No API token found for service account “default”, retry after the token is automatically</p>
+</li>
+</ul>
+<p><a href=https://blog.csdn.net/lusyoe/article/details/79673058>https://blog.csdn.net/lusyoe/article/details/79673058</a></p>
+<ul>
+<li>
+<p>Error creating kubernetes pod: No API token found for service acc <a href=https://linuxacademy.com/community/posts/show/topic/15747-error-creating-kubernetes-pod-no-api-token-found-for-service-acc>https://linuxacademy.com/community/posts/show/topic/15747-error-creating-kubernetes-pod-no-api-token-found-for-service-acc</a></p>
+</li>
+<li>
+<p>kubenetes无法创建pod/创建RC时无法自动创建pod的问题 <a href=https://blog.csdn.net/jinzhencs/article/details/51435020>https://blog.csdn.net/jinzhencs/article/details/51435020</a></p>
+</li>
+</ul>
+<h2 id=pod-with-imagepullbackoff-back-off-pulling-image-registryaccessredhatcomrhel7pod-infrastructurelatest>&ldquo;POD&rdquo; with ImagePullBackOff: &ldquo;Back-off pulling image &ldquo;registry.access.redhat.com/rhel7/pod-infrastructure:latest&rdquo;&rdquo;</h2>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>yum install wget -y
+wget http://mirror.centos.org/centos/7/os/x86_64/Packages/python-rhsm-certificates-1.19.10-1.el7_4.x86_64.rpm
+rpm2cpio python-rhsm-certificates-1.19.10-1.el7_4.x86_64.rpm <span class=p>|</span> cpio -iv --to-stdout ./etc/rhsm/ca/redhat-uep.pem <span class=p>|</span> tee /etc/rhsm/ca/redhat-uep.pem
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=nodeport-无法访问>nodeport 无法访问</h2>
+<p>为了安全起见， docker 在 1.13 版本之后，将系统iptables 中 FORWARD 链的默认策略设置为 DROP，并为连接到 docker0 网桥的容器添加了放行规则。这里引用 moby issue#14041 中的描述：</p>
+<blockquote>
+<p>When docker starts, it enables net.ipv4.ip_forward without changing the iptables FORWARD chain default policy to DROP. This means that another machine on the same network as the docker host can add a route to their routing table, and directly address any containers running on that docker host.</p>
+</blockquote>
+<p>For example, if the docker0 subnet is 172.17.0.0/16 (the default subnet), and the docker host’s IP address is 192.168.0.10, from another host on the network run:
+bash
+$ ip route add 172.17.0.0/16 via 192.168.0.10
+$ nmap 172.17.0.0/16</p>
+<p>The above will scan for containers running on the host, and report IP addresses & running services found.</p>
+<p>To fix this, docker needs to set the FORWARD policy to DROP when it enables the net.ipv4.ip_forward sysctl parameter.</p>
+<p>kubernetes 使用的 cni 插件会因此受影响（cni并不会在 FORWARD 链中生成相应规则），由此导致除 pod 所在 host 以外节点无法转发报文而访问失败。</p>
+<h3 id=solution>Solution</h3>
+<p>如果对安全要求较低，可将 FORWARD 链的默认规则设为 ACCEPT</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>iptables -P FORWARD ACCEPT
+</code></pre></td></tr></table>
+</div>
+</div><p>其它方法可参考:</p>
+<p>kubernetes issues#40182</p>
+<p><a href=https://github.com/kubernetes/kubernetes/issues/40182>https://github.com/kubernetes/kubernetes/issues/40182</a></p>
+<h2 id=解决flannel下k8s-pod及容器无法跨主机互通问题>解决flannel下k8s pod及容器无法跨主机互通问题</h2>
+<p>这是由于linux还有底层的iptables，所以在node上分别执行：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -F
+iptables -L -n
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=k8s-113部署pod和node中无法ping同cluster-ip>k8s 1.13部署pod和node中无法ping同cluster ip</h2>
+<p>问题
+在node上和pod中无法ping通cluster ip</p>
+<p>节点之前的网络是kube-proxy管理的，检查kube-proxy 的配置</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>vim /lib/systemd/system/kube-proxy.service
+
+<span class=o>[</span>Unit<span class=o>]</span>
+<span class=nv>Description</span><span class=o>=</span>Kubernetes Proxy
+<span class=nv>After</span><span class=o>=</span>network.target
+
+<span class=o>[</span>Service<span class=o>]</span>
+<span class=nv>WorkingDirectory</span><span class=o>=</span>/var/lib/kube-proxy
+<span class=nv>ExecStart</span><span class=o>=</span>/usr/local/bin/kube-proxy <span class=se>\
+</span><span class=se></span>  --bind-address<span class=o>=</span>192.168.205.10 <span class=se>\
+</span><span class=se></span>  --v<span class=o>=</span><span class=m>4</span> <span class=se>\
+</span><span class=se></span>  --kubeconfig<span class=o>=</span>/etc/kubernetes/kube-proxy.kubeconfig
+<span class=nv>Restart</span><span class=o>=</span>on-failure
+
+<span class=o>[</span>Install<span class=o>]</span>
+<span class=nv>WantedBy</span><span class=o>=</span>multi-user.target
+</code></pre></td></tr></table>
+</div>
+</div><p>导致这个问题的配置项是 &ndash;proxy-mode</p>
+<blockquote>
+<p>&ndash;proxy-mode ProxyMode Which proxy mode to use: &lsquo;userspace&rsquo; (older) or &lsquo;iptables&rsquo; (faster) or &lsquo;ipvs&rsquo; (experimental). If blank, use the best-available proxy (currently iptables). If the iptables proxy is selected, regardless of how, but the system&rsquo;s kernel or iptables versions are insufficient, this always falls back to the userspace proxy.</p>
+</blockquote>
+<p>解决方法</p>
+<p>修改配置如下：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=k>[Unit]</span>
+<span class=na>Description</span><span class=o>=</span><span class=s>Kubernetes Proxy</span>
+<span class=na>After</span><span class=o>=</span><span class=s>network.target</span>
+
+<span class=k>[Service]</span>
+<span class=na>WorkingDirectory</span><span class=o>=</span><span class=s>/var/lib/kube-proxy</span>
+<span class=na>ExecStart</span><span class=o>=</span><span class=s>/usr/local/bin/kube-proxy \
+</span><span class=s>  --bind-address=192.168.205.10 \
+</span><span class=s>  --v=4 \
+</span><span class=s>  --proxy-mode=ipvs \
+</span><span class=s>  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig</span>
+<span class=na>Restart</span><span class=o>=</span><span class=s>on-failure</span>
+
+<span class=k>[Install]</span>
+<span class=na>WantedBy</span><span class=o>=</span><span class=s>multi-user.target</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>将 <code>--proxy-mode</code>指定成 <code>ipvs</code>模式。</p>
+<p>详细问题原因还不明，反正这样改了后，重启kube-proxy后就可以ping同cluster ip了。</p>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-11-26
+<a href=https://github.com/rogeecn/notes/commit/8dc87a73a3f2da82883c4dc2f9a7d61a70e53f9a title=post>(8dc87a7)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/kubernetes/>Kubernetes</a>
+<a href=/tags/k8s/>k8s</a>
+<a href=/tags/error/>error</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/yet-another-nice-wordpress-theme/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">一个不错的 WordPress 主题</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/flutter-uni-link-cold-start-stop-on-homepage/>
+<span class="next-text nav-default">Flutter解决uni_link 应用冷启动只能停留在主页的问题</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-11-26 15:33:03 \u002b0800 \u002b0800',title:'Kubernetes 相关问题',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

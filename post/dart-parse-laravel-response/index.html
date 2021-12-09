@@ -1,0 +1,750 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Dart 解析 Laravel 数据结构 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="数据JSON内容： 1 2 3 4 5 6 7 8 9 10 11 12 13 14  { &amp;#34;message&amp;#34;: &amp;#34;json_message_data&amp;#34;, &amp;#34;errors&amp;#34;:{ &amp;#34;name&amp;#34;:[ &amp;#34;name_message_nnn&amp;#34; ], &amp;#34;user&amp;#34;:[ &amp;#34;user_message&amp;#34; ] }, &amp;#34;data&amp;#34;:{ &amp;#34;username&amp;#34;:&amp;#34;Rogee&amp;#34; } }   "><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/dart-parse-laravel-response/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Dart 解析 Laravel 数据结构">
+<meta property="og:description" content="数据JSON内容：
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+
+
+{
+    &#34;message&#34;: &#34;json_message_data&#34;,
+    &#34;errors&#34;:{
+        &#34;name&#34;:[
+            &#34;name_message_nnn&#34;
+        ],
+        &#34;user&#34;:[
+            &#34;user_message&#34;
+        ]
+    },
+    &#34;data&#34;:{
+        &#34;username&#34;:&#34;Rogee&#34;
+    }
+}
+
+
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/dart-parse-laravel-response/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-11-26T16:02:38+08:00">
+<meta property="article:modified_time" content="2021-11-26T16:31:21+08:00">
+<meta itemprop=name content="Dart 解析 Laravel 数据结构">
+<meta itemprop=description content="数据JSON内容：
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+
+
+{
+    &#34;message&#34;: &#34;json_message_data&#34;,
+    &#34;errors&#34;:{
+        &#34;name&#34;:[
+            &#34;name_message_nnn&#34;
+        ],
+        &#34;user&#34;:[
+            &#34;user_message&#34;
+        ]
+    },
+    &#34;data&#34;:{
+        &#34;username&#34;:&#34;Rogee&#34;
+    }
+}
+
+
+"><meta itemprop=datePublished content="2021-11-26T16:02:38+08:00">
+<meta itemprop=dateModified content="2021-11-26T16:31:21+08:00">
+<meta itemprop=wordCount content="673">
+<meta itemprop=keywords content="Dart,JSON,Laravel,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Dart 解析 Laravel 数据结构">
+<meta name=twitter:description content="数据JSON内容：
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+
+
+{
+    &#34;message&#34;: &#34;json_message_data&#34;,
+    &#34;errors&#34;:{
+        &#34;name&#34;:[
+            &#34;name_message_nnn&#34;
+        ],
+        &#34;user&#34;:[
+            &#34;user_message&#34;
+        ]
+    },
+    &#34;data&#34;:{
+        &#34;username&#34;:&#34;Rogee&#34;
+    }
+}
+
+
+"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Dart 解析 Laravel 数据结构</h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#数据json内容>数据JSON内容：</a></li>
+<li><a href=#解析结构>解析结构：</a></li>
+<li><a href=#使用泛型方式解析>使用泛型方式解析：</a>
+<ul>
+<li><a href=#优化后的>优化后的</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<h2 id=数据json内容>数据JSON内容：</h2>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+    <span class=nt>&#34;message&#34;</span><span class=p>:</span> <span class=s2>&#34;json_message_data&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;errors&#34;</span><span class=p>:{</span>
+        <span class=nt>&#34;name&#34;</span><span class=p>:[</span>
+            <span class=s2>&#34;name_message_nnn&#34;</span>
+        <span class=p>],</span>
+        <span class=nt>&#34;user&#34;</span><span class=p>:[</span>
+            <span class=s2>&#34;user_message&#34;</span>
+        <span class=p>]</span>
+    <span class=p>},</span>
+    <span class=nt>&#34;data&#34;</span><span class=p>:{</span>
+        <span class=nt>&#34;username&#34;</span><span class=p>:</span><span class=s2>&#34;Rogee&#34;</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=解析结构>解析结构：</h2>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=k>import</span> <span class=s2>&#34;dart:io&#34;</span><span class=p>;</span>
+<span class=k>import</span> <span class=s2>&#34;dart:convert&#34;</span><span class=p>;</span>
+
+<span class=kt>void</span> <span class=n>main</span><span class=p>(</span><span class=n>args</span><span class=p>)</span> <span class=p>{</span>
+  <span class=n>File</span> <span class=n>file</span> <span class=o>=</span> <span class=k>new</span> <span class=n>File</span><span class=p>(</span><span class=s2>&#34;./dart.json&#34;</span><span class=p>);</span>
+  <span class=kt>String</span> <span class=n>jsonContent</span> <span class=o>=</span> <span class=n>file</span><span class=p>.</span><span class=n>readAsStringSync</span><span class=p>();</span>
+
+  <span class=n>Map</span> <span class=n>jsonMap</span> <span class=o>=</span> <span class=n>json</span><span class=p>.</span><span class=n>decode</span><span class=p>(</span><span class=n>jsonContent</span><span class=p>);</span>
+  <span class=kd>var</span> <span class=n>resp</span> <span class=o>=</span> <span class=n>Response</span><span class=p>.</span><span class=n>fromJson</span><span class=p>(</span><span class=n>jsonMap</span><span class=p>);</span>
+
+  <span class=k>if</span> <span class=p>(</span><span class=n>resp</span><span class=p>.</span><span class=n>errors</span><span class=p>.</span><span class=n>isNotEmpty</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>print</span><span class=p>(</span><span class=s2>&#34;json: &#34;</span> <span class=o>+</span> <span class=n>resp</span><span class=p>.</span><span class=n>errors</span><span class=p>[</span><span class=s1>&#39;name&#39;</span><span class=p>]</span><span class=o>?</span><span class=p>.</span><span class=n>first</span><span class=p>);</span>
+  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+    <span class=n>print</span><span class=p>(</span><span class=s2>&#34;json: error is empty&#34;</span><span class=p>);</span>
+  <span class=p>}</span>
+
+  <span class=n>print</span><span class=p>(</span><span class=s2>&#34;JSON: &#34;</span><span class=o>+</span><span class=n>json</span><span class=p>.</span><span class=n>encode</span><span class=p>(</span><span class=n>resp</span><span class=p>.</span><span class=n>toJson</span><span class=p>()));</span>
+<span class=p>}</span>
+
+<span class=kd>class</span> <span class=nc>Response</span> <span class=p>{</span>
+  <span class=kt>String</span> <span class=n>message</span><span class=p>;</span>
+  <span class=n>Data</span> <span class=n>data</span><span class=p>;</span>
+  <span class=n>Map</span><span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span> <span class=n>List</span><span class=o>&lt;</span><span class=kt>String</span><span class=o>&gt;&gt;</span> <span class=n>errors</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Map</span><span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span> <span class=n>List</span><span class=o>&lt;</span><span class=kt>String</span><span class=o>&gt;&gt;</span><span class=p>();</span>
+
+  <span class=n>Response</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=n>message</span><span class=p>,</span> <span class=k>this</span><span class=p>.</span><span class=n>errors</span><span class=p>);</span>
+
+  <span class=n>Response</span><span class=p>.</span><span class=n>fromJson</span><span class=p>(</span><span class=n>Map</span><span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span> <span class=kt>dynamic</span><span class=o>&gt;</span> <span class=n>json</span><span class=p>)</span>
+      <span class=o>:</span> <span class=n>message</span> <span class=o>=</span> <span class=n>json</span><span class=p>[</span><span class=s1>&#39;message&#39;</span><span class=p>],</span>
+        <span class=n>data</span> <span class=o>=</span> <span class=n>Data</span><span class=p>.</span><span class=n>fromJson</span><span class=p>(</span><span class=n>json</span><span class=p>[</span><span class=s1>&#39;data&#39;</span><span class=p>])</span> <span class=p>{</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>json</span><span class=p>[</span><span class=s2>&#34;errors&#34;</span><span class=p>]</span> <span class=o>!=</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
+      <span class=n>Map</span><span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span> <span class=kt>dynamic</span><span class=o>&gt;</span><span class=p>.</span><span class=n>from</span><span class=p>(</span><span class=n>json</span><span class=p>[</span><span class=s2>&#34;errors&#34;</span><span class=p>]).</span><span class=n>forEach</span><span class=p>((</span><span class=n>key</span><span class=p>,</span> <span class=n>value</span><span class=p>)</span> <span class=p>{</span>
+        <span class=n>errors</span><span class=p>.</span><span class=n>addAll</span><span class=p>({</span><span class=nl>key:</span> <span class=n>List</span><span class=o>&lt;</span><span class=kt>String</span><span class=o>&gt;</span><span class=p>.</span><span class=n>from</span><span class=p>(</span><span class=n>value</span><span class=p>)});</span>
+      <span class=p>});</span>
+    <span class=p>}</span>
+  <span class=p>}</span>
+
+  <span class=n>Map</span><span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span> <span class=kt>dynamic</span><span class=o>&gt;</span> <span class=n>toJson</span><span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+        <span class=s1>&#39;message&#39;</span><span class=o>:</span> <span class=n>message</span><span class=p>,</span>
+        <span class=s1>&#39;errors&#39;</span><span class=o>:</span> <span class=n>errors</span><span class=p>,</span>
+        <span class=s1>&#39;data&#39;</span><span class=o>:</span> <span class=n>data</span><span class=p>,</span>
+      <span class=p>};</span>
+<span class=p>}</span>
+
+<span class=kd>class</span> <span class=nc>Data</span> <span class=p>{</span>
+  <span class=kt>String</span> <span class=n>username</span><span class=p>;</span>
+
+  <span class=n>Data</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=n>username</span><span class=p>);</span>
+
+  <span class=n>Data</span><span class=p>.</span><span class=n>fromJson</span><span class=p>(</span><span class=n>Map</span><span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span> <span class=kt>dynamic</span><span class=o>&gt;</span> <span class=n>json</span><span class=p>)</span> <span class=o>:</span> <span class=n>username</span> <span class=o>=</span> <span class=n>json</span><span class=p>[</span><span class=s1>&#39;username&#39;</span><span class=p>];</span>
+
+  <span class=n>Map</span><span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span> <span class=kt>dynamic</span><span class=o>&gt;</span> <span class=n>toJson</span><span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+        <span class=s1>&#39;username&#39;</span><span class=o>:</span> <span class=n>username</span><span class=p>,</span>
+      <span class=p>};</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=使用泛型方式解析>使用泛型方式解析：</h2>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>import &#34;dart:io&#34;;
+import &#34;dart:convert&#34;;
+
+void main(args) {
+  File file = new File(&#34;./dart.json&#34;);
+  String jsonContent = file.readAsStringSync();
+
+  Map jsonMap = json.decode(jsonContent);
+
+  //  NOTICE
+  var resp = Response&lt;Data&gt;.fromJson(Data(), jsonMap);
+
+  if (resp.errors.isNotEmpty) {
+    print(&#34;json: &#34; + resp.errors[&#39;name&#39;]?.first);
+  } else {
+    print(&#34;json: error is empty&#34;);
+  }
+
+  print(&#34;JSON: &#34; + json.encode(resp.toJson()));
+}
+
+class Response&lt;T extends IData&gt; {
+  String message;
+  Map&lt;String, List&lt;String&gt;&gt; errors = new Map&lt;String, List&lt;String&gt;&gt;();
+  T data;
+
+  Response(this.message, this.errors, this.data);
+
+  //  NOTICE
+  Response.fromJson(T data, Map&lt;String, dynamic&gt; json) {
+    message = json[&#39;message&#39;];
+    this.data = data.fromJson(json[&#39;data&#39;]);
+
+    if (json[&#34;errors&#34;] != null) {
+      Map&lt;String, dynamic&gt;.from(json[&#34;errors&#34;]).forEach((key, value) {
+        errors.addAll({key: List&lt;String&gt;.from(value)});
+      });
+    }
+  }
+
+  Map&lt;String, dynamic&gt; toJson() =&gt; {
+        &#39;message&#39;: message,
+        &#39;errors&#39;: errors,
+        &#39;data&#39;: data,
+      };
+}
+
+abstract class IData&lt;T&gt; {
+  T fromJson(Map&lt;String, dynamic&gt; json);
+
+  Map&lt;String, dynamic&gt; toJson();
+}
+
+class Data implements IData&lt;Data&gt; {
+  String username;
+
+  Data({this.username});
+
+  Data fromJson(Map&lt;String, dynamic&gt; json) {
+    return Data(username: username);
+  }
+
+  Map&lt;String, dynamic&gt; toJson() =&gt; {
+        &#34;usernmae&#34;: username,
+      };
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=优化后的>优化后的</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>import &#39;package:validators/validators.dart&#39;;
+
+import &#39;json_convert_content.dart&#39;;
+
+class HttpResponse&lt;T extends JsonConvert&gt; {
+  String message = &#34;&#34;;
+  Map&lt;String, List&lt;String&gt;&gt; errors = new Map&lt;String, List&lt;String&gt;&gt;();
+  T data;
+
+  HttpResponse(this.message, this.errors, this.data);
+
+  HttpResponse.fromJson(T data, Map&lt;String, dynamic&gt; json) {
+    if (json[&#39;message&#39;] != null) {
+      message = json[&#39;message&#39;];
+    }
+
+    if (json[&#39;data&#39;] != null) {
+      this.data = data.fromJson(json[&#39;data&#39;]);
+    }
+
+    if (json[&#34;errors&#34;] != null) {
+      Map&lt;String, dynamic&gt;.from(json[&#34;errors&#34;]).forEach((key, value) {
+        errors.addAll({key: List&lt;String&gt;.from(value)});
+      });
+    }
+  }
+
+  Map&lt;String, dynamic&gt; toJson() =&gt; {
+        &#39;message&#39;: message,
+        &#39;errors&#39;: errors,
+        &#39;data&#39;: data,
+      };
+
+  bool hasError() {
+    return message.length &gt; 0;
+  }
+
+  bool fieldHasError(String field) {
+    if (!hasError()) {
+      return false;
+    }
+    return errors.containsKey(field);
+  }
+
+  String firstFieldError(String field) {
+    return fieldErrors(field).first;
+  }
+
+  List&lt;String&gt; fieldErrors(String field) {
+    if (!hasError()) {
+      return new List&lt;String&gt;();
+    }
+
+    if (!fieldHasError(field)) {
+      return List&lt;String&gt;();
+    }
+
+    return errors[field];
+  }
+
+  String firstError() {
+    if (!hasError()) {
+      return &#34;&#34;;
+    }
+
+    String firstError = &#34;&#34;;
+    bool canBreak = false;
+    errors.forEach((key, value) {
+      canBreak = true;
+      if (!canBreak) {
+        firstError = value.first;
+      }
+    });
+    return firstError;
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-11-26
+<a href=https://github.com/rogeecn/notes/commit/8dc87a73a3f2da82883c4dc2f9a7d61a70e53f9a title=post>(8dc87a7)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/dart/>Dart</a>
+<a href=/tags/json/>JSON</a>
+<a href=/tags/laravel/>Laravel</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/centos-flutter-android-builder-env/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">CentOS7 Flutter Android 环境构建</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/golang-cross-platform-compile/>
+<span class="next-text nav-default">Golang 在 Mac、Linux、Windows 下如何交叉编译</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-11-26 16:02:38 \u002b0800 \u002b0800',title:'Dart 解析 Laravel 数据结构',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

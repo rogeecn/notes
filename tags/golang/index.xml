@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Golang on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/golang/</link><description>Recent content in Golang on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 16:28:40 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/golang/index.xml" rel="self" type="application/rss+xml"/><item><title>golang float32/64与[]byte互转</title><link>http://notes.711xd.com/post/golang-float-byte-convert/</link><pubDate>Fri, 26 Nov 2021 16:28:40 +0800</pubDate><guid>http://notes.711xd.com/post/golang-float-byte-convert/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="kn">import&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;span class="s">&amp;#34;encoding/binary&amp;#34;&lt;/span>
+&lt;span class="s">&amp;#34;math&amp;#34;&lt;/span>
+&lt;span class="p">)&lt;/span>
+&lt;span class="kd">func&lt;/span> &lt;span class="nf">Float32ToByte&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span> &lt;span class="kt">float32&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="kt">byte&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">bits&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Float32bits&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nx">bytes&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nb">make&lt;/span>&lt;span class="p">([]&lt;/span>&lt;span class="kt">byte&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nx">binary&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">LittleEndian&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">PutUint32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">bytes&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">bits&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="nx">bytes&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="kd">func&lt;/span> &lt;span class="nf">ByteToFloat32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">bytes&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="kt">byte&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">float32&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">bits&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">binary&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">LittleEndian&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Uint32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">bytes&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="nx">math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Float32frombits&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">bits&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="kd">func&lt;/span> &lt;span class="nf">Float64ToByte&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span> &lt;span class="kt">float64&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="kt">byte&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">bits&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Float64bits&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nx">bytes&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nb">make&lt;/span>&lt;span class="p">([]&lt;/span>&lt;span class="kt">byte&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nx">binary&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">LittleEndian&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">PutUint64&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">bytes&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">bits&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="nx">bytes&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="kd">func&lt;/span> &lt;span class="nf">ByteToFloat64&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">bytes&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="kt">byte&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">float64&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">bits&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">binary&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">LittleEndian&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Uint64&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">bytes&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="nx">math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Float64frombits&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">bits&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>go build 移除路径信息</title><link>http://notes.711xd.com/post/golang-build-remove-path/</link><pubDate>Fri, 26 Nov 2021 16:26:59 +0800</pubDate><guid>http://notes.711xd.com/post/golang-build-remove-path/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="nv">CGO_ENABLED&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">0&lt;/span> go build -v -a -ldflags &lt;span class="s1">&amp;#39;-s -w&amp;#39;&lt;/span> -gcflags&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;all=-trimpath=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">PWD&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -asmflags&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;all=-trimpath=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">PWD&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Golang -ldflags 的一个技巧 go version 信息注入</title><link>http://notes.711xd.com/post/golang-ldflags/</link><pubDate>Fri, 26 Nov 2021 16:26:16 +0800</pubDate><guid>http://notes.711xd.com/post/golang-ldflags/</guid><description>&lt;p>我在开发 go 的项目时，习惯上会在编译后的二进制文件中注入 git 等版本信息后再发布。一直以来都是这么做的：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="kn">package&lt;/span> &lt;span class="nx">main&lt;/span>
+&lt;span class="kn">import&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;span class="s">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;span class="s">&amp;#34;os&amp;#34;&lt;/span>
+&lt;span class="s">&amp;#34;runtime&amp;#34;&lt;/span>
+&lt;span class="p">)&lt;/span>
+&lt;span class="kd">var&lt;/span> &lt;span class="nx">buildstamp&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;&amp;#34;&lt;/span>
+&lt;span class="kd">var&lt;/span> &lt;span class="nx">githash&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;&amp;#34;&lt;/span>
+&lt;span class="kd">func&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">args&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">os&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Args&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">args&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">2&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">args&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s">&amp;#34;--version&amp;#34;&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="nx">args&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s">&amp;#34;-v&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Printf&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Git Commit Hash: %s\n&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">githash&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Printf&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;UTC Build Time : %s\n&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">buildstamp&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">return&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>然后编译的时候，通过链接选项 -X 来动态传入版本信息：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">flags=&amp;#34;-X main.buildstamp=`date -u &amp;#39;+%Y-%m-%d_%I:%M:%S%p&amp;#39;` -X main.githash=`git describe --long --dirty --abbrev=14`&amp;#34;go build -ldflags &amp;#34;$flags&amp;#34; -x -o build-version main.go
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Golang 在 Mac、Linux、Windows 下如何交叉编译</title><link>http://notes.711xd.com/post/golang-cross-platform-compile/</link><pubDate>Fri, 26 Nov 2021 16:01:14 +0800</pubDate><guid>http://notes.711xd.com/post/golang-cross-platform-compile/</guid><description>&lt;p>&lt;strong>交叉编译不支持 CGO 所以要禁用它&lt;/strong>&lt;/p>
+&lt;h2 id="如何编译">如何编译&lt;/h2>
+&lt;h3 id="mac-下编译-linux-和-windows-64位可执行程序">Mac 下编译 Linux 和 Windows 64位可执行程序&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="nv">CGO_ENABLED&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">0&lt;/span> &lt;span class="nv">GOOS&lt;/span>&lt;span class="o">=&lt;/span>linux &lt;span class="nv">GOARCH&lt;/span>&lt;span class="o">=&lt;/span>amd64 go build main.go
+&lt;span class="nv">CGO_ENABLED&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">0&lt;/span> &lt;span class="nv">GOOS&lt;/span>&lt;span class="o">=&lt;/span>windows &lt;span class="nv">GOARCH&lt;/span>&lt;span class="o">=&lt;/span>amd64 go build main.go
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>使用 systemctl 启动 Golang 应用</title><link>http://notes.711xd.com/post/golang-run-by-systemctl/</link><pubDate>Fri, 26 Nov 2021 15:50:15 +0800</pubDate><guid>http://notes.711xd.com/post/golang-run-by-systemctl/</guid><description>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 [Unit] Description=jdm apk building service After=network.target After=network-online.target Wants=network-online.target [Service] ExecStart=/opt/builder/builder serve --config /opt/builder/etc/builder.toml Type=simple User=root Group=root RuntimeDirectory=/opt/builder RuntimeDirectoryMode=0755 [Install] WantedBy=multi-user.target</description></item></channel></rss>

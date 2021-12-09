@@ -1,0 +1,425 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="一个简单的备忘录"><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/>
+<link href=http://notes.711xd.com/index.xml rel=alternate type=application/rss+xml title="Rogee's 备忘录">
+<link href=http://notes.711xd.com/index.xml rel=feed type=application/rss+xml title="Rogee's 备忘录">
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Rogee's 备忘录">
+<meta property="og:description" content="一个简单的备忘录">
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://notes.711xd.com/">
+<meta itemprop=name content="Rogee's 备忘录">
+<meta itemprop=description content="一个简单的备忘录"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Rogee's 备忘录">
+<meta name=twitter:description content="一个简单的备忘录"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<section id=posts class=posts>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/mariadb-gtid-slave-master/>MariaDB基于GTID的主从复制</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<p>MySQL复制有两种方式：</p>
+<ul>
+<li>
+<p>基于日志点的复制</p>
+</li>
+<li>
+<p>基于GTID的复制</p>
+</li>
+</ul>
+<p>两种方式都依赖于MySQL二进制日志。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=c1># 二进制日志格式</span>
+<span class=na>binlog-format</span><span class=o>=</span><span class=s>STATEMENT|ROW|MIXED</span>
+<span class=c1># ROW格式下日志的级别</span>
+<span class=na>binlog-row-image</span><span class=o>=</span><span class=s>full|minimal|noblob</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+</div>
+<div class=read-more>
+<a href=/post/mariadb-gtid-slave-master/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/flutter-media-query/>Flutter MediaQuery 相关说明</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<p><code>MediaQueryData</code>是<code>MediaQuery.of</code>获取数据的类型。说明如下：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>size</td>
+<td>逻辑像素，并不是物理像素，类似于Android中的dp，逻辑像素会在不同大小的手机上显示的大小基本一样，物理像素 = size*devicePixelRatio。</td>
+</tr>
+<tr>
+<td>devicePixelRatio</td>
+<td>单位逻辑像素的物理像素数量，即设备像素比。</td>
+</tr>
+<tr>
+<td>textScaleFactor</td>
+<td>单位逻辑像素字体像素数，如果设置为1.5则比指定的字体大50%。</td>
+</tr>
+<tr>
+<td>platformBrightness</td>
+<td>当前设备的亮度模式，比如在Android Pie手机上进入省电模式，所有的App将会使用深色（dark）模式绘制。</td>
+</tr>
+<tr>
+<td>viewInsets</td>
+<td>被系统遮挡的部分，通常指键盘，弹出键盘，viewInsets.bottom表示键盘的高度。</td>
+</tr>
+<tr>
+<td>padding</td>
+<td>被系统遮挡的部分，通常指“刘海屏”或者系统状态栏。</td>
+</tr>
+<tr>
+<td>viewPadding</td>
+<td>被系统遮挡的部分，通常指“刘海屏”或者系统状态栏，此值独立于padding和viewInsets，它们的值从MediaQuery控件边界的边缘开始测量。在移动设备上，通常是全屏。</td>
+</tr>
+<tr>
+<td>systemGestureInsets</td>
+<td>显示屏边缘上系统“消耗”的区域输入事件，并阻止将这些事件传递给应用。比如在Android Q手势滑动用于页面导航（ios也一样），比如左滑退出当前页面。</td>
+</tr>
+<tr>
+<td>physicalDepth</td>
+<td>设备的最大深度，类似于三维空间的Z轴。</td>
+</tr>
+<tr>
+<td>alwaysUse24HourFormat</td>
+<td>是否是24小时制。</td>
+</tr>
+<tr>
+<td>accessibleNavigation</td>
+<td>用户是否使用诸如TalkBack或VoiceOver之类的辅助功能与应用程序进行交互，用于帮助视力有障碍的人进行使用。</td>
+</tr>
+<tr>
+<td>invertColors</td>
+<td>是否支持颜色反转。</td>
+</tr>
+<tr>
+<td>highContrast</td>
+<td>用户是否要求前景与背景之间的对比度高， iOS上，方法是通过“设置”->“辅助功能”->“增加对比度”。 此标志仅在运行iOS 13的iOS设备上更新或以上。</td>
+</tr>
+<tr>
+<td>disableAnimations</td>
+<td>平台是否要求尽可能禁用或减少动画。</td>
+</tr>
+<tr>
+<td>boldText</td>
+<td>平台是否要求使用粗体。</td>
+</tr>
+<tr>
+<td>orientation</td>
+<td>是横屏还是竖屏。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class=read-more>
+<a href=/post/flutter-media-query/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/flutter-get-webview-session-in-cookie/>Flutter 获取webview中cookie存储的session</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<h2 id=需求>需求</h2>
+<p>由于最近要获取阿里系网站的信息，网站在登录模块做了大量的保护工作，我的需求是拿到登录之后的cookie以获得session字段的值，用来保持登录状态。所以想通过webview来获取登录的信息。</p>
+<p>在flutter上面比较流行的一个webview插件为：<code>flutter_webview_plugin</code></p>
+<h2 id=flutter_webview_plugin-使用>flutter_webview_plugin 使用</h2>
+<h3 id=1在app的路由上面添加登录的页面>1.在app的路由上面添加登录的页面</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=nl>routes:</span> <span class=p>{</span>
+    <span class=s2>&#34;/web_login&#34;</span><span class=o>:</span><span class=p>(</span><span class=n>_</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>new</span> <span class=n>WebviewScaffold</span><span class=p>(</span><span class=nl>url:</span> <span class=n>Config</span><span class=p>.</span><span class=n>login</span><span class=p>,</span>
+        <span class=nl>withLocalStorage:</span> <span class=kc>true</span><span class=p>,</span>
+        <span class=nl>hidden:</span> <span class=kc>true</span><span class=p>,</span>
+        <span class=nl>userAgent:</span> <span class=s2>&#34;Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36&#34;</span><span class=p>,</span>
+        <span class=nl>appBar:</span> <span class=k>new</span> <span class=n>AppBar</span><span class=p>(</span>
+          <span class=nl>centerTitle:</span> <span class=kc>true</span> <span class=p>,</span>
+          <span class=nl>title:</span> <span class=k>new</span> <span class=n>Text</span><span class=p>(</span><span class=s2>&#34;登录&#34;</span><span class=p>),</span>
+        <span class=p>),</span>
+        <span class=nl>initialChild:</span> <span class=n>Container</span><span class=p>(</span>
+          <span class=nl>child:</span> <span class=k>new</span> <span class=n>Center</span><span class=p>(</span>
+            <span class=nl>child:</span> <span class=k>new</span> <span class=n>CupertinoActivityIndicator</span><span class=p>(</span><span class=nl>animating:</span> <span class=kc>true</span><span class=p>),</span>
+          <span class=p>),</span>
+        <span class=p>),</span>
+    <span class=p>),</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>注意：userAgent字段一定要加上，不然在ios下打开WKwebview会白屏</p>
+</div>
+<div class=read-more>
+<a href=/post/flutter-get-webview-session-in-cookie/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/flutter-no-network/>Flutter 无法访问HTTP服务</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<h2 id=android无法访问http>Android无法访问http</h2>
+<p>其实这本身不是Flutter的问题，但在开发中经常遇到，在Android Pie版本及以上和IOS 系统上默认禁止访问http，主要是为了安全考虑。</p>
+<h3 id=android解决办法>Android解决办法：</h3>
+<p>在<code>./android/app/src/main/AndroidManifest.xml</code>配置文件中<code>application</code>标签里面设置<code>networkSecurityConfig</code>属性:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=cp>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span class=nt>&lt;manifest</span> <span class=err>...</span> <span class=nt>&gt;</span>
+    <span class=nt>&lt;application</span> <span class=na>android:networkSecurityConfig=</span><span class=s>&#34;@xml/network_security_config&#34;</span><span class=nt>&gt;</span>
+         <span class=c>&lt;!-- ... --&gt;</span>
+    <span class=nt>&lt;/application&gt;</span>
+<span class=nt>&lt;/manifest&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在<code>./android/app/src/main/res</code>目录下创建xml文件夹（已存在不用创建），在xml文件夹下创建<code>network_security_config.xml</code>文件，内容如下：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=cp>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span class=nt>&lt;network-security-config&gt;</span>
+    <span class=nt>&lt;base-config</span> <span class=na>cleartextTrafficPermitted=</span><span class=s>&#34;true&#34;</span><span class=nt>&gt;</span>
+        <span class=nt>&lt;trust-anchors&gt;</span>
+            <span class=nt>&lt;certificates</span> <span class=na>src=</span><span class=s>&#34;system&#34;</span> <span class=nt>/&gt;</span>
+        <span class=nt>&lt;/trust-anchors&gt;</span>
+    <span class=nt>&lt;/base-config&gt;</span>
+<span class=nt>&lt;/network-security-config&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+</div>
+<div class=read-more>
+<a href=/post/flutter-no-network/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/flutter-open-other-app/>Flutter 使用网页唤醒 APP</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<p>这里只介绍安卓的端的用法</p>
+<h2 id=修改配置文件>修改配置文件</h2>
+<p>通过 <code>host</code> 和 <code>scheme</code> 来完成对 App 应用的匹配</p>
+<p>文件：AndroidManifest.xml 在 activity 块下添加</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;intent-filter&gt;</span>
+    <span class=nt>&lt;action</span> <span class=na>android:name=</span><span class=s>&#34;android.intent.action.VIEW&#34;</span> <span class=nt>/&gt;</span>
+    <span class=nt>&lt;category</span> <span class=na>android:name=</span><span class=s>&#34;android.intent.category.DEFAULT&#34;</span> <span class=nt>/&gt;</span>
+    <span class=nt>&lt;category</span> <span class=na>android:name=</span><span class=s>&#34;android.intent.category.BROWSABLE&#34;</span> <span class=nt>/&gt;</span>
+    <span class=nt>&lt;data</span> <span class=na>android:host=</span><span class=s>&#34;splash&#34;</span> <span class=na>android:scheme=</span><span class=s>&#34;vchao&#34;</span> <span class=nt>/&gt;</span>
+<span class=nt>&lt;/intent-filter&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+</div>
+<div class=read-more>
+<a href=/post/flutter-open-other-app/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+</section>
+<nav class=pagination>
+<a class=prev href=/page/4/>
+<i class="iconfont icon-left"></i>
+<span class=prev-text>上一页</span>
+</a>
+<a class=next href=/page/6/>
+<span class=next-text>下一页</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</div>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

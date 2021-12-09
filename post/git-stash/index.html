@@ -1,0 +1,488 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Git Stash 用法小结 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="git stash (git 储藏) 可用于以下情形  发现有一个类是多余的, 想删掉它又担心以后需要查看它的代码, 想保存它但又不想增加一个脏的提交. 这时就可以考虑 git stash. 使用 git 的时候, 我们往往使用分支 (branch) 解决任务切换问题, 例如, 我们往往会建一个自己的分支去修改和调试代码, 如果别人或者自己发现原有的分支上有个不得不修改的 bug, 我们往往会把完成一半的代码 commit 提交到本地仓库, 然后切换分支去修改 bug, 改好之后再切换回来. 这样的话往往 log 上会有大量不必要的记录. 其实如果我们不想提交完成一半或者不完善的代码, 但是却不得不去修改一个紧急 Bug, 那么使用 git stash 就可以将你当前未提交到本地 (和服务器) 的代码推入到 Git 的栈中, 这时候你的工作区间和上一次提交的内容是完全一样的, 所以你可以放心的修 Bug, 等到修完 Bug, 提交到服务器上后, 再使用 git stash apply 将以前一半的工作应用回来. 经常有这样的事情发生, 当你正在进行项目中某一部分的工作, 里面的东西处于一个比较杂乱的状态, 而你想转到其他分支上进行一些工作. 问题是, 你不想提交进行了一半的工作, 否则以后你无法回到这个工作点. 解决这个问题的办法就是 git stash 命令. 储藏 (stash) 可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中, 随时可以重新应用. "><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/git-stash/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Git Stash 用法小结">
+<meta property="og:description" content="git stash (git 储藏) 可用于以下情形
+
+发现有一个类是多余的, 想删掉它又担心以后需要查看它的代码, 想保存它但又不想增加一个脏的提交. 这时就可以考虑 git stash.
+使用 git 的时候, 我们往往使用分支 (branch) 解决任务切换问题, 例如, 我们往往会建一个自己的分支去修改和调试代码, 如果别人或者自己发现原有的分支上有个不得不修改的 bug, 我们往往会把完成一半的代码 commit 提交到本地仓库, 然后切换分支去修改 bug, 改好之后再切换回来. 这样的话往往 log 上会有大量不必要的记录. 其实如果我们不想提交完成一半或者不完善的代码, 但是却不得不去修改一个紧急 Bug, 那么使用 git stash 就可以将你当前未提交到本地 (和服务器) 的代码推入到 Git 的栈中, 这时候你的工作区间和上一次提交的内容是完全一样的, 所以你可以放心的修 Bug, 等到修完 Bug, 提交到服务器上后, 再使用 git stash apply 将以前一半的工作应用回来.
+经常有这样的事情发生, 当你正在进行项目中某一部分的工作, 里面的东西处于一个比较杂乱的状态, 而你想转到其他分支上进行一些工作. 问题是, 你不想提交进行了一半的工作, 否则以后你无法回到这个工作点. 解决这个问题的办法就是 git stash 命令. 储藏 (stash) 可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中, 随时可以重新应用.
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/git-stash/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-12-08T09:25:37+08:00">
+<meta property="article:modified_time" content="2021-12-08T09:51:33+08:00">
+<meta itemprop=name content="Git Stash 用法小结">
+<meta itemprop=description content="git stash (git 储藏) 可用于以下情形
+
+发现有一个类是多余的, 想删掉它又担心以后需要查看它的代码, 想保存它但又不想增加一个脏的提交. 这时就可以考虑 git stash.
+使用 git 的时候, 我们往往使用分支 (branch) 解决任务切换问题, 例如, 我们往往会建一个自己的分支去修改和调试代码, 如果别人或者自己发现原有的分支上有个不得不修改的 bug, 我们往往会把完成一半的代码 commit 提交到本地仓库, 然后切换分支去修改 bug, 改好之后再切换回来. 这样的话往往 log 上会有大量不必要的记录. 其实如果我们不想提交完成一半或者不完善的代码, 但是却不得不去修改一个紧急 Bug, 那么使用 git stash 就可以将你当前未提交到本地 (和服务器) 的代码推入到 Git 的栈中, 这时候你的工作区间和上一次提交的内容是完全一样的, 所以你可以放心的修 Bug, 等到修完 Bug, 提交到服务器上后, 再使用 git stash apply 将以前一半的工作应用回来.
+经常有这样的事情发生, 当你正在进行项目中某一部分的工作, 里面的东西处于一个比较杂乱的状态, 而你想转到其他分支上进行一些工作. 问题是, 你不想提交进行了一半的工作, 否则以后你无法回到这个工作点. 解决这个问题的办法就是 git stash 命令. 储藏 (stash) 可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中, 随时可以重新应用.
+"><meta itemprop=datePublished content="2021-12-08T09:25:37+08:00">
+<meta itemprop=dateModified content="2021-12-08T09:51:33+08:00">
+<meta itemprop=wordCount content="1785">
+<meta itemprop=keywords content="git,版本控制,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Git Stash 用法小结">
+<meta name=twitter:description content="git stash (git 储藏) 可用于以下情形
+
+发现有一个类是多余的, 想删掉它又担心以后需要查看它的代码, 想保存它但又不想增加一个脏的提交. 这时就可以考虑 git stash.
+使用 git 的时候, 我们往往使用分支 (branch) 解决任务切换问题, 例如, 我们往往会建一个自己的分支去修改和调试代码, 如果别人或者自己发现原有的分支上有个不得不修改的 bug, 我们往往会把完成一半的代码 commit 提交到本地仓库, 然后切换分支去修改 bug, 改好之后再切换回来. 这样的话往往 log 上会有大量不必要的记录. 其实如果我们不想提交完成一半或者不完善的代码, 但是却不得不去修改一个紧急 Bug, 那么使用 git stash 就可以将你当前未提交到本地 (和服务器) 的代码推入到 Git 的栈中, 这时候你的工作区间和上一次提交的内容是完全一样的, 所以你可以放心的修 Bug, 等到修完 Bug, 提交到服务器上后, 再使用 git stash apply 将以前一半的工作应用回来.
+经常有这样的事情发生, 当你正在进行项目中某一部分的工作, 里面的东西处于一个比较杂乱的状态, 而你想转到其他分支上进行一些工作. 问题是, 你不想提交进行了一半的工作, 否则以后你无法回到这个工作点. 解决这个问题的办法就是 git stash 命令. 储藏 (stash) 可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中, 随时可以重新应用.
+"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Git Stash 用法小结</h1>
+<div class=post-meta>
+<span class=post-time> 2021-12-08 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#git-stash-git-储藏-可用于以下情形>git stash (git 储藏) 可用于以下情形</a></li>
+<li><a href=#git-stash-用法>git stash 用法</a>
+<ul>
+<li><a href=#1-stash-当前修改>1. stash 当前修改</a></li>
+<li><a href=#2-重新应用缓存的-stash>2. 重新应用缓存的 stash</a></li>
+<li><a href=#3-查看现有-stash>3. 查看现有 stash</a></li>
+<li><a href=#4-移除-stash>4. 移除 stash</a></li>
+<li><a href=#5-查看指定-stash-的-diff>5. 查看指定 stash 的 diff</a></li>
+<li><a href=#6-从-stash-创建分支>6. 从 stash 创建分支</a></li>
+<li><a href=#7-暂存未跟踪或忽略的文件>7. 暂存未跟踪或忽略的文件</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<h2 id=git-stash-git-储藏-可用于以下情形>git stash (git 储藏) 可用于以下情形</h2>
+<ul>
+<li>发现有一个类是多余的, 想删掉它又担心以后需要查看它的代码, 想保存它但又不想增加一个脏的提交. 这时就可以考虑 git stash.</li>
+<li>使用 git 的时候, 我们往往使用分支 (branch) 解决任务切换问题, 例如, 我们往往会建一个自己的分支去修改和调试代码, 如果别人或者自己发现原有的分支上有个不得不修改的 bug, 我们往往会把完成一半的代码 commit 提交到本地仓库, 然后切换分支去修改 bug, 改好之后再切换回来. 这样的话往往 log 上会有大量不必要的记录. 其实如果我们不想提交完成一半或者不完善的代码, 但是却不得不去修改一个紧急 Bug, 那么使用 git stash 就可以将你当前未提交到本地 (和服务器) 的代码推入到 Git 的栈中, 这时候你的工作区间和上一次提交的内容是完全一样的, 所以你可以放心的修 Bug, 等到修完 Bug, 提交到服务器上后, 再使用 git stash apply 将以前一半的工作应用回来.</li>
+<li>经常有这样的事情发生, 当你正在进行项目中某一部分的工作, 里面的东西处于一个比较杂乱的状态, 而你想转到其他分支上进行一些工作. 问题是, 你不想提交进行了一半的工作, 否则以后你无法回到这个工作点. 解决这个问题的办法就是 git stash 命令. 储藏 (stash) 可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中, 随时可以重新应用.</li>
+</ul>
+<h2 id=git-stash-用法>git stash 用法</h2>
+<h3 id=1-stash-当前修改>1. stash 当前修改</h3>
+<p>git stash 会把所有未提交的修改 (包括暂存的和非暂存的) 都保存起来, 用于后续恢复当前工作目录.
+比如下面的中间状态, 通过 git stash 命令推送一个新的储藏, 当前的工作目录就干净了.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ git status
+On branch master
+Changes to be committed:
+
+new file:   style.css
+
+Changes not staged <span class=k>for</span> commit:
+
+modified:   index.html
+
+$ git stash
+Saved working directory and index state WIP on master: 5002d47 our new homepage
+HEAD is now at 5002d47 our new homepage
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+</code></pre></td></tr></table>
+</div>
+</div><p>需要说明一点, <strong>stash 是本地的, 不会通过 git push 命令上传到 git server 上</strong>.</p>
+<p>实际应用中推荐给每个 stash 加一个 message, 用于记录版本, 使用 git stash save 取代 git stash 命令. 示例如下:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ git stash save <span class=s2>&#34;test-cmd-stash&#34;</span>
+Saved working directory and index state On autoswitch: test-cmd-stash
+HEAD 现在位于 296e8d4 remove unnecessary postion reset in onResume <span class=k>function</span>
+$ git stash list
+stash@<span class=o>{</span>0<span class=o>}</span>: On autoswitch: test-cmd-stash
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=2-重新应用缓存的-stash>2. 重新应用缓存的 stash</h3>
+<p>可以通过 <code>git stash pop</code> 命令恢复之前缓存的工作目录, 输出如下:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ git status
+On branch master
+nothing to commit, working tree clean
+$ git stash pop
+On branch master
+Changes to be committed:
+
+    new file:   style.css
+
+Changes not staged <span class=k>for</span> commit:
+
+    modified:   index.html
+
+Dropped refs/stash@<span class=o>{</span>0<span class=o>}</span> <span class=o>(</span>32b3aa1d185dfe6d57b3c3cc3b32cbf3e380cc6a<span class=o>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这个指令将缓存堆栈中的第一个 stash 删除, 并将对应修改应用到当前的工作目录下.
+你也可以使用 <code>git stash apply</code> 命令, 将缓存堆栈中的 stash 多次应用到工作目录中, 但并不删除 stash 拷贝. 命令输出如下:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ git stash apply
+On branch master
+Changes to be committed:
+
+    new file:   style.css
+
+Changes not staged <span class=k>for</span> commit:
+
+    modified:   index.html
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=3-查看现有-stash>3. 查看现有 stash</h3>
+<p>可以使用 git stash list 命令, 一个典型的输出如下:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ git stash list
+stash@<span class=o>{</span>0<span class=o>}</span>: WIP on master: 049d078 added the index file
+stash@<span class=o>{</span>1<span class=o>}</span>: WIP on master: c264051 Revert <span class=s2>&#34;added file_size&#34;</span>
+stash@<span class=o>{</span>2<span class=o>}</span>: WIP on master: 21d80a5 added number to log
+</code></pre></td></tr></table>
+</div>
+</div><p>在使用 git stash apply 命令时可以通过名字指定使用哪个 stash, 默认使用最近的 stash (即 stash@{0}) .</p>
+<h3 id=4-移除-stash>4. 移除 stash</h3>
+<p>可以使用 git stash drop 命令, 后面可以跟着 stash 名字. 下面是一个示例:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ git stash list
+stash@<span class=o>{</span>0<span class=o>}</span>: WIP on master: 049d078 added the index file
+stash@<span class=o>{</span>1<span class=o>}</span>: WIP on master: c264051 Revert <span class=s2>&#34;added file_size&#34;</span>
+stash@<span class=o>{</span>2<span class=o>}</span>: WIP on master: 21d80a5 added number to log
+$ git stash drop stash@<span class=o>{</span>0<span class=o>}</span>
+Dropped stash@<span class=o>{</span>0<span class=o>}</span> <span class=o>(</span>364e91f3f268f0900bc3ee613f9f733e82aaed43<span class=o>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>或者使用 git stash clear 命令, 删除所有缓存的 stash.</p>
+<h3 id=5-查看指定-stash-的-diff>5. 查看指定 stash 的 diff</h3>
+<p>可以使用 git stash show 命令, 后面可以跟着 stash 名字. 示例如下:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ git stash show
+ index.html <span class=p>|</span> <span class=m>1</span> +
+ style.css <span class=p>|</span> <span class=m>3</span> +++
+ <span class=m>2</span> files changed, <span class=m>4</span> insertions<span class=o>(</span>+<span class=o>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在该命令后面添加-p 或&ndash;patch 可以查看特定 stash 的全部 diff, 如下:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ git stash show -p
+diff --git a/style.css b/style.css
+new file mode <span class=m>100644</span>
+index 0000000..d92368b
+--- /dev/null
++++ b/style.css
+@@ -0, <span class=m>0</span> +1, <span class=m>3</span> @@
++* <span class=o>{</span>
++  text-decoration: blink<span class=p>;</span>
++<span class=o>}</span>
+diff --git a/index.html b/index.html
+index 9daeafb..ebdcbd2 <span class=m>100644</span>
+--- a/index.html
++++ b/index.html
+@@ -1 +1, <span class=m>2</span> @@
++&lt;link <span class=nv>rel</span><span class=o>=</span><span class=s2>&#34;stylesheet&#34;</span> <span class=nv>href</span><span class=o>=</span><span class=s2>&#34;style.css&#34;</span>/&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=6-从-stash-创建分支>6. 从 stash 创建分支</h3>
+<p>如果你储藏了一些工作, 暂时不去理会, 然后继续在你储藏工作的分支上工作, 你在重新应用工作时可能会碰到一些问题. 如果尝试应用的变更是针对一个你那之后修改过的文件, 你会碰到一个归并冲突并且必须去化解它. 如果你想用更方便的方法来重新检验你储藏的变更, 你可以运行 git stash branch, 这会创建一个新的分支, 检出你储藏工作时的所处的提交, 重新应用你的工作, 如果成功, 将会丢弃储藏.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ git stash branch testchanges
+Switched to a new branch <span class=s2>&#34;testchanges&#34;</span>
+<span class=c1># On branch testchanges</span>
+<span class=c1># Changes to be committed:</span>
+<span class=c1>#   (use &#34;git reset HEAD &lt;file&gt;...&#34; to unstage)</span>
+<span class=c1>#</span>
+<span class=c1>#      modified:   index.html</span>
+<span class=c1>#</span>
+<span class=c1># Changes not staged for commit:</span>
+<span class=c1>#   (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)</span>
+<span class=c1>#</span>
+<span class=c1>#      modified:   lib/simplegit.rb</span>
+<span class=c1>#</span>
+Dropped refs/stash@<span class=o>{</span>0<span class=o>}</span> <span class=o>(</span>f0dfc4d5dc332d1cee34a634182e168c4efc3359<span class=o>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这是一个很棒的捷径来恢复储藏的工作然后在新的分支上继续当时的工作.</p>
+<h3 id=7-暂存未跟踪或忽略的文件>7. 暂存未跟踪或忽略的文件</h3>
+<p>默认情况下, git stash 会缓存下列文件:</p>
+<ul>
+<li>添加到暂存区的修改 (staged changes)</li>
+<li>Git 跟踪的但并未添加到暂存区的修改 (unstaged changes)</li>
+</ul>
+<p>但不会缓存以下文件:</p>
+<ul>
+<li>在工作目录中新的文件 (untracked files)</li>
+<li>被忽略的文件 (ignored files)</li>
+</ul>
+<p>git stash 命令提供了参数用于缓存上面两种类型的文件. 使用 <code>-u</code> 或者 <code>--include-untracked</code> 可以 stash untracked 文件. 使用 <code>-a</code> 或者 <code>--all</code> 命令可以 stash 当前目录下的所有修改.</p>
+<p>至于 git stash 的其他命令建议参考 Git manual.</p>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-12-08
+<a href=https://github.com/rogeecn/notes/commit/1fda2ac34b9b7ae407bc46033d83fc36f54b232c title="format data">(1fda2ac)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/git/>git</a>
+<a href=/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/du-ji-tang/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">毒鸡汤</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/php-libtidy-error/>
+<span class="next-text nav-default">MAC Php Libtidy 报错解决办法</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-12-08 09:25:37 \u002b0800 \u002b0800',title:'Git Stash 用法小结',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

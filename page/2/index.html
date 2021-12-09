@@ -1,0 +1,285 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="一个简单的备忘录"><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/>
+<link href=http://notes.711xd.com/index.xml rel=alternate type=application/rss+xml title="Rogee's 备忘录">
+<link href=http://notes.711xd.com/index.xml rel=feed type=application/rss+xml title="Rogee's 备忘录">
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Rogee's 备忘录">
+<meta property="og:description" content="一个简单的备忘录">
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://notes.711xd.com/">
+<meta itemprop=name content="Rogee's 备忘录">
+<meta itemprop=description content="一个简单的备忘录"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Rogee's 备忘录">
+<meta name=twitter:description content="一个简单的备忘录"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<section id=posts class=posts>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/git-stash/>Git Stash 用法小结</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-12-08 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<h2 id=git-stash-git-储藏-可用于以下情形>git stash (git 储藏) 可用于以下情形</h2>
+<ul>
+<li>发现有一个类是多余的, 想删掉它又担心以后需要查看它的代码, 想保存它但又不想增加一个脏的提交. 这时就可以考虑 git stash.</li>
+<li>使用 git 的时候, 我们往往使用分支 (branch) 解决任务切换问题, 例如, 我们往往会建一个自己的分支去修改和调试代码, 如果别人或者自己发现原有的分支上有个不得不修改的 bug, 我们往往会把完成一半的代码 commit 提交到本地仓库, 然后切换分支去修改 bug, 改好之后再切换回来. 这样的话往往 log 上会有大量不必要的记录. 其实如果我们不想提交完成一半或者不完善的代码, 但是却不得不去修改一个紧急 Bug, 那么使用 git stash 就可以将你当前未提交到本地 (和服务器) 的代码推入到 Git 的栈中, 这时候你的工作区间和上一次提交的内容是完全一样的, 所以你可以放心的修 Bug, 等到修完 Bug, 提交到服务器上后, 再使用 git stash apply 将以前一半的工作应用回来.</li>
+<li>经常有这样的事情发生, 当你正在进行项目中某一部分的工作, 里面的东西处于一个比较杂乱的状态, 而你想转到其他分支上进行一些工作. 问题是, 你不想提交进行了一半的工作, 否则以后你无法回到这个工作点. 解决这个问题的办法就是 git stash 命令. 储藏 (stash) 可以获取你工作目录的中间状态——也就是你修改过的被追踪的文件和暂存的变更——并将它保存到一个未完结变更的堆栈中, 随时可以重新应用.</li>
+</ul>
+</div>
+<div class=read-more>
+<a href=/post/git-stash/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/php-libtidy-error/>MAC Php Libtidy 报错解决办法</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-12-06 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<p>今天使用 <code>composer</code> 安装一个扩展包时 <code>mac</code> 报如下问题:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>&gt;&gt; composer require laravelista/comments
+dyld: Library not loaded: /usr/local/opt/tidy-html5/lib/libtidy.5.dylib
+  Referenced from: /usr/local/bin/php
+  Reason: image not found
+<span class=o>[</span>1<span class=o>]</span>    <span class=m>33575</span> abort      composer require laravelista/comments
+➜  MedicalCMS git:<span class=o>(</span>master<span class=o>)</span> which php                           
+</code></pre></td></tr></table>
+</div>
+</div><p>解决方案为重新安装此扩展:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>brew reinstall tidy-html5
+</code></pre></td></tr></table>
+</div>
+</div>
+</div>
+<div class=read-more>
+<a href=/post/php-libtidy-error/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/nginx-status-code-499/>Nginx的 HTTP 499 状态码问题</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-12-03 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<h2 id=1前言>1、前言</h2>
+<p>今天在处理一个客户问题，遇到 Nginx access log 中出现大量的 <code>499</code> 状态码。实际场景是：客户的域名通过 cname 解析到我们的 Nginx 反向代理集群上来，客户的 Web 服务是由一个负载均衡提供外网 IP 进行访问，负载均衡后面挂了多个内网 web 站点业务服务器。出现的访问日志如下所示：</p>
+<p><img src=305504-20170625232821913-1629695159.png alt=img></p>
+</div>
+<div class=read-more>
+<a href=/post/nginx-status-code-499/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/docker-openvpn/>Docker Openvpn</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<h2 id=安装-docker-ce>安装 Docker-CE</h2>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>curl -fsSL https://get.docker.com <span class=p>|</span> bash -s docker --mirror Aliyun
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=拉取镜像>拉取镜像</h2>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-Bash data-lang=Bash>docker pull kylemanna/openvpn
+</code></pre></td></tr></table>
+</div>
+</div>
+</div>
+<div class=read-more>
+<a href=/post/docker-openvpn/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title><a class=post-link href=/post/apisix-https-sni-error/>Apisix 配置 HTTPS SNI 不识别问题定位</a></h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+</div>
+</header>
+<div class=post-content>
+<div class=post-summary>
+<p>ApiSIX网关</p>
+<h2 id=问题说明>问题说明</h2>
+<p>项目中配置 HTTPS 需要支持 IP 格式直接访问，Apisix 中配置证书需要使用到 SNI 识别功能，但是使用 IP 方式请求主机时 SNI 识别为空，导致配置的 SNI 证书无法被匹配。</p>
+<h2 id=问题定位>问题定位</h2>
+<p>根据报错信息来定位代码逻辑部分：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=mi>2021</span><span class=o>/</span><span class=mi>07</span><span class=o>/</span><span class=mi>20</span> <span class=mi>09</span><span class=p>:</span><span class=mi>54</span><span class=p>:</span><span class=mi>33</span> <span class=p>[</span><span class=n>error</span><span class=p>]</span> <span class=mi>42</span><span class=o>#</span><span class=mi>42</span><span class=p>:</span> <span class=o>*</span><span class=mi>2011</span> <span class=p>[</span><span class=n>lua</span><span class=p>]</span> <span class=n>init.lua</span><span class=p>:</span><span class=mi>184</span><span class=p>:</span> <span class=n>http_ssl_phase</span><span class=p>():</span> <span class=n>failed</span> <span class=n>to</span> <span class=n>fetch</span> <span class=n>ssl</span> <span class=n>config</span><span class=p>:</span> <span class=n>failed</span> <span class=n>to</span> <span class=n>find</span> <span class=n>SNI</span><span class=p>:</span> <span class=n>please</span> <span class=n>check</span> <span class=kr>if</span> <span class=n>the</span> <span class=n>client</span> <span class=n>reques</span>
+ <span class=n>If</span> <span class=n>you</span> <span class=n>need</span> <span class=n>to</span> <span class=n>report</span> <span class=n>an</span> <span class=n>issue</span><span class=p>,</span> <span class=n>provide</span> <span class=n>a</span> <span class=n>packet</span> <span class=n>capture</span> <span class=n>file</span> <span class=n>of</span> <span class=n>the</span> <span class=n>TLS</span> <span class=n>handshake</span><span class=p>.,</span> <span class=n>context</span><span class=p>:</span> <span class=n>ssl_certificate_by_lua</span><span class=o>*</span><span class=p>,</span> <span class=n>client</span><span class=p>:</span> <span class=mf>172.17.0.1</span><span class=p>,</span> <span class=n>server</span><span class=p>:</span> <span class=mf>0.0.0.0</span><span class=p>:</span><span class=mi>6443</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+</div>
+<div class=read-more>
+<a href=/post/apisix-https-sni-error/ class=read-more-link>阅读更多</a>
+</div>
+</div>
+</article>
+</section>
+<nav class=pagination>
+<a class=prev href=/>
+<i class="iconfont icon-left"></i>
+<span class=prev-text>上一页</span>
+</a>
+<a class=next href=/page/3/>
+<span class=next-text>下一页</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</div>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>uni_link on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/uni_link/</link><description>Recent content in uni_link on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 15:32:02 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/uni_link/index.xml" rel="self" type="application/rss+xml"/><item><title>Flutter解决uni_link 应用冷启动只能停留在主页的问题</title><link>http://notes.711xd.com/post/flutter-uni-link-cold-start-stop-on-homepage/</link><pubDate>Fri, 26 Nov 2021 15:32:02 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-uni-link-cold-start-stop-on-homepage/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-dart" data-lang="dart">&lt;span class="n">StreamSubscription&lt;/span> &lt;span class="n">_sub&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">// jdmbest://goto
+&lt;/span>&lt;span class="c1">&lt;/span>  &lt;span class="n">Future&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Null&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">initUniLinks&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="kd">async&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kt">String&lt;/span> &lt;span class="n">initialLink&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="c1">// Platform messages may fail, so we use a try/catch PlatformException.
+&lt;/span>&lt;span class="c1">&lt;/span>    &lt;span class="k">try&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">initialLink&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kd">await&lt;/span> &lt;span class="n">getInitialLink&lt;/span>&lt;span class="p">();&lt;/span>
+      &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;initial scheme link: &lt;/span>&lt;span class="si">$&lt;/span>&lt;span class="n">initialLink&lt;/span>&lt;span class="s1">&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+      &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">initialLink&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+        &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;initialLink--&lt;/span>&lt;span class="si">$&lt;/span>&lt;span class="n">initialLink&lt;/span>&lt;span class="s1">&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+        &lt;span class="kd">final&lt;/span> &lt;span class="n">Uri&lt;/span> &lt;span class="n">_jumpUri&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">initialLink&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">replaceFirst&lt;/span>&lt;span class="p">(&lt;/span>
+          &lt;span class="s1">&amp;#39;jdmbest://&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+          &lt;span class="s1">&amp;#39;http://&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+        &lt;span class="p">));&lt;/span>
+        &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Scheme Changed: &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+            &lt;span class="n">_jumpUri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">+&lt;/span>
+            &lt;span class="s2">&amp;#34;, query : &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+            &lt;span class="n">_jumpUri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">queryParameters&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">());&lt;/span>
+        &lt;span class="c1">//  跳转到指定页面
+&lt;/span>&lt;span class="c1">&lt;/span>        &lt;span class="n">Routes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">navigateTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">_jumpUri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">,&lt;/span>
+            &lt;span class="nl">params:&lt;/span> &lt;span class="n">_jumpUri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">queryParameters&lt;/span>&lt;span class="p">);&lt;/span>
+      &lt;span class="p">}&lt;/span>
+    &lt;span class="p">}&lt;/span> &lt;span class="n">on&lt;/span> &lt;span class="n">PlatformException&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">initialLink&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;Failed to get initial link.&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="p">}&lt;/span> &lt;span class="n">on&lt;/span> &lt;span class="n">FormatException&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">initialLink&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;Failed to parse the initial link as Uri.&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="p">}&lt;/span>
+    &lt;span class="n">_sub&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">getUriLinksStream&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="n">listen&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">Uri&lt;/span> &lt;span class="n">uri&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Scheme Changed: &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+          &lt;span class="n">uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">+&lt;/span>
+          &lt;span class="s2">&amp;#34;, query : &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+          &lt;span class="n">uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">queryParameters&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">());&lt;/span>
+      &lt;span class="n">Routes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">navigateTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nl">params:&lt;/span> &lt;span class="n">uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">queryParameters&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">//    Routes.navigateTo(context, uri.path, params: uri.queryParameters);
+&lt;/span>&lt;span class="c1">&lt;/span>    &lt;span class="p">},&lt;/span> &lt;span class="nl">onError:&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;jump error: &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">err&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">());&lt;/span>
+      &lt;span class="c1">// Handle exception by warning the user their action did345not succeed
+&lt;/span>&lt;span class="c1">&lt;/span>    &lt;span class="p">});&lt;/span>
+  &lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Redis on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/redis/</link><description>Recent content in Redis on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 16:29:46 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/redis/index.xml" rel="self" type="application/rss+xml"/><item><title>Redis八股文背诵版</title><link>http://notes.711xd.com/post/redis-key-points/</link><pubDate>Fri, 26 Nov 2021 16:29:46 +0800</pubDate><guid>http://notes.711xd.com/post/redis-key-points/</guid><description>&lt;h2 id="redis单线程原理">&lt;strong>Redis单线程原理&lt;/strong>&lt;/h2>
+&lt;p>首先必须明确，Redis单线程指的是网络请求模块使用了一个线程（，其他模块仍用了多个线程。并不是一个线程完成了所有功能。原理上，其采用了利用epoll的多路复用特性，因此可以采用单线程处理其网络请求。&lt;/p>
+&lt;h2 id="redis数据类型">&lt;strong>Redis数据类型&lt;/strong>&lt;/h2>
+&lt;p>String：字符串类型，最简单的类型 Hash：类似于Map的一种结构。List：有序列表。Set:无序集合。ZSet：带权值的无序集合，即每个ZSet元素还另有一个数字代表权值，集合通过权值进行排序。&lt;/p></description></item><item><title>Linux Redis Service 配置文件</title><link>http://notes.711xd.com/post/linux-redis-service-file/</link><pubDate>Fri, 26 Nov 2021 15:49:23 +0800</pubDate><guid>http://notes.711xd.com/post/linux-redis-service-file/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">vi /usr/lib/systemd/system/redis.service
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ini" data-lang="ini">&lt;span class="k">[Unit]&lt;/span>
+&lt;span class="na">Description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">Redis persistent key-value database&lt;/span>
+&lt;span class="na">After&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">network.target&lt;/span>
+&lt;span class="na">After&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">network-online.target&lt;/span>
+&lt;span class="na">Wants&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">network-online.target&lt;/span>
+&lt;span class="k">[Service]&lt;/span>
+&lt;span class="na">ExecStart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/usr/bin/redis-server /etc/redis.conf --supervised systemd&lt;/span>
+&lt;span class="na">ExecStop&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/usr/libexec/redis-shutdown&lt;/span>
+&lt;span class="na">User&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">redis&lt;/span>
+&lt;span class="na">Group&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">redis&lt;/span>
+&lt;span class="na">RuntimeDirectory&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">redis&lt;/span>
+&lt;span class="na">RuntimeDirectoryMode&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">0755&lt;/span>
+&lt;span class="k">[Install]&lt;/span>
+&lt;span class="na">WantedBy&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">multi-user.target&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

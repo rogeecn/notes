@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/linux/</link><description>Recent content in Linux on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 16:25:26 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>CentOS添加swap分区</title><link>http://notes.711xd.com/post/centos-add-swap/</link><pubDate>Fri, 26 Nov 2021 16:25:26 +0800</pubDate><guid>http://notes.711xd.com/post/centos-add-swap/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">/bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+/sbin/mkswap /var/swap.1
+/sbin/swapon /var/swap.1
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;a href="https://stackoverflow.com/questions/33299302/composer-update-failed-out-of-memory">https://stackoverflow.com/questions/33299302/composer-update-failed-out-of-memory&lt;/a>&lt;/p>
+&lt;p>Katiak&amp;rsquo;s answer worked but I had to modify it. You will need 4 GB of free space for this to work on a Linux machine. Make sure you sudo the commands if you&amp;rsquo;re not root:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">/bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=4096
+/sbin/mkswap /var/swap.1
+/sbin/swapon /var/swap.1
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>服务巡检脚本</title><link>http://notes.711xd.com/post/server-check-script/</link><pubDate>Fri, 26 Nov 2021 15:53:41 +0800</pubDate><guid>http://notes.711xd.com/post/server-check-script/</guid><description>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70</description></item><item><title>使用wget命令爬取整站</title><link>http://notes.711xd.com/post/use-wget-to-crawl-hole-site/</link><pubDate>Fri, 26 Nov 2021 15:51:30 +0800</pubDate><guid>http://notes.711xd.com/post/use-wget-to-crawl-hole-site/</guid><description>&lt;h2 id="命令">命令&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">wget -c -r -npH -k -nv -user-agent=&amp;#34;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.104 Safari/537.36 Core/1.53.4482.400 QQBrowser/9.7.13001.400&amp;#34; http://www.baidu.com
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>使用 systemctl 启动 Golang 应用</title><link>http://notes.711xd.com/post/golang-run-by-systemctl/</link><pubDate>Fri, 26 Nov 2021 15:50:15 +0800</pubDate><guid>http://notes.711xd.com/post/golang-run-by-systemctl/</guid><description>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 [Unit] Description=jdm apk building service After=network.target After=network-online.target Wants=network-online.target [Service] ExecStart=/opt/builder/builder serve --config /opt/builder/etc/builder.toml Type=simple User=root Group=root RuntimeDirectory=/opt/builder RuntimeDirectoryMode=0755 [Install] WantedBy=multi-user.target</description></item><item><title>Linux Redis Service 配置文件</title><link>http://notes.711xd.com/post/linux-redis-service-file/</link><pubDate>Fri, 26 Nov 2021 15:49:23 +0800</pubDate><guid>http://notes.711xd.com/post/linux-redis-service-file/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">vi /usr/lib/systemd/system/redis.service
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ini" data-lang="ini">&lt;span class="k">[Unit]&lt;/span>
+&lt;span class="na">Description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">Redis persistent key-value database&lt;/span>
+&lt;span class="na">After&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">network.target&lt;/span>
+&lt;span class="na">After&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">network-online.target&lt;/span>
+&lt;span class="na">Wants&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">network-online.target&lt;/span>
+&lt;span class="k">[Service]&lt;/span>
+&lt;span class="na">ExecStart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/usr/bin/redis-server /etc/redis.conf --supervised systemd&lt;/span>
+&lt;span class="na">ExecStop&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/usr/libexec/redis-shutdown&lt;/span>
+&lt;span class="na">User&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">redis&lt;/span>
+&lt;span class="na">Group&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">redis&lt;/span>
+&lt;span class="na">RuntimeDirectory&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">redis&lt;/span>
+&lt;span class="na">RuntimeDirectoryMode&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">0755&lt;/span>
+&lt;span class="k">[Install]&lt;/span>
+&lt;span class="na">WantedBy&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">multi-user.target&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

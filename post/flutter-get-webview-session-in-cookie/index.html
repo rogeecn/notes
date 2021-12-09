@@ -1,0 +1,832 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Flutter 获取webview中cookie存储的session - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="需求 由于最近要获取阿里系网站的信息，网站在登录模块做了大量的保护工作，我的需求是拿到登录之后的cookie以获得session字段的值，用来保持登录状态。所以想通过webview来获取登录的信息。
+在flutter上面比较流行的一个webview插件为：flutter_webview_plugin
+flutter_webview_plugin 使用 1.在app的路由上面添加登录的页面 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16  routes: { &amp;#34;/web_login&amp;#34;:(_) =&amp;gt; new WebviewScaffold(url: Config.login, withLocalStorage: true, hidden: true, userAgent: &amp;#34;Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36&amp;#34;, appBar: new AppBar( centerTitle: true , title: new Text(&amp;#34;登录&amp;#34;), ), initialChild: Container( child: new Center( child: new CupertinoActivityIndicator(animating: true), ), ), ), }   注意：userAgent字段一定要加上，不然在ios下打开WKwebview会白屏
+"><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/flutter-get-webview-session-in-cookie/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Flutter 获取webview中cookie存储的session">
+<meta property="og:description" content="需求
+由于最近要获取阿里系网站的信息，网站在登录模块做了大量的保护工作，我的需求是拿到登录之后的cookie以获得session字段的值，用来保持登录状态。所以想通过webview来获取登录的信息。
+在flutter上面比较流行的一个webview插件为：flutter_webview_plugin
+flutter_webview_plugin 使用
+1.在app的路由上面添加登录的页面
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+
+
+routes: {
+    &#34;/web_login&#34;:(_) => new WebviewScaffold(url: Config.login,
+        withLocalStorage: true,
+        hidden: true,
+        userAgent: &#34;Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36&#34;,
+        appBar: new AppBar(
+          centerTitle: true ,
+          title: new Text(&#34;登录&#34;),
+        ),
+        initialChild: Container(
+          child: new Center(
+            child: new CupertinoActivityIndicator(animating: true),
+          ),
+        ),
+    ),
+}
+
+
+注意：userAgent字段一定要加上，不然在ios下打开WKwebview会白屏">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/flutter-get-webview-session-in-cookie/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-11-26T16:06:24+08:00">
+<meta property="article:modified_time" content="2021-11-26T16:31:21+08:00">
+<meta itemprop=name content="Flutter 获取webview中cookie存储的session">
+<meta itemprop=description content="需求
+由于最近要获取阿里系网站的信息，网站在登录模块做了大量的保护工作，我的需求是拿到登录之后的cookie以获得session字段的值，用来保持登录状态。所以想通过webview来获取登录的信息。
+在flutter上面比较流行的一个webview插件为：flutter_webview_plugin
+flutter_webview_plugin 使用
+1.在app的路由上面添加登录的页面
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+
+
+routes: {
+    &#34;/web_login&#34;:(_) => new WebviewScaffold(url: Config.login,
+        withLocalStorage: true,
+        hidden: true,
+        userAgent: &#34;Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36&#34;,
+        appBar: new AppBar(
+          centerTitle: true ,
+          title: new Text(&#34;登录&#34;),
+        ),
+        initialChild: Container(
+          child: new Center(
+            child: new CupertinoActivityIndicator(animating: true),
+          ),
+        ),
+    ),
+}
+
+
+注意：userAgent字段一定要加上，不然在ios下打开WKwebview会白屏"><meta itemprop=datePublished content="2021-11-26T16:06:24+08:00">
+<meta itemprop=dateModified content="2021-11-26T16:31:21+08:00">
+<meta itemprop=wordCount content="1663">
+<meta itemprop=keywords content="Flutter,Session,Cookie,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Flutter 获取webview中cookie存储的session">
+<meta name=twitter:description content="需求
+由于最近要获取阿里系网站的信息，网站在登录模块做了大量的保护工作，我的需求是拿到登录之后的cookie以获得session字段的值，用来保持登录状态。所以想通过webview来获取登录的信息。
+在flutter上面比较流行的一个webview插件为：flutter_webview_plugin
+flutter_webview_plugin 使用
+1.在app的路由上面添加登录的页面
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+
+
+routes: {
+    &#34;/web_login&#34;:(_) => new WebviewScaffold(url: Config.login,
+        withLocalStorage: true,
+        hidden: true,
+        userAgent: &#34;Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36&#34;,
+        appBar: new AppBar(
+          centerTitle: true ,
+          title: new Text(&#34;登录&#34;),
+        ),
+        initialChild: Container(
+          child: new Center(
+            child: new CupertinoActivityIndicator(animating: true),
+          ),
+        ),
+    ),
+}
+
+
+注意：userAgent字段一定要加上，不然在ios下打开WKwebview会白屏"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Flutter 获取webview中cookie存储的session</h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#需求>需求</a></li>
+<li><a href=#flutter_webview_plugin-使用>flutter_webview_plugin 使用</a>
+<ul>
+<li><a href=#1在app的路由上面添加登录的页面>1.在app的路由上面添加登录的页面</a></li>
+<li><a href=#2初始化flutterwebviewplugin作为全局变量并且在启动app时如果没登录就跳转到登录界面>2.初始化flutterWebviewPlugin，作为全局变量；并且在启动app时如果没登录就跳转到登录界面</a></li>
+<li><a href=#3监听url的变化监测到跳转到成功之后的界面后获取cookies然后保存到sp中>3.监听url的变化，监测到跳转到成功之后的界面后获取cookies然后保存到sp中</a></li>
+</ul>
+</li>
+<li><a href=#改轮子>改轮子</a>
+<ul>
+<li><a href=#修改插件的方式为>修改插件的方式为：</a></li>
+</ul>
+</li>
+<li><a href=#android获取cookie实现>Android获取cookie实现：</a>
+<ul>
+<li><a href=#1修改flutter_webview_pluginandroid文件夹下的-webviewmanagerjava>1.修改<code>flutter_webview_plugin/android</code>文件夹下的 <code>WebviewManager.java</code></a></li>
+<li><a href=#2修改flutter_webview_pluginandroid文件夹下的flutterwebviewpluginjava>2.修改flutter_webview_plugin/android文件夹下的FlutterWebviewPlugin.java</a></li>
+<li><a href=#3新增一个getallcookies的方法>3.新增一个getAllCookies的方法</a></li>
+</ul>
+</li>
+<li><a href=#ios获取cookie的实现>IOS获取Cookie的实现</a>
+<ul>
+<li><a href=#1修改flutter_webview_pluginiosclasses文件夹下的flutterwebviewpluginm>1.修改<code>flutter_webview_plugin/ios/Classes</code>文件夹下的<code>FlutterWebviewPlugin.m</code></a></li>
+<li><a href=#2添加一个方法>2.添加一个方法</a></li>
+</ul>
+</li>
+<li><a href=#dart修改>Dart修改</a>
+<ul>
+<li><a href=#添加getallcookies的方法>添加getAllCookies的方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<h2 id=需求>需求</h2>
+<p>由于最近要获取阿里系网站的信息，网站在登录模块做了大量的保护工作，我的需求是拿到登录之后的cookie以获得session字段的值，用来保持登录状态。所以想通过webview来获取登录的信息。</p>
+<p>在flutter上面比较流行的一个webview插件为：<code>flutter_webview_plugin</code></p>
+<h2 id=flutter_webview_plugin-使用>flutter_webview_plugin 使用</h2>
+<h3 id=1在app的路由上面添加登录的页面>1.在app的路由上面添加登录的页面</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=nl>routes:</span> <span class=p>{</span>
+    <span class=s2>&#34;/web_login&#34;</span><span class=o>:</span><span class=p>(</span><span class=n>_</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>new</span> <span class=n>WebviewScaffold</span><span class=p>(</span><span class=nl>url:</span> <span class=n>Config</span><span class=p>.</span><span class=n>login</span><span class=p>,</span>
+        <span class=nl>withLocalStorage:</span> <span class=kc>true</span><span class=p>,</span>
+        <span class=nl>hidden:</span> <span class=kc>true</span><span class=p>,</span>
+        <span class=nl>userAgent:</span> <span class=s2>&#34;Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36&#34;</span><span class=p>,</span>
+        <span class=nl>appBar:</span> <span class=k>new</span> <span class=n>AppBar</span><span class=p>(</span>
+          <span class=nl>centerTitle:</span> <span class=kc>true</span> <span class=p>,</span>
+          <span class=nl>title:</span> <span class=k>new</span> <span class=n>Text</span><span class=p>(</span><span class=s2>&#34;登录&#34;</span><span class=p>),</span>
+        <span class=p>),</span>
+        <span class=nl>initialChild:</span> <span class=n>Container</span><span class=p>(</span>
+          <span class=nl>child:</span> <span class=k>new</span> <span class=n>Center</span><span class=p>(</span>
+            <span class=nl>child:</span> <span class=k>new</span> <span class=n>CupertinoActivityIndicator</span><span class=p>(</span><span class=nl>animating:</span> <span class=kc>true</span><span class=p>),</span>
+          <span class=p>),</span>
+        <span class=p>),</span>
+    <span class=p>),</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>注意：userAgent字段一定要加上，不然在ios下打开WKwebview会白屏</p>
+<h3 id=2初始化flutterwebviewplugin作为全局变量并且在启动app时如果没登录就跳转到登录界面>2.初始化flutterWebviewPlugin，作为全局变量；并且在启动app时如果没登录就跳转到登录界面</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=kd>final</span> <span class=n>flutterWebviewPlugin</span> <span class=o>=</span> <span class=k>new</span> <span class=n>FlutterWebviewPlugin</span><span class=p>();</span>
+
+<span class=k>if</span><span class=p>(</span><span class=n>_event</span><span class=p>.</span><span class=n>data</span><span class=p>.</span><span class=n>length</span> <span class=o>==</span> <span class=m>0</span><span class=p>){</span>
+    <span class=n>print</span><span class=p>(</span><span class=s2>&#34;nologin &#34;</span><span class=p>);</span>
+    <span class=n>Navigator</span><span class=p>.</span><span class=n>of</span><span class=p>(</span><span class=n>context</span><span class=p>).</span><span class=n>pushNamed</span><span class=p>(</span><span class=s2>&#34;/web_login&#34;</span><span class=p>);</span>
+    <span class=n>_webViewLogin</span><span class=p>();</span>
+<span class=p>}</span><span class=k>else</span><span class=p>{</span>
+    <span class=n>print</span><span class=p>(</span><span class=s2>&#34;get events data successfully&#34;</span><span class=p>);</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=3监听url的变化监测到跳转到成功之后的界面后获取cookies然后保存到sp中>3.监听url的变化，监测到跳转到成功之后的界面后获取cookies然后保存到sp中</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=n>flutterWebviewPlugin</span><span class=p>.</span><span class=n>onUrlChanged</span><span class=p>.</span><span class=n>listen</span><span class=p>((</span><span class=kt>String</span> <span class=n>url</span><span class=p>){</span>
+    <span class=kd>var</span> <span class=n>_uri</span> <span class=o>=</span> <span class=n>Uri</span><span class=p>.</span><span class=n>parse</span><span class=p>(</span><span class=n>url</span><span class=p>);</span>
+    <span class=k>if</span><span class=p>(</span><span class=n>_uri</span><span class=p>.</span><span class=n>path</span> <span class=o>==</span> <span class=s2>&#34;/dashboard&#34;</span><span class=p>){</span>
+    <span class=n>Navigator</span><span class=p>.</span><span class=n>of</span><span class=p>(</span><span class=n>context</span><span class=p>).</span><span class=n>pop</span><span class=p>();</span>
+    <span class=n>flutterWebviewPlugin</span><span class=p>.</span><span class=n>close</span><span class=p>();</span>
+    <span class=n>print</span><span class=p>(</span><span class=s2>&#34;登陆成功&#34;</span><span class=p>);</span>
+    <span class=n>flutterWebviewPlugin</span><span class=p>.</span><span class=n>getCookies</span><span class=p>().</span><span class=n>then</span><span class=p>((</span><span class=n>Map</span><span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span><span class=kt>String</span><span class=o>&gt;</span> <span class=n>_cookies</span><span class=p>){</span>
+        <span class=n>print</span><span class=p>(</span><span class=n>_cookies</span><span class=p>);</span>
+        <span class=n>_saveCookie</span><span class=p>();</span>
+    <span class=p>});</span>
+    <span class=p>}</span>
+<span class=p>});</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>以为这样就大功告成，但是打印出来的cookie其实是不包含session字段的。</p>
+<p>看一下getCookies()方法的源码：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=n>Future</span><span class=o>&lt;</span><span class=n>Map</span><span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span> <span class=kt>String</span><span class=o>&gt;&gt;</span> <span class=n>getCookies</span><span class=p>()</span> <span class=kd>async</span> <span class=p>{</span>
+    <span class=kd>final</span> <span class=n>cookiesString</span> <span class=o>=</span> <span class=kd>await</span> <span class=n>evalJavascript</span><span class=p>(</span><span class=s1>&#39;document.cookie&#39;</span><span class=p>);</span>
+    <span class=kd>final</span> <span class=n>cookies</span> <span class=o>=</span> <span class=o>&lt;</span><span class=kt>String</span><span class=p>,</span> <span class=kt>String</span><span class=o>&gt;</span><span class=p>{};</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>cookiesString</span><span class=o>?</span><span class=p>.</span><span class=n>isNotEmpty</span> <span class=o>==</span> <span class=kc>true</span><span class=p>)</span> <span class=p>{</span>
+        <span class=n>cookiesString</span><span class=p>.</span><span class=n>split</span><span class=p>(</span><span class=s1>&#39;;&#39;</span><span class=p>).</span><span class=n>forEach</span><span class=p>((</span><span class=kt>String</span> <span class=n>cookie</span><span class=p>)</span> <span class=p>{</span>
+        <span class=kd>final</span> <span class=n>split</span> <span class=o>=</span> <span class=n>cookie</span><span class=p>.</span><span class=n>split</span><span class=p>(</span><span class=s1>&#39;=&#39;</span><span class=p>);</span>
+        <span class=n>cookies</span><span class=p>[</span><span class=n>split</span><span class=p>[</span><span class=m>0</span><span class=p>]]</span> <span class=o>=</span> <span class=n>split</span><span class=p>[</span><span class=m>1</span><span class=p>];</span>
+        <span class=p>});</span>
+    <span class=p>}</span>
+
+    <span class=k>return</span> <span class=n>cookies</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过js来获得cookie，大多数网站都会做跨域安全处理，这样基本上不可能会获得session的值，那就毫无意义。</p>
+<h2 id=改轮子>改轮子</h2>
+<p>目前flutter 插件中并没有可以直接获取 <code>webview cookie</code> 插件，因此只能自己改轮子</p>
+<p><code>flutter_webview_plugin</code> 使用的是 <code>webview</code>和<code>wkwebview</code>;</p>
+<h3 id=修改插件的方式为>修改插件的方式为：</h3>
+<p>Android Studio左侧 projet窗口 > External Libraries > Flutter Plugins > flutter_webview_plugin</p>
+<h2 id=android获取cookie实现>Android获取cookie实现：</h2>
+<h3 id=1修改flutter_webview_pluginandroid文件夹下的-webviewmanagerjava>1.修改<code>flutter_webview_plugin/android</code>文件夹下的 <code>WebviewManager.java</code></h3>
+<p>新加一个方法：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=kt>void</span> <span class=n>getAllCookies</span><span class=p>(</span><span class=n>MethodCall</span> <span class=n>call</span><span class=p>,</span> <span class=kd>final</span> <span class=n>MethodChannel</span><span class=p>.</span><span class=n>Result</span> <span class=n>result</span><span class=p>){</span>
+    <span class=kt>String</span> <span class=n>url</span> <span class=o>=</span> <span class=n>call</span><span class=p>.</span><span class=n>argument</span><span class=p>(</span><span class=s2>&#34;url&#34;</span><span class=p>);</span>
+    <span class=n>CookieManager</span> <span class=n>cookieManager</span> <span class=o>=</span> <span class=n>CookieManager</span><span class=p>.</span><span class=n>getInstance</span><span class=p>();</span>
+    <span class=kt>String</span> <span class=n>cookieStr</span> <span class=o>=</span> <span class=n>cookieManager</span><span class=p>.</span><span class=n>getCookie</span><span class=p>(</span><span class=n>url</span><span class=p>);</span>
+    <span class=n>result</span><span class=p>.</span><span class=n>success</span><span class=p>(</span><span class=n>cookieStr</span><span class=p>);</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=2修改flutter_webview_pluginandroid文件夹下的flutterwebviewpluginjava>2.修改flutter_webview_plugin/android文件夹下的FlutterWebviewPlugin.java</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=err>@</span><span class=n>Override</span>
+<span class=n>public</span> <span class=kt>void</span> <span class=n>onMethodCall</span><span class=p>(</span><span class=n>MethodCall</span> <span class=n>call</span><span class=p>,</span> <span class=n>MethodChannel</span><span class=p>.</span><span class=n>Result</span> <span class=n>result</span><span class=p>)</span> <span class=p>{</span>
+    <span class=k>switch</span> <span class=p>(</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>case</span> <span class=s2>&#34;launch&#34;</span><span class=o>:</span>
+            <span class=n>openUrl</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;close&#34;</span><span class=o>:</span>
+            <span class=n>close</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;eval&#34;</span><span class=o>:</span>
+            <span class=n>eval</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;resize&#34;</span><span class=o>:</span>
+            <span class=n>resize</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;reload&#34;</span><span class=o>:</span>
+            <span class=n>reload</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;back&#34;</span><span class=o>:</span>
+            <span class=n>back</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;forward&#34;</span><span class=o>:</span>
+            <span class=n>forward</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;hide&#34;</span><span class=o>:</span>
+            <span class=n>hide</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;show&#34;</span><span class=o>:</span>
+            <span class=n>show</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;reloadUrl&#34;</span><span class=o>:</span>
+            <span class=n>reloadUrl</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;stopLoading&#34;</span><span class=o>:</span>
+            <span class=n>stopLoading</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;cleanCookies&#34;</span><span class=o>:</span>
+            <span class=n>cleanCookies</span><span class=p>(</span><span class=n>call</span><span class=p>,</span> <span class=n>result</span><span class=p>);</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=k>case</span> <span class=s2>&#34;getAllCookies&#34;</span><span class=o>:</span>
+            <span class=n>getAllCookies</span><span class=p>(</span><span class=n>call</span><span class=p>,</span><span class=n>result</span><span class=p>);</span>
+                <span class=k>break</span><span class=p>;</span>
+        <span class=k>default</span><span class=o>:</span>
+            <span class=n>result</span><span class=p>.</span><span class=n>notImplemented</span><span class=p>();</span>
+            <span class=k>break</span><span class=p>;</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在<code>onMethodCall</code>方法上新增case的分支，用于判断使用的方法是<code>getAllCookies</code></p>
+<h3 id=3新增一个getallcookies的方法>3.新增一个getAllCookies的方法</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=n>private</span> <span class=kt>void</span> <span class=n>getAllCookies</span><span class=p>(</span><span class=n>MethodCall</span> <span class=n>call</span><span class=p>,</span> <span class=kd>final</span> <span class=n>MethodChannel</span><span class=p>.</span><span class=n>Result</span> <span class=n>result</span><span class=p>){</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>webViewManager</span> <span class=o>!=</span> <span class=kc>null</span><span class=p>){</span>
+        <span class=n>webViewManager</span><span class=p>.</span><span class=n>getAllCookies</span><span class=p>(</span><span class=n>call</span><span class=p>,</span><span class=n>result</span><span class=p>);</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=ios获取cookie的实现>IOS获取Cookie的实现</h2>
+<h3 id=1修改flutter_webview_pluginiosclasses文件夹下的flutterwebviewpluginm>1.修改<code>flutter_webview_plugin/ios/Classes</code>文件夹下的<code>FlutterWebviewPlugin.m</code></h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-objective-c data-lang=objective-c><span class=p>-</span> <span class=p>(</span><span class=kt>void</span><span class=p>)</span><span class=nf>handleMethodCall:</span><span class=p>(</span><span class=n>FlutterMethodCall</span><span class=o>*</span><span class=p>)</span><span class=nv>call</span> <span class=nf>result:</span><span class=p>(</span><span class=n>FlutterResult</span><span class=p>)</span><span class=nv>result</span> <span class=p>{</span>
+    <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;launch&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nb>self</span><span class=p>.</span><span class=n>webview</span><span class=p>)</span>
+            <span class=p>[</span><span class=nb>self</span> <span class=nl>initWebview</span><span class=p>:</span><span class=n>call</span><span class=p>];</span>
+        <span class=k>else</span>
+            <span class=p>[</span><span class=nb>self</span> <span class=nl>navigate</span><span class=p>:</span><span class=n>call</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;close&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=n>closeWebView</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;eval&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=nl>evalJavascript</span><span class=p>:</span><span class=n>call</span> <span class=nl>completionHandler</span><span class=p>:</span><span class=o>^</span><span class=p>(</span><span class=n>NSString</span> <span class=o>*</span> <span class=n>response</span><span class=p>)</span> <span class=p>{</span>
+            <span class=n>result</span><span class=p>(</span><span class=n>response</span><span class=p>);</span>
+        <span class=p>}];</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;resize&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=nl>resize</span><span class=p>:</span><span class=n>call</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;reloadUrl&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=nl>reloadUrl</span><span class=p>:</span><span class=n>call</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;show&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=n>show</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;hide&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=n>hide</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;stopLoading&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=n>stopLoading</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;cleanCookies&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=n>cleanCookies</span><span class=p>];</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;back&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=n>back</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;forward&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=n>forward</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;reload&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>])</span> <span class=p>{</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=n>reload</span><span class=p>];</span>
+        <span class=n>result</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span><span class=k>else</span> <span class=k>if</span> <span class=p>([</span><span class=s>@&#34;getAllCookies&#34;</span> <span class=nl>isEqualToString</span><span class=p>:</span><span class=n>call</span><span class=p>.</span><span class=n>method</span><span class=p>]){</span>
+        <span class=p>[</span><span class=nb>self</span> <span class=nl>getAllCookies</span><span class=p>:</span><span class=n>call</span> <span class=nl>completionHandler</span><span class=p>:</span><span class=o>^</span><span class=p>(</span><span class=n>NSString</span> <span class=o>*</span><span class=n>cookies</span><span class=p>)</span> <span class=p>{</span>
+              <span class=n>result</span><span class=p>(</span><span class=n>cookies</span><span class=p>);</span>
+          <span class=p>}];</span>
+    <span class=p>}</span><span class=k>else</span> <span class=p>{</span>
+        <span class=n>result</span><span class=p>(</span><span class=n>FlutterMethodNotImplemented</span><span class=p>);</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>添加一个<code>getAllCookies</code>的分支判断</p>
+<h3 id=2添加一个方法>2.添加一个方法</h3>
+<p>⚠️ 仅支持ios11以上</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-objective-c data-lang=objective-c><span class=p>-</span> <span class=p>(</span><span class=kt>void</span><span class=p>)</span><span class=nf>getAllCookies:</span><span class=p>(</span><span class=n>FlutterMethodCall</span><span class=o>*</span><span class=p>)</span><span class=nv>call</span>
+     <span class=nf>completionHandler:</span><span class=p>(</span><span class=kt>void</span> <span class=p>(</span><span class=o>^</span><span class=n>_Nullable</span><span class=p>)(</span><span class=n>NSString</span> <span class=o>*</span> <span class=n>cookies</span><span class=p>))</span><span class=nv>completionHandler</span> <span class=p>{</span>
+    <span class=k>if</span> <span class=p>(</span><span class=nb>self</span><span class=p>.</span><span class=n>webview</span> <span class=o>!=</span> <span class=nb>nil</span><span class=p>)</span> <span class=p>{</span>
+        <span class=n>NSString</span> <span class=o>*</span><span class=n>url</span> <span class=o>=</span> <span class=n>call</span><span class=p>.</span><span class=n>arguments</span><span class=p>[</span><span class=s>@&#34;url&#34;</span><span class=p>];</span>
+        <span class=n>WKHTTPCookieStore</span> <span class=o>*</span><span class=n>cookieStore</span> <span class=o>=</span> <span class=nb>self</span><span class=p>.</span><span class=n>webview</span><span class=p>.</span><span class=n>configuration</span><span class=p>.</span><span class=n>websiteDataStore</span><span class=p>.</span><span class=n>httpCookieStore</span><span class=p>;</span>
+        <span class=p>[</span><span class=n>cookieStore</span> <span class=nl>getAllCookies</span><span class=p>:</span><span class=o>^</span><span class=p>(</span><span class=n>NSArray</span><span class=o>&lt;</span><span class=n>NSHTTPCookie</span> <span class=o>*&gt;</span> <span class=o>*</span> <span class=n>_Nonnull</span> <span class=n>cookies</span><span class=p>)</span> <span class=p>{</span>
+            <span class=n>NSString</span> <span class=o>*</span><span class=n>allCookies</span> <span class=o>=</span> <span class=s>@&#34;&#34;</span><span class=p>;</span>
+            <span class=n>NSEnumerator</span> <span class=o>*</span><span class=n>cookie_enum</span> <span class=o>=</span> <span class=p>[</span><span class=n>cookies</span> <span class=n>objectEnumerator</span><span class=p>];</span>
+            <span class=n>NSHTTPCookie</span> <span class=o>*</span><span class=n>temp_cookie</span><span class=p>;</span>
+            <span class=k>while</span> <span class=p>(</span><span class=n>temp_cookie</span> <span class=o>=</span> <span class=p>[</span><span class=n>cookie_enum</span> <span class=n>nextObject</span><span class=p>])</span> <span class=p>{</span>
+                <span class=n>NSString</span> <span class=o>*</span><span class=n>temp</span> <span class=o>=</span> <span class=p>[</span><span class=n>NSString</span> <span class=nl>stringWithFormat</span><span class=p>:</span><span class=s>@&#34;%@=%@;&#34;</span><span class=p>,[</span><span class=n>temp_cookie</span> <span class=n>name</span><span class=p>],[</span><span class=n>temp_cookie</span> <span class=n>value</span><span class=p>]];</span>
+                <span class=n>allCookies</span> <span class=o>=</span> <span class=p>[</span><span class=n>allCookies</span> <span class=nl>stringByAppendingString</span><span class=p>:</span><span class=n>temp</span><span class=p>];</span>
+            <span class=p>}</span>
+            <span class=n>completionHandler</span><span class=p>([</span><span class=n>NSString</span> <span class=nl>stringWithFormat</span><span class=p>:</span><span class=s>@&#34;%@&#34;</span><span class=p>,</span> <span class=n>allCookies</span><span class=p>]);</span>
+        <span class=p>}];</span>
+    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+        <span class=n>completionHandler</span><span class=p>(</span><span class=nb>nil</span><span class=p>);</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=dart修改>Dart修改</h2>
+<p>修改<code>flutter_webview_plugin/lib/src</code>文件夹下的<code>base.dart</code></p>
+<h3 id=添加getallcookies的方法>添加getAllCookies的方法</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=c1>/// Get AllCookies
+</span><span class=c1></span><span class=n>Future</span><span class=o>&lt;</span><span class=kt>String</span><span class=o>&gt;</span> <span class=n>getAllCookies</span><span class=p>(</span><span class=kt>String</span> <span class=n>url</span><span class=p>)</span> <span class=kd>async</span> <span class=p>{</span>
+    <span class=kd>final</span> <span class=n>res</span> <span class=o>=</span> <span class=kd>await</span> <span class=n>_channel</span><span class=p>.</span><span class=n>invokeMethod</span><span class=p>(</span><span class=s1>&#39;getAllCookies&#39;</span><span class=p>,</span> <span class=p>{</span><span class=s1>&#39;url&#39;</span><span class=o>:</span> <span class=n>url</span><span class=p>});</span>
+    <span class=k>return</span> <span class=n>res</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dart data-lang=dart><span class=n>Future</span><span class=o>&lt;</span><span class=n>Null</span><span class=o>&gt;</span> <span class=n>_getAllCookies</span><span class=p>()</span> <span class=kd>async</span> <span class=p>{</span>
+    <span class=k>try</span> <span class=p>{</span>
+        <span class=kd>final</span> <span class=kt>String</span> <span class=n>result</span> <span class=o>=</span> <span class=kd>await</span> <span class=n>flutterWebviewPlugin</span><span class=p>.</span><span class=n>getAllCookies</span><span class=p>(</span><span class=s2>&#34;https://www.yuque.com/dashboard&#34;</span><span class=p>);</span>
+        <span class=n>print</span><span class=p>(</span><span class=n>result</span><span class=p>);</span>
+        <span class=n>cookie</span> <span class=o>=</span> <span class=n>result</span><span class=p>;</span>
+        <span class=n>_saveCookie</span><span class=p>();</span>
+        <span class=n>_getHttpData</span><span class=p>();</span>
+    <span class=p>}</span> <span class=n>on</span> <span class=n>PlatformException</span> <span class=k>catch</span> <span class=p>(</span><span class=n>e</span><span class=p>)</span> <span class=p>{</span>
+        <span class=n>cookie</span> <span class=o>=</span> <span class=s2>&#34;&#34;</span><span class=p>;</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>注意：getAllCookies必须在浏览器未关闭之前获取，否则会获取空值</p>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-11-26
+<a href=https://github.com/rogeecn/notes/commit/8dc87a73a3f2da82883c4dc2f9a7d61a70e53f9a title=post>(8dc87a7)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/flutter/>Flutter</a>
+<a href=/tags/session/>Session</a>
+<a href=/tags/cookie/>Cookie</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/flutter-media-query/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">Flutter MediaQuery 相关说明</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/flutter-no-network/>
+<span class="next-text nav-default">Flutter 无法访问HTTP服务</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-11-26 16:06:24 \u002b0800 \u002b0800',title:'Flutter 获取webview中cookie存储的session',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Flutter on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/flutter/</link><description>Recent content in Flutter on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 16:07:23 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/flutter/index.xml" rel="self" type="application/rss+xml"/><item><title>Flutter MediaQuery 相关说明</title><link>http://notes.711xd.com/post/flutter-media-query/</link><pubDate>Fri, 26 Nov 2021 16:07:23 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-media-query/</guid><description>&lt;p>&lt;code>MediaQueryData&lt;/code>是&lt;code>MediaQuery.of&lt;/code>获取数据的类型。说明如下：&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>属性&lt;/th>
+&lt;th>说明&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>size&lt;/td>
+&lt;td>逻辑像素，并不是物理像素，类似于Android中的dp，逻辑像素会在不同大小的手机上显示的大小基本一样，物理像素 = size*devicePixelRatio。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>devicePixelRatio&lt;/td>
+&lt;td>单位逻辑像素的物理像素数量，即设备像素比。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>textScaleFactor&lt;/td>
+&lt;td>单位逻辑像素字体像素数，如果设置为1.5则比指定的字体大50%。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>platformBrightness&lt;/td>
+&lt;td>当前设备的亮度模式，比如在Android Pie手机上进入省电模式，所有的App将会使用深色（dark）模式绘制。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>viewInsets&lt;/td>
+&lt;td>被系统遮挡的部分，通常指键盘，弹出键盘，viewInsets.bottom表示键盘的高度。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>padding&lt;/td>
+&lt;td>被系统遮挡的部分，通常指“刘海屏”或者系统状态栏。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>viewPadding&lt;/td>
+&lt;td>被系统遮挡的部分，通常指“刘海屏”或者系统状态栏，此值独立于padding和viewInsets，它们的值从MediaQuery控件边界的边缘开始测量。在移动设备上，通常是全屏。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>systemGestureInsets&lt;/td>
+&lt;td>显示屏边缘上系统“消耗”的区域输入事件，并阻止将这些事件传递给应用。比如在Android Q手势滑动用于页面导航（ios也一样），比如左滑退出当前页面。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>physicalDepth&lt;/td>
+&lt;td>设备的最大深度，类似于三维空间的Z轴。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>alwaysUse24HourFormat&lt;/td>
+&lt;td>是否是24小时制。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>accessibleNavigation&lt;/td>
+&lt;td>用户是否使用诸如TalkBack或VoiceOver之类的辅助功能与应用程序进行交互，用于帮助视力有障碍的人进行使用。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>invertColors&lt;/td>
+&lt;td>是否支持颜色反转。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>highContrast&lt;/td>
+&lt;td>用户是否要求前景与背景之间的对比度高， iOS上，方法是通过“设置”-&amp;gt;“辅助功能”-&amp;gt;“增加对比度”。 此标志仅在运行iOS 13的iOS设备上更新或以上。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>disableAnimations&lt;/td>
+&lt;td>平台是否要求尽可能禁用或减少动画。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>boldText&lt;/td>
+&lt;td>平台是否要求使用粗体。&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>orientation&lt;/td>
+&lt;td>是横屏还是竖屏。&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table></description></item><item><title>Flutter 获取webview中cookie存储的session</title><link>http://notes.711xd.com/post/flutter-get-webview-session-in-cookie/</link><pubDate>Fri, 26 Nov 2021 16:06:24 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-get-webview-session-in-cookie/</guid><description>&lt;h2 id="需求">需求&lt;/h2>
+&lt;p>由于最近要获取阿里系网站的信息，网站在登录模块做了大量的保护工作，我的需求是拿到登录之后的cookie以获得session字段的值，用来保持登录状态。所以想通过webview来获取登录的信息。&lt;/p>
+&lt;p>在flutter上面比较流行的一个webview插件为：&lt;code>flutter_webview_plugin&lt;/code>&lt;/p>
+&lt;h2 id="flutter_webview_plugin-使用">flutter_webview_plugin 使用&lt;/h2>
+&lt;h3 id="1在app的路由上面添加登录的页面">1.在app的路由上面添加登录的页面&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-dart" data-lang="dart">&lt;span class="nl">routes:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="s2">&amp;#34;/web_login&amp;#34;&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WebviewScaffold&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nl">url:&lt;/span> &lt;span class="n">Config&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">login&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nl">withLocalStorage:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nl">hidden:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nl">userAgent:&lt;/span> &lt;span class="s2">&amp;#34;Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nl">appBar:&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">AppBar&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;span class="nl">centerTitle:&lt;/span> &lt;span class="kc">true&lt;/span> &lt;span class="p">,&lt;/span>
+&lt;span class="nl">title:&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Text&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;登录&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="p">),&lt;/span>
+&lt;span class="nl">initialChild:&lt;/span> &lt;span class="n">Container&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;span class="nl">child:&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Center&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;span class="nl">child:&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CupertinoActivityIndicator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nl">animating:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="p">),&lt;/span>
+&lt;span class="p">),&lt;/span>
+&lt;span class="p">),&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>注意：userAgent字段一定要加上，不然在ios下打开WKwebview会白屏&lt;/p></description></item><item><title>Flutter 无法访问HTTP服务</title><link>http://notes.711xd.com/post/flutter-no-network/</link><pubDate>Fri, 26 Nov 2021 16:05:36 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-no-network/</guid><description>&lt;h2 id="android无法访问http">Android无法访问http&lt;/h2>
+&lt;p>其实这本身不是Flutter的问题，但在开发中经常遇到，在Android Pie版本及以上和IOS 系统上默认禁止访问http，主要是为了安全考虑。&lt;/p>
+&lt;h3 id="android解决办法">Android解决办法：&lt;/h3>
+&lt;p>在&lt;code>./android/app/src/main/AndroidManifest.xml&lt;/code>配置文件中&lt;code>application&lt;/code>标签里面设置&lt;code>networkSecurityConfig&lt;/code>属性:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="cp">&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;manifest&lt;/span> &lt;span class="err">...&lt;/span> &lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;application&lt;/span> &lt;span class="na">android:networkSecurityConfig=&lt;/span>&lt;span class="s">&amp;#34;@xml/network_security_config&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="c">&amp;lt;!-- ... --&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/application&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/manifest&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在&lt;code>./android/app/src/main/res&lt;/code>目录下创建xml文件夹（已存在不用创建），在xml文件夹下创建&lt;code>network_security_config.xml&lt;/code>文件，内容如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="cp">&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;network-security-config&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;base-config&lt;/span> &lt;span class="na">cleartextTrafficPermitted=&lt;/span>&lt;span class="s">&amp;#34;true&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;trust-anchors&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;certificates&lt;/span> &lt;span class="na">src=&lt;/span>&lt;span class="s">&amp;#34;system&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/trust-anchors&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/base-config&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/network-security-config&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Flutter 使用网页唤醒 APP</title><link>http://notes.711xd.com/post/flutter-open-other-app/</link><pubDate>Fri, 26 Nov 2021 16:04:41 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-open-other-app/</guid><description>&lt;p>这里只介绍安卓的端的用法&lt;/p>
+&lt;h2 id="修改配置文件">修改配置文件&lt;/h2>
+&lt;p>通过 &lt;code>host&lt;/code> 和 &lt;code>scheme&lt;/code> 来完成对 App 应用的匹配&lt;/p>
+&lt;p>文件：AndroidManifest.xml 在 activity 块下添加&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="nt">&amp;lt;intent-filter&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;action&lt;/span> &lt;span class="na">android:name=&lt;/span>&lt;span class="s">&amp;#34;android.intent.action.VIEW&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;category&lt;/span> &lt;span class="na">android:name=&lt;/span>&lt;span class="s">&amp;#34;android.intent.category.DEFAULT&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;category&lt;/span> &lt;span class="na">android:name=&lt;/span>&lt;span class="s">&amp;#34;android.intent.category.BROWSABLE&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;data&lt;/span> &lt;span class="na">android:host=&lt;/span>&lt;span class="s">&amp;#34;splash&amp;#34;&lt;/span> &lt;span class="na">android:scheme=&lt;/span>&lt;span class="s">&amp;#34;vchao&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/intent-filter&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>CentOS7 Flutter Android 环境构建</title><link>http://notes.711xd.com/post/centos-flutter-android-builder-env/</link><pubDate>Fri, 26 Nov 2021 16:03:43 +0800</pubDate><guid>http://notes.711xd.com/post/centos-flutter-android-builder-env/</guid><description>&lt;h2 id="flutter">Flutter&lt;/h2>
+&lt;h3 id="下载-flutter-sdk">下载 Flutter SDK&lt;/h3>
+&lt;p>&lt;a href="https://flutter.cn/docs/development/tools/sdk/releases?tab=linux">https://flutter.cn/docs/development/tools/sdk/releases?tab=linux&lt;/a>&lt;/p>
+&lt;h3 id="配置环境变量">配置环境变量&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">$PATH&lt;/span>:/root/flutter/bin
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Flutter 组件 Gridview、ListView 自适应高度配置</title><link>http://notes.711xd.com/post/flutter-auto-grow-height/</link><pubDate>Fri, 26 Nov 2021 15:59:03 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-auto-grow-height/</guid><description>两个组件都会有 shrinkWrap 选项，设置为 true 即可。</description></item><item><title>Flutter解决uni_link 应用冷启动只能停留在主页的问题</title><link>http://notes.711xd.com/post/flutter-uni-link-cold-start-stop-on-homepage/</link><pubDate>Fri, 26 Nov 2021 15:32:02 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-uni-link-cold-start-stop-on-homepage/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-dart" data-lang="dart">&lt;span class="n">StreamSubscription&lt;/span> &lt;span class="n">_sub&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">// jdmbest://goto
+&lt;/span>&lt;span class="c1">&lt;/span>  &lt;span class="n">Future&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Null&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">initUniLinks&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="kd">async&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kt">String&lt;/span> &lt;span class="n">initialLink&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="c1">// Platform messages may fail, so we use a try/catch PlatformException.
+&lt;/span>&lt;span class="c1">&lt;/span>    &lt;span class="k">try&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">initialLink&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kd">await&lt;/span> &lt;span class="n">getInitialLink&lt;/span>&lt;span class="p">();&lt;/span>
+      &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;initial scheme link: &lt;/span>&lt;span class="si">$&lt;/span>&lt;span class="n">initialLink&lt;/span>&lt;span class="s1">&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+      &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">initialLink&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+        &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;initialLink--&lt;/span>&lt;span class="si">$&lt;/span>&lt;span class="n">initialLink&lt;/span>&lt;span class="s1">&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+        &lt;span class="kd">final&lt;/span> &lt;span class="n">Uri&lt;/span> &lt;span class="n">_jumpUri&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">initialLink&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">replaceFirst&lt;/span>&lt;span class="p">(&lt;/span>
+          &lt;span class="s1">&amp;#39;jdmbest://&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+          &lt;span class="s1">&amp;#39;http://&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+        &lt;span class="p">));&lt;/span>
+        &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Scheme Changed: &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+            &lt;span class="n">_jumpUri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">+&lt;/span>
+            &lt;span class="s2">&amp;#34;, query : &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+            &lt;span class="n">_jumpUri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">queryParameters&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">());&lt;/span>
+        &lt;span class="c1">//  跳转到指定页面
+&lt;/span>&lt;span class="c1">&lt;/span>        &lt;span class="n">Routes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">navigateTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">_jumpUri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">,&lt;/span>
+            &lt;span class="nl">params:&lt;/span> &lt;span class="n">_jumpUri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">queryParameters&lt;/span>&lt;span class="p">);&lt;/span>
+      &lt;span class="p">}&lt;/span>
+    &lt;span class="p">}&lt;/span> &lt;span class="n">on&lt;/span> &lt;span class="n">PlatformException&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">initialLink&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;Failed to get initial link.&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="p">}&lt;/span> &lt;span class="n">on&lt;/span> &lt;span class="n">FormatException&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">initialLink&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;Failed to parse the initial link as Uri.&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="p">}&lt;/span>
+    &lt;span class="n">_sub&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">getUriLinksStream&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="n">listen&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">Uri&lt;/span> &lt;span class="n">uri&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Scheme Changed: &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+          &lt;span class="n">uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">+&lt;/span>
+          &lt;span class="s2">&amp;#34;, query : &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+          &lt;span class="n">uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">queryParameters&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">());&lt;/span>
+      &lt;span class="n">Routes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">navigateTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nl">params:&lt;/span> &lt;span class="n">uri&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">queryParameters&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">//    Routes.navigateTo(context, uri.path, params: uri.queryParameters);
+&lt;/span>&lt;span class="c1">&lt;/span>    &lt;span class="p">},&lt;/span> &lt;span class="nl">onError:&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">err&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+      &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;jump error: &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">err&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">toString&lt;/span>&lt;span class="p">());&lt;/span>
+      &lt;span class="c1">// Handle exception by warning the user their action did345not succeed
+&lt;/span>&lt;span class="c1">&lt;/span>    &lt;span class="p">});&lt;/span>
+  &lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>解决 Flutter Android 添加scheme 后安装没有图标的问题</title><link>http://notes.711xd.com/post/flutter-no-icon-after-add-scheme-for-android/</link><pubDate>Fri, 26 Nov 2021 15:29:48 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-no-icon-after-add-scheme-for-android/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="nt">&amp;lt;intent-filter&amp;gt;&lt;/span>
+    &lt;span class="nt">&amp;lt;action&lt;/span> &lt;span class="na">android:name=&lt;/span>&lt;span class="s">&amp;#34;android.intent.action.MAIN&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+    &lt;span class="nt">&amp;lt;category&lt;/span> &lt;span class="na">android:name=&lt;/span>&lt;span class="s">&amp;#34;android.intent.category.LAUNCHER&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/intent-filter&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;intent-filter&amp;gt;&lt;/span>
+    &lt;span class="nt">&amp;lt;action&lt;/span> &lt;span class="na">android:name=&lt;/span>&lt;span class="s">&amp;#34;android.intent.action.VIEW&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+    &lt;span class="nt">&amp;lt;category&lt;/span> &lt;span class="na">android:name=&lt;/span>&lt;span class="s">&amp;#34;android.intent.category.DEFAULT&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+    &lt;span class="nt">&amp;lt;category&lt;/span> &lt;span class="na">android:name=&lt;/span>&lt;span class="s">&amp;#34;android.intent.category.BROWSABLE&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+    &lt;span class="nt">&amp;lt;data&lt;/span> &lt;span class="na">android:host=&lt;/span>&lt;span class="s">&amp;#34;goto&amp;#34;&lt;/span> &lt;span class="na">android:scheme=&lt;/span>&lt;span class="s">&amp;#34;jdmbest&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/intent-filter&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>网站 on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/%E7%BD%91%E7%AB%99/</link><description>Recent content in 网站 on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 03 Dec 2021 10:08:53 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/%E7%BD%91%E7%AB%99/index.xml" rel="self" type="application/rss+xml"/><item><title>Nginx的 HTTP 499 状态码问题</title><link>http://notes.711xd.com/post/nginx-status-code-499/</link><pubDate>Fri, 03 Dec 2021 10:08:53 +0800</pubDate><guid>http://notes.711xd.com/post/nginx-status-code-499/</guid><description>&lt;h2 id="1前言">1、前言&lt;/h2>
+&lt;p>今天在处理一个客户问题，遇到 Nginx access log 中出现大量的 &lt;code>499&lt;/code> 状态码。实际场景是：客户的域名通过 cname 解析到我们的 Nginx 反向代理集群上来，客户的 Web 服务是由一个负载均衡提供外网 IP 进行访问，负载均衡后面挂了多个内网 web 站点业务服务器。出现的访问日志如下所示：&lt;/p>
+&lt;p>&lt;img src="305504-20170625232821913-1629695159.png" alt="img">&lt;/p></description></item><item><title>防止网站页面被其他网站iframe引用方法</title><link>http://notes.711xd.com/post/disable-page-frame-by-other-site/</link><pubDate>Fri, 26 Nov 2021 10:16:38 +0800</pubDate><guid>http://notes.711xd.com/post/disable-page-frame-by-other-site/</guid><description>&lt;p>两种解决方案：&lt;/p>
+&lt;h2 id="1在响应头里加一个x-frame-options">1、在响应头里加一个X-Frame-Options&lt;/h2>
+&lt;p>其取值有三种，大部分浏览器都支持：&lt;/p>
+&lt;ul>
+&lt;li>DENY：浏览器拒绝当前页面加载任何Frame页面&lt;/li>
+&lt;li>SAMEORIGIN：frame页面的地址只能为同源域名下的页面&lt;/li>
+&lt;li>ALLOW-FROM origin：origin为允许frame加载的页面地址&lt;/li>
+&lt;/ul>
+&lt;p>这样被不同源的页面以iframe包含时就不会显示了&lt;/p></description></item></channel></rss>

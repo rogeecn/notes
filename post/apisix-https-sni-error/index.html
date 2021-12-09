@@ -1,0 +1,333 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Apisix 配置 HTTPS SNI 不识别问题定位 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="ApiSIX网关
+问题说明 项目中配置 HTTPS 需要支持 IP 格式直接访问，Apisix 中配置证书需要使用到 SNI 识别功能，但是使用 IP 方式请求主机时 SNI 识别为空，导致配置的 SNI 证书无法被匹配。
+问题定位 根据报错信息来定位代码逻辑部分：
+1 2  2021/07/20 09:54:33 [error] 42#42: *2011 [lua] init.lua:184: http_ssl_phase(): failed to fetch ssl config: failed to find SNI: please check if the client reques If you need to report an issue, provide a packet capture file of the TLS handshake., context: ssl_certificate_by_lua*, client: 172.17.0.1, server: 0.0.0.0:6443   "><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/apisix-https-sni-error/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Apisix 配置 HTTPS SNI 不识别问题定位">
+<meta property="og:description" content="ApiSIX网关
+问题说明
+项目中配置 HTTPS 需要支持 IP 格式直接访问，Apisix 中配置证书需要使用到 SNI 识别功能，但是使用 IP 方式请求主机时 SNI 识别为空，导致配置的 SNI 证书无法被匹配。
+问题定位
+根据报错信息来定位代码逻辑部分：
+
+
+1
+2
+
+
+2021/07/20 09:54:33 [error] 42#42: *2011 [lua] init.lua:184: http_ssl_phase(): failed to fetch ssl config: failed to find SNI: please check if the client reques
+ If you need to report an issue, provide a packet capture file of the TLS handshake., context: ssl_certificate_by_lua*, client: 172.17.0.1, server: 0.0.0.0:6443
+
+
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/apisix-https-sni-error/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-11-26T16:32:00+08:00">
+<meta property="article:modified_time" content="2021-11-26T16:34:27+08:00">
+<meta itemprop=name content="Apisix 配置 HTTPS SNI 不识别问题定位">
+<meta itemprop=description content="ApiSIX网关
+问题说明
+项目中配置 HTTPS 需要支持 IP 格式直接访问，Apisix 中配置证书需要使用到 SNI 识别功能，但是使用 IP 方式请求主机时 SNI 识别为空，导致配置的 SNI 证书无法被匹配。
+问题定位
+根据报错信息来定位代码逻辑部分：
+
+
+1
+2
+
+
+2021/07/20 09:54:33 [error] 42#42: *2011 [lua] init.lua:184: http_ssl_phase(): failed to fetch ssl config: failed to find SNI: please check if the client reques
+ If you need to report an issue, provide a packet capture file of the TLS handshake., context: ssl_certificate_by_lua*, client: 172.17.0.1, server: 0.0.0.0:6443
+
+
+"><meta itemprop=datePublished content="2021-11-26T16:32:00+08:00">
+<meta itemprop=dateModified content="2021-11-26T16:34:27+08:00">
+<meta itemprop=wordCount content="691">
+<meta itemprop=keywords content="Apisix,网关,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Apisix 配置 HTTPS SNI 不识别问题定位">
+<meta name=twitter:description content="ApiSIX网关
+问题说明
+项目中配置 HTTPS 需要支持 IP 格式直接访问，Apisix 中配置证书需要使用到 SNI 识别功能，但是使用 IP 方式请求主机时 SNI 识别为空，导致配置的 SNI 证书无法被匹配。
+问题定位
+根据报错信息来定位代码逻辑部分：
+
+
+1
+2
+
+
+2021/07/20 09:54:33 [error] 42#42: *2011 [lua] init.lua:184: http_ssl_phase(): failed to fetch ssl config: failed to find SNI: please check if the client reques
+ If you need to report an issue, provide a packet capture file of the TLS handshake., context: ssl_certificate_by_lua*, client: 172.17.0.1, server: 0.0.0.0:6443
+
+
+"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Apisix 配置 HTTPS SNI 不识别问题定位</h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#问题说明>问题说明</a></li>
+<li><a href=#问题定位>问题定位</a></li>
+<li><a href=#解决办法>解决办法</a></li>
+<li><a href=#验证>验证</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<p>ApiSIX网关</p>
+<h2 id=问题说明>问题说明</h2>
+<p>项目中配置 HTTPS 需要支持 IP 格式直接访问，Apisix 中配置证书需要使用到 SNI 识别功能，但是使用 IP 方式请求主机时 SNI 识别为空，导致配置的 SNI 证书无法被匹配。</p>
+<h2 id=问题定位>问题定位</h2>
+<p>根据报错信息来定位代码逻辑部分：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=mi>2021</span><span class=o>/</span><span class=mi>07</span><span class=o>/</span><span class=mi>20</span> <span class=mi>09</span><span class=p>:</span><span class=mi>54</span><span class=p>:</span><span class=mi>33</span> <span class=p>[</span><span class=n>error</span><span class=p>]</span> <span class=mi>42</span><span class=o>#</span><span class=mi>42</span><span class=p>:</span> <span class=o>*</span><span class=mi>2011</span> <span class=p>[</span><span class=n>lua</span><span class=p>]</span> <span class=n>init.lua</span><span class=p>:</span><span class=mi>184</span><span class=p>:</span> <span class=n>http_ssl_phase</span><span class=p>():</span> <span class=n>failed</span> <span class=n>to</span> <span class=n>fetch</span> <span class=n>ssl</span> <span class=n>config</span><span class=p>:</span> <span class=n>failed</span> <span class=n>to</span> <span class=n>find</span> <span class=n>SNI</span><span class=p>:</span> <span class=n>please</span> <span class=n>check</span> <span class=kr>if</span> <span class=n>the</span> <span class=n>client</span> <span class=n>reques</span>
+ <span class=n>If</span> <span class=n>you</span> <span class=n>need</span> <span class=n>to</span> <span class=n>report</span> <span class=n>an</span> <span class=n>issue</span><span class=p>,</span> <span class=n>provide</span> <span class=n>a</span> <span class=n>packet</span> <span class=n>capture</span> <span class=n>file</span> <span class=n>of</span> <span class=n>the</span> <span class=n>TLS</span> <span class=n>handshake</span><span class=p>.,</span> <span class=n>context</span><span class=p>:</span> <span class=n>ssl_certificate_by_lua</span><span class=o>*</span><span class=p>,</span> <span class=n>client</span><span class=p>:</span> <span class=mf>172.17.0.1</span><span class=p>,</span> <span class=n>server</span><span class=p>:</span> <span class=mf>0.0.0.0</span><span class=p>:</span><span class=mi>6443</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>根据提示来看是在 <code>init.lua</code>中的一个方法调用报错。查看 <code>init.lua</code>报错行位置代码逻辑。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=kd>local</span> <span class=n>ok</span><span class=p>,</span> <span class=n>err</span> <span class=o>=</span> <span class=n>router.router_ssl</span><span class=p>.</span><span class=n>match_and_set</span><span class=p>(</span><span class=n>api_ctx</span><span class=p>)</span>
+<span class=kr>if</span> <span class=ow>not</span> <span class=n>ok</span> <span class=kr>then</span>
+    <span class=kr>if</span> <span class=n>err</span> <span class=kr>then</span>
+        <span class=n>core.log</span><span class=p>.</span><span class=n>error</span><span class=p>(</span><span class=s2>&#34;failed to fetch ssl config: &#34;</span><span class=p>,</span> <span class=n>err</span><span class=p>)</span>
+    <span class=kr>end</span>
+    <span class=n>ngx_exit</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+<span class=kr>end</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看出来是在 ssl 匹配阶段报错，因为 Apisix 使用 radixtree 模式来支持范域名匹配。此方法包文件为 <code>apisix/ssl/router/radixtree_sni.lua</code> ，打开文件查看方法位置逻辑：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=kd>local</span> <span class=n>sni</span>
+<span class=n>sni</span><span class=p>,</span> <span class=n>err</span> <span class=o>=</span> <span class=n>ngx_ssl.server_name</span><span class=p>()</span>
+<span class=kr>if</span> <span class=n>type</span><span class=p>(</span><span class=n>sni</span><span class=p>)</span> <span class=o>~=</span> <span class=s2>&#34;string&#34;</span> <span class=kr>then</span>
+    <span class=kd>local</span> <span class=n>advise</span> <span class=o>=</span> <span class=s2>&#34;please check if the client requests via IP or uses an outdated protocol&#34;</span> <span class=o>..</span>
+                   <span class=s2>&#34;. If you need to report an issue, &#34;</span> <span class=o>..</span>
+                   <span class=s2>&#34;provide a packet capture file of the TLS handshake.&#34;</span>
+    <span class=kr>return</span> <span class=kc>false</span><span class=p>,</span> <span class=s2>&#34;failed to find SNI: &#34;</span> <span class=o>..</span> <span class=p>(</span><span class=n>err</span> <span class=ow>or</span> <span class=n>advise</span><span class=p>)</span>
+<span class=kr>end</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>看得出来，<code>advise</code> 字符串模板与日志输出完全吻合。</p>
+<p>此逻辑为使用 <code>nginx_ssl</code>模块调用 <code>server_name</code> 方法，会返回 <code>sni</code> 字符串，当使用<strong>域名</strong>访问服务时，<code>sni</code> 值为域名，当使用 <strong>IP</strong> 访问服务时，<code>sni</code> 返回为<code>nil</code> 。逻辑判定返回 <code>sni</code>为非字符串时直接返回未匹配的报错。</p>
+<h2 id=解决办法>解决办法</h2>
+<p>如上，通过查看 Apisix 初始化完成后生成的 <code>nginx.conf</code>文件发现，其会默认配置一套 SSL证书，所以，如果查不到时 <code>sni</code>就使用系统默认生成的那一套证书。修改判断逻辑，使其不返回错误即可使用默认证书。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=kd>local</span> <span class=n>sni</span>
+<span class=n>sni</span><span class=p>,</span> <span class=n>err</span> <span class=o>=</span> <span class=n>ngx_ssl.server_name</span><span class=p>()</span>
+<span class=kr>if</span> <span class=n>sni</span> <span class=o>==</span> <span class=kc>nil</span> <span class=kr>then</span> <span class=c1>-- 这里是新加入的逻辑</span>
+    <span class=kr>return</span> <span class=kc>true</span>
+<span class=kr>end</span>
+<span class=kr>if</span> <span class=n>type</span><span class=p>(</span><span class=n>sni</span><span class=p>)</span> <span class=o>~=</span> <span class=s2>&#34;string&#34;</span> <span class=kr>then</span>
+    <span class=kd>local</span> <span class=n>advise</span> <span class=o>=</span> <span class=s2>&#34;please check if the client requests via IP or uses an outdated protocol&#34;</span> <span class=o>..</span>
+                   <span class=s2>&#34;. If you need to report an issue, &#34;</span> <span class=o>..</span>
+                   <span class=s2>&#34;provide a packet capture file of the TLS handshake.&#34;</span>
+    <span class=kr>return</span> <span class=kc>false</span><span class=p>,</span> <span class=s2>&#34;failed to find SNI: &#34;</span> <span class=o>..</span> <span class=p>(</span><span class=n>err</span> <span class=ow>or</span> <span class=n>advise</span><span class=p>)</span>
+<span class=kr>end</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=验证>验证</h2>
+<p>再次使用 IP 直接访问服务，可以正常访问，查看证书信息为测试证书</p>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-11-26
+<a href=https://github.com/rogeecn/notes/commit/2c5c01bee4170b9e288f53f65bde2ce33dc26ee3 title=post>(2c5c01b)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/apisix/>Apisix</a>
+<a href=/tags/%E7%BD%91%E5%85%B3/>网关</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/docker-openvpn/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">Docker Openvpn</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/redis-key-points/>
+<span class="next-text nav-default">Redis八股文背诵版</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-11-26 16:32:00 \u002b0800 \u002b0800',title:'Apisix 配置 HTTPS SNI 不识别问题定位',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

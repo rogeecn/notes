@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>satis on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/satis/</link><description>Recent content in satis on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 16:20:59 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/satis/index.xml" rel="self" type="application/rss+xml"/><item><title>用 Satis 处理私有资源包</title><link>http://notes.711xd.com/post/composer-self-host-package-with-satis/</link><pubDate>Fri, 26 Nov 2021 16:20:59 +0800</pubDate><guid>http://notes.711xd.com/post/composer-self-host-package-with-satis/</guid><description>&lt;p>Satis 是 &lt;code>composer&lt;/code>官方推出的一款私有资源包托管工具。项目地址：&lt;a href="https://github.com/composer/satis">https://github.com/composer/satis&lt;/a>&lt;/p>
+&lt;h2 id="安装方式">安装方式&lt;/h2>
+&lt;h3 id="本地安装">本地安装&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">composer create-project composer/satis:dev-master
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

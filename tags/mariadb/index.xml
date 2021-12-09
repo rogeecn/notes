@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MariaDB on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/mariadb/</link><description>Recent content in MariaDB on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 16:15:59 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/mariadb/index.xml" rel="self" type="application/rss+xml"/><item><title>MariaDB基于GTID的主从复制</title><link>http://notes.711xd.com/post/mariadb-gtid-slave-master/</link><pubDate>Fri, 26 Nov 2021 16:15:59 +0800</pubDate><guid>http://notes.711xd.com/post/mariadb-gtid-slave-master/</guid><description>&lt;p>MySQL复制有两种方式：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>基于日志点的复制&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>基于GTID的复制&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>两种方式都依赖于MySQL二进制日志。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ini" data-lang="ini">&lt;span class="c1"># 二进制日志格式&lt;/span>
+&lt;span class="na">binlog-format&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">STATEMENT|ROW|MIXED&lt;/span>
+&lt;span class="c1"># ROW格式下日志的级别&lt;/span>
+&lt;span class="na">binlog-row-image&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">full|minimal|noblob&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>MariaDB 修改字符编码格式</title><link>http://notes.711xd.com/post/mariadb-set-character-setting/</link><pubDate>Fri, 26 Nov 2021 15:58:03 +0800</pubDate><guid>http://notes.711xd.com/post/mariadb-set-character-setting/</guid><description>&lt;h2 id="修改配置文件">修改配置文件&lt;/h2>
+&lt;p>&lt;code>vi /etc/my.cnf.d/server.conf&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ini" data-lang="ini">&lt;span class="k">[mysqld]&lt;/span>
+&lt;span class="na">character_set_server&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">utf8mb4&lt;/span>
+&lt;span class="na">collation-server&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">utf8mb4_unicode_ci&lt;/span>
+&lt;span class="na">init_connect&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#39;SET NAMES utf8mb4&amp;#39;&lt;/span>
+&lt;span class="na">skip-character-set-client-handshake&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">true&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="查询编码">查询编码&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">mysql&amp;gt; SHOW VARIABLES WHERE Variable_name LIKE &lt;span class="s1">&amp;#39;character_set_%&amp;#39;&lt;/span> OR Variable_name LIKE &lt;span class="s1">&amp;#39;collation%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
++--------------------------+-------------------+
+&lt;span class="p">|&lt;/span> Variable_name &lt;span class="p">|&lt;/span> Value &lt;span class="p">|&lt;/span>
++--------------------------+-------------------+
+&lt;span class="p">|&lt;/span> character_set_client &lt;span class="p">|&lt;/span> utf8 &lt;span class="p">|&lt;/span>
+&lt;span class="p">|&lt;/span> character_set_connection &lt;span class="p">|&lt;/span> utf8 &lt;span class="p">|&lt;/span>
+&lt;span class="p">|&lt;/span> character_set_database &lt;span class="p">|&lt;/span> latin1 &lt;span class="p">|&lt;/span>
+&lt;span class="p">|&lt;/span> character_set_filesystem &lt;span class="p">|&lt;/span> binary &lt;span class="p">|&lt;/span>
+&lt;span class="p">|&lt;/span> character_set_results &lt;span class="p">|&lt;/span> utf8 &lt;span class="p">|&lt;/span>
+&lt;span class="p">|&lt;/span> character_set_server &lt;span class="p">|&lt;/span> latin1 &lt;span class="p">|&lt;/span>
+&lt;span class="p">|&lt;/span> character_set_system &lt;span class="p">|&lt;/span> utf8 &lt;span class="p">|&lt;/span>
+&lt;span class="p">|&lt;/span> collation_connection &lt;span class="p">|&lt;/span> utf8_general_ci &lt;span class="p">|&lt;/span>
+&lt;span class="p">|&lt;/span> collation_database &lt;span class="p">|&lt;/span> latin1_swedish_ci &lt;span class="p">|&lt;/span>
+&lt;span class="p">|&lt;/span> collation_server &lt;span class="p">|&lt;/span> latin1_swedish_ci &lt;span class="p">|&lt;/span>
++--------------------------+-------------------+
+&lt;span class="m">10&lt;/span> rows in &lt;span class="nb">set&lt;/span> &lt;span class="o">(&lt;/span>0.00 sec&lt;span class="o">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

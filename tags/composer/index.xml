@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>composer on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/composer/</link><description>Recent content in composer on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Mon, 06 Dec 2021 09:33:02 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/composer/index.xml" rel="self" type="application/rss+xml"/><item><title>MAC Php Libtidy 报错解决办法</title><link>http://notes.711xd.com/post/php-libtidy-error/</link><pubDate>Mon, 06 Dec 2021 09:33:02 +0800</pubDate><guid>http://notes.711xd.com/post/php-libtidy-error/</guid><description>&lt;p>今天使用 &lt;code>composer&lt;/code> 安装一个扩展包时 &lt;code>mac&lt;/code> 报如下问题:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&amp;gt;&amp;gt; composer require laravelista/comments
+dyld: Library not loaded: /usr/local/opt/tidy-html5/lib/libtidy.5.dylib
+Referenced from: /usr/local/bin/php
+Reason: image not found
+&lt;span class="o">[&lt;/span>1&lt;span class="o">]&lt;/span> &lt;span class="m">33575&lt;/span> abort composer require laravelista/comments
+➜ MedicalCMS git:&lt;span class="o">(&lt;/span>master&lt;span class="o">)&lt;/span> which php
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>解决方案为重新安装此扩展:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">brew reinstall tidy-html5
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>用 Satis 处理私有资源包</title><link>http://notes.711xd.com/post/composer-self-host-package-with-satis/</link><pubDate>Fri, 26 Nov 2021 16:20:59 +0800</pubDate><guid>http://notes.711xd.com/post/composer-self-host-package-with-satis/</guid><description>&lt;p>Satis 是 &lt;code>composer&lt;/code>官方推出的一款私有资源包托管工具。项目地址：&lt;a href="https://github.com/composer/satis">https://github.com/composer/satis&lt;/a>&lt;/p>
+&lt;h2 id="安装方式">安装方式&lt;/h2>
+&lt;h3 id="本地安装">本地安装&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">composer create-project composer/satis:dev-master
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Composer 国内镜像</title><link>http://notes.711xd.com/post/composer-mirrors/</link><pubDate>Fri, 26 Nov 2021 16:20:19 +0800</pubDate><guid>http://notes.711xd.com/post/composer-mirrors/</guid><description>&lt;h1 id="阿里云">阿里云&lt;/h1>
+&lt;p>全局配置（推荐）&lt;/p>
+&lt;p>所有项目都会使用该镜像地址：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>取消配置：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">composer config -g --unset repos.packagist
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>项目配置&lt;/p>
+&lt;p>仅修改当前工程配置，仅当前工程可使用该镜像地址：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">composer config repo.packagist composer https://mirrors.aliyun.com/composer/
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>取消配置：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">composer config --unset repos.packagist
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Compoer 报错解决</title><link>http://notes.711xd.com/post/composer-error-resolving/</link><pubDate>Fri, 26 Nov 2021 15:28:14 +0800</pubDate><guid>http://notes.711xd.com/post/composer-error-resolving/</guid><description>&lt;ul>
+&lt;li>内存过小报错
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="nv">COMPOSER_MEMORY_LIMIT&lt;/span>&lt;span class="o">=&lt;/span>-1 composer update/install/require
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ul></description></item></channel></rss>

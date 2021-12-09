@@ -1,0 +1,365 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Laravel 一些不错的扩展 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="带 [-] 标签为推荐安装包 拼音 https://github.com/overtrue/laravel-pinyin https://github.com/overtrue/laravel-follow https://github.com/overtrue/laravel-favorite https://github.com/overtrue/laravel-subscribe https://github.com/overtrue/laravel-like 菜单生成 https://github.com/spatie/menu 控制台 https://github.com/spatie/laravel-dashboard Enum https://github.com/spatie/laravel-enum https://github.com/BenSampo/laravel-enum stubs https://github.com/atehnix/laravel-stubs web tinker https://github.com/spatie/laravel-web-tinker 过期文件自动删除 https://github.com/spatie/laravel-directory-cleanup sluggable https://github.com/spatie/laravel-sluggable permission https://github.com/spatie/laravel-permission 另一个权限控制 https://github.com/mateusjunges/laravel-acl docker manager https://github.com/spatie/docker html generator https://github.com/spatie/laravel-html ssh https://github.com/spatie/ssh 邮件订阅 https://github.com/spatie/laravel-newsletter flash message"><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/laravel-awesome-extensions/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Laravel 一些不错的扩展">
+<meta property="og:description" content="带 [-] 标签为推荐安装包 拼音 https://github.com/overtrue/laravel-pinyin https://github.com/overtrue/laravel-follow https://github.com/overtrue/laravel-favorite https://github.com/overtrue/laravel-subscribe https://github.com/overtrue/laravel-like 菜单生成 https://github.com/spatie/menu 控制台 https://github.com/spatie/laravel-dashboard Enum https://github.com/spatie/laravel-enum https://github.com/BenSampo/laravel-enum stubs https://github.com/atehnix/laravel-stubs web tinker https://github.com/spatie/laravel-web-tinker 过期文件自动删除 https://github.com/spatie/laravel-directory-cleanup sluggable https://github.com/spatie/laravel-sluggable permission https://github.com/spatie/laravel-permission 另一个权限控制 https://github.com/mateusjunges/laravel-acl docker manager https://github.com/spatie/docker html generator https://github.com/spatie/laravel-html ssh https://github.com/spatie/ssh 邮件订阅 https://github.com/spatie/laravel-newsletter flash message">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/laravel-awesome-extensions/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-11-26T15:48:01+08:00">
+<meta property="article:modified_time" content="2021-11-26T16:31:21+08:00">
+<meta itemprop=name content="Laravel 一些不错的扩展">
+<meta itemprop=description content="带 [-] 标签为推荐安装包 拼音 https://github.com/overtrue/laravel-pinyin https://github.com/overtrue/laravel-follow https://github.com/overtrue/laravel-favorite https://github.com/overtrue/laravel-subscribe https://github.com/overtrue/laravel-like 菜单生成 https://github.com/spatie/menu 控制台 https://github.com/spatie/laravel-dashboard Enum https://github.com/spatie/laravel-enum https://github.com/BenSampo/laravel-enum stubs https://github.com/atehnix/laravel-stubs web tinker https://github.com/spatie/laravel-web-tinker 过期文件自动删除 https://github.com/spatie/laravel-directory-cleanup sluggable https://github.com/spatie/laravel-sluggable permission https://github.com/spatie/laravel-permission 另一个权限控制 https://github.com/mateusjunges/laravel-acl docker manager https://github.com/spatie/docker html generator https://github.com/spatie/laravel-html ssh https://github.com/spatie/ssh 邮件订阅 https://github.com/spatie/laravel-newsletter flash message"><meta itemprop=datePublished content="2021-11-26T15:48:01+08:00">
+<meta itemprop=dateModified content="2021-11-26T16:31:21+08:00">
+<meta itemprop=wordCount content="332">
+<meta itemprop=keywords content="Laravel,Extensions,扩展,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Laravel 一些不错的扩展">
+<meta name=twitter:description content="带 [-] 标签为推荐安装包 拼音 https://github.com/overtrue/laravel-pinyin https://github.com/overtrue/laravel-follow https://github.com/overtrue/laravel-favorite https://github.com/overtrue/laravel-subscribe https://github.com/overtrue/laravel-like 菜单生成 https://github.com/spatie/menu 控制台 https://github.com/spatie/laravel-dashboard Enum https://github.com/spatie/laravel-enum https://github.com/BenSampo/laravel-enum stubs https://github.com/atehnix/laravel-stubs web tinker https://github.com/spatie/laravel-web-tinker 过期文件自动删除 https://github.com/spatie/laravel-directory-cleanup sluggable https://github.com/spatie/laravel-sluggable permission https://github.com/spatie/laravel-permission 另一个权限控制 https://github.com/mateusjunges/laravel-acl docker manager https://github.com/spatie/docker html generator https://github.com/spatie/laravel-html ssh https://github.com/spatie/ssh 邮件订阅 https://github.com/spatie/laravel-newsletter flash message"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Laravel 一些不错的扩展</h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#拼音>拼音</a></li>
+<li><a href=#菜单生成>菜单生成</a></li>
+<li><a href=#控制台>控制台</a></li>
+<li><a href=#enum>Enum</a></li>
+<li><a href=#stubs>stubs</a></li>
+<li><a href=#web-tinker>web tinker</a></li>
+<li><a href=#过期文件自动删除>过期文件自动删除</a></li>
+<li><a href=#sluggable>sluggable</a></li>
+<li><a href=#permission>permission</a></li>
+<li><a href=#另一个权限控制>另一个权限控制</a></li>
+<li><a href=#docker-manager>docker manager</a></li>
+<li><a href=#html-generator>html generator</a></li>
+<li><a href=#ssh>ssh</a></li>
+<li><a href=#邮件订阅>邮件订阅</a></li>
+<li><a href=#flash-message>flash message</a></li>
+<li><a href=#webhook-server>webhook server</a></li>
+<li><a href=#model-状态转换>model 状态转换</a></li>
+<li><a href=#扩展验证包>扩展验证包</a></li>
+<li><a href=#为-view-配置-model>为 view 配置 model</a></li>
+<li><a href=#图片处理>图片处理</a></li>
+<li><a href=#过期-url-签名>过期 URL 签名</a></li>
+<li><a href=#tagable>Tagable</a></li>
+<li><a href=#tail-laravel-log>tail laravel log</a></li>
+<li><a href=#sortable>sortable</a></li>
+<li><a href=#url-处理>url 处理</a></li>
+<li><a href=#emoji-输出>Emoji 输出</a></li>
+<li><a href=#guzzle-日志>Guzzle 日志</a></li>
+<li><a href=#api-测试工具生成>Api 测试工具生成</a></li>
+<li><a href=#blade-filter>blade filter</a></li>
+<li><a href=#邮件模板编辑器>邮件模板编辑器</a></li>
+<li><a href=#消费优惠券发放消费管理>消费、优惠券发放、消费管理</a></li>
+<li><a href=#git-格式-markdown-解析>git 格式 markdown 解析</a></li>
+<li><a href=#keyvalue-配置存储器>key/value 配置存储器</a></li>
+<li><a href=#收邮件收件箱>收邮件、收件箱</a></li>
+<li><a href=#版本号解析>版本号解析</a></li>
+<li><a href=#blade-自定义标签>blade 自定义标签</a></li>
+<li><a href=#一款漂亮的-mardown-文档生成工具>一款漂亮的 mardown 文档生成工具</a></li>
+<li><a href=#社交用户关注>社交用户关注</a></li>
+<li><a href=#likedislike-点赞>Like/Dislike 点赞</a></li>
+<li><a href=#访问量管理统计>访问量管理统计</a></li>
+<li><a href=#类-wordpress-hook-功能插件>类 Wordpress Hook 功能插件</a></li>
+<li><a href=#breadcrumbs>breadcrumbs</a></li>
+<li><a href=#json-异常处理>Json 异常处理</a></li>
+<li><a href=#自动头像生成方案>自动头像生成方案</a></li>
+<li><a href=#slack-消息>slack 消息</a></li>
+<li><a href=#blade-扩展-指示器>blade 扩展 指示器</a></li>
+<li><a href=#分享链接生成器>分享链接生成器</a></li>
+<li><a href=#聊天机器人>聊天机器人</a></li>
+<li><a href=#操作审计>操作审计</a></li>
+<li><a href=#交互命令>交互命令</a></li>
+<li><a href=#邀请码机制>邀请码机制</a></li>
+<li><a href=#csvexcel-导出工具>csv/excel 导出工具</a></li>
+<li><a href=#--opcache-管理工具>[-] opcache 管理工具</a></li>
+<li><a href=#过期页面路由跳转器>过期页面路由跳转器</a></li>
+<li><a href=#社交登录>社交登录</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<blockquote>
+<p>带 <code>[-]</code> 标签为推荐安装包</p>
+</blockquote>
+<h2 id=拼音>拼音</h2>
+<p><a href=https://github.com/overtrue/laravel-pinyin>https://github.com/overtrue/laravel-pinyin</a></p>
+<p><a href=https://github.com/overtrue/laravel-follow>https://github.com/overtrue/laravel-follow</a></p>
+<p><a href=https://github.com/overtrue/laravel-favorite>https://github.com/overtrue/laravel-favorite</a></p>
+<p><a href=https://github.com/overtrue/laravel-subscribe>https://github.com/overtrue/laravel-subscribe</a></p>
+<p><a href=https://github.com/overtrue/laravel-like>https://github.com/overtrue/laravel-like</a></p>
+<h2 id=菜单生成>菜单生成</h2>
+<p><a href=https://github.com/spatie/menu>https://github.com/spatie/menu</a></p>
+<h2 id=控制台>控制台</h2>
+<p><a href=https://github.com/spatie/laravel-dashboard>https://github.com/spatie/laravel-dashboard</a></p>
+<h2 id=enum>Enum</h2>
+<p><a href=https://github.com/spatie/laravel-enum>https://github.com/spatie/laravel-enum</a></p>
+<p><a href=https://github.com/BenSampo/laravel-enum>https://github.com/BenSampo/laravel-enum</a></p>
+<h2 id=stubs>stubs</h2>
+<p><a href=https://github.com/atehnix/laravel-stubs>https://github.com/atehnix/laravel-stubs</a></p>
+<h2 id=web-tinker>web tinker</h2>
+<p><a href=https://github.com/spatie/laravel-web-tinker>https://github.com/spatie/laravel-web-tinker</a></p>
+<h2 id=过期文件自动删除>过期文件自动删除</h2>
+<p><a href=https://github.com/spatie/laravel-directory-cleanup>https://github.com/spatie/laravel-directory-cleanup</a></p>
+<h2 id=sluggable>sluggable</h2>
+<p><a href=https://github.com/spatie/laravel-sluggable>https://github.com/spatie/laravel-sluggable</a></p>
+<h2 id=permission>permission</h2>
+<p><a href=https://github.com/spatie/laravel-permission>https://github.com/spatie/laravel-permission</a></p>
+<h2 id=另一个权限控制>另一个权限控制</h2>
+<p><a href=https://github.com/mateusjunges/laravel-acl>https://github.com/mateusjunges/laravel-acl</a></p>
+<h2 id=docker-manager>docker manager</h2>
+<p><a href=https://github.com/spatie/docker>https://github.com/spatie/docker</a></p>
+<h2 id=html-generator>html generator</h2>
+<p><a href=https://github.com/spatie/laravel-html>https://github.com/spatie/laravel-html</a></p>
+<h2 id=ssh>ssh</h2>
+<p><a href=https://github.com/spatie/ssh>https://github.com/spatie/ssh</a></p>
+<h2 id=邮件订阅>邮件订阅</h2>
+<p><a href=https://github.com/spatie/laravel-newsletter>https://github.com/spatie/laravel-newsletter</a></p>
+<h2 id=flash-message>flash message</h2>
+<p><a href=https://github.com/spatie/laravel-flash>https://github.com/spatie/laravel-flash</a></p>
+<h2 id=webhook-server>webhook server</h2>
+<p><a href=https://github.com/spatie/laravel-webhook-server>https://github.com/spatie/laravel-webhook-server</a></p>
+<h2 id=model-状态转换>model 状态转换</h2>
+<blockquote>
+<p>多用于订单、工单、用户状态切换</p>
+</blockquote>
+<p><a href=https://github.com/spatie/laravel-model-states>https://github.com/spatie/laravel-model-states</a></p>
+<h2 id=扩展验证包>扩展验证包</h2>
+<p><a href=https://github.com/spatie/laravel-validation-rules>https://github.com/spatie/laravel-validation-rules</a></p>
+<h2 id=为-view-配置-model>为 view 配置 model</h2>
+<p><a href=https://github.com/spatie/laravel-view-models>https://github.com/spatie/laravel-view-models</a></p>
+<h2 id=图片处理>图片处理</h2>
+<p><a href=https://github.com/spatie/laravel-glide>https://github.com/spatie/laravel-glide</a></p>
+<h2 id=过期-url-签名>过期 URL 签名</h2>
+<p><a href=https://github.com/spatie/laravel-url-signer>https://github.com/spatie/laravel-url-signer</a></p>
+<h2 id=tagable>Tagable</h2>
+<p><a href=https://github.com/spatie/laravel-tags>https://github.com/spatie/laravel-tags</a></p>
+<h2 id=tail-laravel-log>tail laravel log</h2>
+<p><a href=https://github.com/spatie/laravel-tail>https://github.com/spatie/laravel-tail</a></p>
+<h2 id=sortable>sortable</h2>
+<p><a href=https://github.com/spatie/eloquent-sortable>https://github.com/spatie/eloquent-sortable</a></p>
+<h2 id=url-处理>url 处理</h2>
+<p><a href=https://github.com/spatie/url>https://github.com/spatie/url</a></p>
+<h2 id=emoji-输出>Emoji 输出</h2>
+<p><a href=https://github.com/spatie/emoji>https://github.com/spatie/emoji</a></p>
+<h2 id=guzzle-日志>Guzzle 日志</h2>
+<p><a href=https://github.com/spatie/guzzle-logger>https://github.com/spatie/guzzle-logger</a></p>
+<h2 id=api-测试工具生成>Api 测试工具生成</h2>
+<p><a href=https://github.com/davidhsianturi/laravel-compass>https://github.com/davidhsianturi/laravel-compass</a></p>
+<h2 id=blade-filter>blade filter</h2>
+<p><a href=https://github.com/thepinecode/blade-filters>https://github.com/thepinecode/blade-filters</a></p>
+<h2 id=邮件模板编辑器>邮件模板编辑器</h2>
+<p><a href=https://github.com/Qoraiche/laravel-mail-editor>https://github.com/Qoraiche/laravel-mail-editor</a></p>
+<h2 id=消费优惠券发放消费管理>消费、优惠券发放、消费管理</h2>
+<p><a href=https://github.com/beyondcode/laravel-vouchers>https://github.com/beyondcode/laravel-vouchers</a></p>
+<h2 id=git-格式-markdown-解析>git 格式 markdown 解析</h2>
+<p><a href=https://github.com/calebporzio/gitdown>https://github.com/calebporzio/gitdown</a></p>
+<h2 id=keyvalue-配置存储器>key/value 配置存储器</h2>
+<p><a href=https://github.com/appstract/laravel-options>https://github.com/appstract/laravel-options</a></p>
+<h2 id=收邮件收件箱>收邮件、收件箱</h2>
+<p><a href=https://github.com/beyondcode/laravel-mailbox>https://github.com/beyondcode/laravel-mailbox</a></p>
+<h2 id=版本号解析>版本号解析</h2>
+<p><a href=https://laravel-news.com/php-semantic-versioning-helper>https://laravel-news.com/php-semantic-versioning-helper</a></p>
+<h2 id=blade-自定义标签>blade 自定义标签</h2>
+<p><a href=https://github.com/beyondcode/laravel-tag-helper>https://github.com/beyondcode/laravel-tag-helper</a></p>
+<h2 id=一款漂亮的-mardown-文档生成工具>一款漂亮的 mardown 文档生成工具</h2>
+<p><a href=https://github.com/saleem-hadad/larecipe>https://github.com/saleem-hadad/larecipe</a></p>
+<h2 id=社交用户关注>社交用户关注</h2>
+<p><a href=https://github.com/renoki-co/befriended>https://github.com/renoki-co/befriended</a></p>
+<h2 id=likedislike-点赞>Like/Dislike 点赞</h2>
+<p><a href=https://github.com/cybercog/laravel-love>https://github.com/cybercog/laravel-love</a></p>
+<h2 id=访问量管理统计>访问量管理统计</h2>
+<p><a href=https://github.com/awssat/laravel-visits>https://github.com/awssat/laravel-visits</a></p>
+<h2 id=类-wordpress-hook-功能插件>类 Wordpress Hook 功能插件</h2>
+<p><a href=https://github.com/tormjens/eventy>https://github.com/tormjens/eventy</a></p>
+<h2 id=breadcrumbs>breadcrumbs</h2>
+<p><a href=https://github.com/davejamesmiller/laravel-breadcrumbs>https://github.com/davejamesmiller/laravel-breadcrumbs</a></p>
+<h2 id=json-异常处理>Json 异常处理</h2>
+<p><a href=https://github.com/jannejava/json>https://github.com/jannejava/json</a></p>
+<h2 id=自动头像生成方案>自动头像生成方案</h2>
+<p><a href=https://github.com/laravolt/avatar>https://github.com/laravolt/avatar</a></p>
+<h2 id=slack-消息>slack 消息</h2>
+<p><a href=https://laravel-news.com/laravel-slack-package>https://laravel-news.com/laravel-slack-package</a></p>
+<h2 id=blade-扩展-指示器>blade 扩展 指示器</h2>
+<p><a href=https://github.com/appstract/laravel-blade-directives>https://github.com/appstract/laravel-blade-directives</a></p>
+<h2 id=分享链接生成器>分享链接生成器</h2>
+<p><a href=https://github.com/ksassnowski/laravel-shareable-models>https://github.com/ksassnowski/laravel-shareable-models</a></p>
+<h2 id=聊天机器人>聊天机器人</h2>
+<p><a href=https://github.com/botman/botman>https://github.com/botman/botman</a></p>
+<h2 id=操作审计>操作审计</h2>
+<p><a href=https://github.com/owen-it/laravel-auditing>https://github.com/owen-it/laravel-auditing</a></p>
+<h2 id=交互命令>交互命令</h2>
+<p><a href=https://github.com/laracademy/interactive-make>https://github.com/laracademy/interactive-make</a></p>
+<h2 id=邀请码机制>邀请码机制</h2>
+<p><a href=https://github.com/clarkeash/doorman>https://github.com/clarkeash/doorman</a></p>
+<h2 id=csvexcel-导出工具>csv/excel 导出工具</h2>
+<p><a href=https://github.com/usmanhalalit/laracsv>https://github.com/usmanhalalit/laracsv</a></p>
+<h2 id=--opcache-管理工具>[-] opcache 管理工具</h2>
+<p><a href=https://github.com/appstract/laravel-opcache>https://github.com/appstract/laravel-opcache</a></p>
+<h2 id=过期页面路由跳转器>过期页面路由跳转器</h2>
+<p><a href=https://github.com/spatie/laravel-missing-page-redirector>https://github.com/spatie/laravel-missing-page-redirector</a></p>
+<h2 id=社交登录>社交登录</h2>
+<p><a href=https://github.com/SocialiteProviders/Providers>https://github.com/SocialiteProviders/Providers</a></p>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-11-26
+<a href=https://github.com/rogeecn/notes/commit/8dc87a73a3f2da82883c4dc2f9a7d61a70e53f9a title=post>(8dc87a7)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/laravel/>Laravel</a>
+<a href=/tags/extensions/>Extensions</a>
+<a href=/tags/%E6%89%A9%E5%B1%95/>扩展</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/linux-redis-service-file/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">Linux Redis Service 配置文件</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/laravel-nginx-conf/>
+<span class="next-text nav-default">Laravel Nginx 配置</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-11-26 15:48:01 \u002b0800 \u002b0800',title:'Laravel 一些不错的扩展',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

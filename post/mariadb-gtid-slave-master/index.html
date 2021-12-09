@@ -1,0 +1,580 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>MariaDB基于GTID的主从复制 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="MySQL复制有两种方式：
+  基于日志点的复制
+  基于GTID的复制
+  两种方式都依赖于MySQL二进制日志。
+1 2 3 4  # 二进制日志格式 binlog-format=STATEMENT|ROW|MIXED # ROW格式下日志的级别 binlog-row-image=full|minimal|noblob   "><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/mariadb-gtid-slave-master/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="MariaDB基于GTID的主从复制">
+<meta property="og:description" content="MySQL复制有两种方式：
+
+
+基于日志点的复制
+
+
+基于GTID的复制
+
+
+两种方式都依赖于MySQL二进制日志。
+
+
+1
+2
+3
+4
+
+
+# 二进制日志格式
+binlog-format=STATEMENT|ROW|MIXED
+# ROW格式下日志的级别
+binlog-row-image=full|minimal|noblob
+
+
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/mariadb-gtid-slave-master/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-11-26T16:15:59+08:00">
+<meta property="article:modified_time" content="2021-11-26T16:31:21+08:00">
+<meta itemprop=name content="MariaDB基于GTID的主从复制">
+<meta itemprop=description content="MySQL复制有两种方式：
+
+
+基于日志点的复制
+
+
+基于GTID的复制
+
+
+两种方式都依赖于MySQL二进制日志。
+
+
+1
+2
+3
+4
+
+
+# 二进制日志格式
+binlog-format=STATEMENT|ROW|MIXED
+# ROW格式下日志的级别
+binlog-row-image=full|minimal|noblob
+
+
+"><meta itemprop=datePublished content="2021-11-26T16:15:59+08:00">
+<meta itemprop=dateModified content="2021-11-26T16:31:21+08:00">
+<meta itemprop=wordCount content="1331">
+<meta itemprop=keywords content="MariaDB,主从,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="MariaDB基于GTID的主从复制">
+<meta name=twitter:description content="MySQL复制有两种方式：
+
+
+基于日志点的复制
+
+
+基于GTID的复制
+
+
+两种方式都依赖于MySQL二进制日志。
+
+
+1
+2
+3
+4
+
+
+# 二进制日志格式
+binlog-format=STATEMENT|ROW|MIXED
+# ROW格式下日志的级别
+binlog-row-image=full|minimal|noblob
+
+
+"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>MariaDB基于GTID的主从复制</h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href=#基于gtid的复制>基于GTID的复制</a></li>
+<li><a href=#配置基于gtid复制的详细步骤>配置基于GTID复制的详细步骤：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<p>MySQL复制有两种方式：</p>
+<ul>
+<li>
+<p>基于日志点的复制</p>
+</li>
+<li>
+<p>基于GTID的复制</p>
+</li>
+</ul>
+<p>两种方式都依赖于MySQL二进制日志。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=c1># 二进制日志格式</span>
+<span class=na>binlog-format</span><span class=o>=</span><span class=s>STATEMENT|ROW|MIXED</span>
+<span class=c1># ROW格式下日志的级别</span>
+<span class=na>binlog-row-image</span><span class=o>=</span><span class=s>full|minimal|noblob</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=基于gtid的复制>基于GTID的复制</h3>
+<p>基于GTID的复制是MySQL5.6后的一种新的复制方式。</p>
+<blockquote>
+<p>From MariaDB 10.0.2, global transaction ID is enabled automatically.
+MariaDB从10.0.2开始默认开启GTID</p>
+</blockquote>
+<p><strong>GTID即全局事务ID</strong>，其保证了每个在Master上提交的事务在复制集群中可以生成一个唯一的ID。</p>
+<p>GTID由3段组成，domain ID-server ID-sequence number</p>
+<ul>
+<li>
+<p>domain ID：单master的环境下， domain id默认值0；多源复制是，domain id区分多个源；</p>
+</li>
+<li>
+<p>cserver ID：各master节点的sever-id，下面的配置文件有此项；</p>
+</li>
+<li>
+<p>sequence number：事务序列号</p>
+</li>
+</ul>
+<h3 id=配置基于gtid复制的详细步骤>配置基于GTID复制的详细步骤：</h3>
+<p>在主DB上建立复制账号</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>MariaDB <span class=o>[(</span>none<span class=o>)]</span>&gt; create user <span class=s1>&#39;slave&#39;</span>@<span class=s1>&#39;3.112.77.51&#39;</span> identified by <span class=s1>&#39;slave_password&#39;</span><span class=p>;</span>
+Query OK, <span class=m>0</span> rows affected <span class=o>(</span>0.00 sec<span class=o>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>授予复制权限</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-C# data-lang=C#><span class=n>MariaDB</span> <span class=p>[(</span><span class=n>none</span><span class=p>)]&gt;</span> <span class=n>grant</span> <span class=n>replication</span> <span class=n>slave</span> <span class=k>on</span> <span class=p>*.*</span> <span class=n>to</span> <span class=err>&#39;</span><span class=n>slave</span><span class=sc>&#39;@&#39;</span><span class=m>3.112</span><span class=p>.</span><span class=m>77.51</span><span class=err>&#39;</span><span class=p>;</span>
+<span class=n>Query</span> <span class=n>OK</span><span class=p>,</span> <span class=m>0</span> <span class=n>rows</span> <span class=n>affected</span> <span class=p>(</span><span class=m>0.00</span> <span class=n>sec</span><span class=p>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>主服务器参数配置</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=c1># ************主服务器*************</span>
+<span class=k>[mysqld]</span>
+<span class=c1># 服务器id</span>
+<span class=na>server-id</span> <span class=o>=</span> <span class=s>1000</span>
+<span class=c1># 二进制日志文件格式</span>
+<span class=na>binlog-format</span><span class=o>=</span><span class=s>ROW</span>
+<span class=c1># ROW格式下日志的级别</span>
+<span class=na>binlog-row-image</span><span class=o>=</span><span class=s>minimal</span>
+<span class=c1># 此两项为打开从服务器崩溃二进制日志功能，信息记录在事物表而不是保存在文件</span>
+<span class=na>master-info-repository</span><span class=o>=</span><span class=s>TABLE</span>
+<span class=na>relay-log-info-repository</span><span class=o>=</span><span class=s>TABLE</span>
+<span class=c1># 二进制日志，后面指定存放位置。如果只是指定名字，默认存放在/var/lib/mysql下</span>
+<span class=na>log-bin</span> <span class=o>=</span> <span class=s>mariadb-bin</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>从服务器参数配置</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=c1># ************从服务器*************</span>
+<span class=c1># 服务器id（在集群中需要唯一）</span>
+<span class=na>server_id</span> <span class=o>=</span> <span class=s>2001</span>
+<span class=c1># binlog日志文件（如果只有文件名，则保存在/usr/lib/mysql目录）</span>
+<span class=na>relay_log</span> <span class=o>=</span> <span class=s>mysql-relay-bin</span>
+<span class=c1># 开启gtid模式（需要同时下面两个） 默认开启的</span>
+<span class=c1># gtid_mode = on</span>
+<span class=c1># 强制gtid一致性（默认开启）</span>
+<span class=c1># enforce-grid-consistency</span>
+<span class=c1># 从服务器中记录binlog日志</span>
+<span class=na>log-slave-updates</span> <span class=o>=</span> <span class=s>on</span>
+<span class=na>read_only</span> <span class=o>=</span> <span class=s>on</span>
+<span class=na>master_info_repository</span> <span class=o>=</span> <span class=s>TABLE</span>
+<span class=na>relay_log_info_repository</span> <span class=o>=</span> <span class=s>TABLE</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>初始化数据：备份主DB、还原到从DB</strong></p>
+<p>这里需要注意下，第1、2步在主DB创建用于复制的账号，这里我们备份、还原所有的库，所以会将用户也还原到从DB。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-Bash data-lang=Bash><span class=c1># 使用mysqldump备份数据</span>
+mysqldump --single-transaction --routines --all-databases &gt; dump.sql<span class=p>;</span>
+<span class=c1># 或使用xtrabackup</span>
+xtrabackup --slave-info ...
+<span class=c1># 还原</span>
+mysql -uroot -p &lt; all.sql
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>启动基于GTID的复制</strong></p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># 在备份文件dump.sql中显示了GTID值，也可以在主库中查看变量</span>
+mysql&gt; <span class=nb>set</span> global <span class=nv>gtid_slave_pos</span><span class=o>=</span><span class=s1>&#39;0-1-148&#39;</span><span class=p>;</span>
+mysql&gt; change master to <span class=nv>master_host</span> <span class=o>=</span> <span class=s1>&#39;mysql.dns.ipao.cloud&#39;</span>,master_user <span class=o>=</span> <span class=s1>&#39;slave&#39;</span>,master_password <span class=o>=</span> <span class=s1>&#39;slave_password&#39;</span>,master_use_gtid <span class=o>=</span> slave_pos<span class=p>;</span>
+<span class=c1># 启动主从复制</span>
+mysql&gt; start slave<span class=p>;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>检查主从复制状态</strong></p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>MariaDB <span class=o>[(</span>none<span class=o>)]</span>&gt; show slave status<span class=se>\G</span> show processlist<span class=p>;</span>
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting <span class=k>for</span> master to send event
+                  Master_Host: 192.168.1.104
+                  Master_User: repl
+                  Master_Port: <span class=m>3306</span>
+                Connect_Retry: <span class=m>60</span>
+              Master_Log_File: mariadb-bin.000002
+          Read_Master_Log_Pos: <span class=m>993</span>
+               Relay_Log_File: mariadb-relay-bin.000002
+                Relay_Log_Pos: <span class=m>644</span>
+        Relay_Master_Log_File: mariadb-bin.000002
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+              Replicate_Do_DB:
+          Replicate_Ignore_DB:
+           Replicate_Do_Table:
+       Replicate_Ignore_Table:
+      Replicate_Wild_Do_Table:
+  Replicate_Wild_Ignore_Table:
+                   Last_Errno: <span class=m>0</span>
+                   Last_Error:
+                 Skip_Counter: <span class=m>0</span>
+          Exec_Master_Log_Pos: <span class=m>993</span>
+              Relay_Log_Space: <span class=m>944</span>
+              Until_Condition: None
+               Until_Log_File:
+                Until_Log_Pos: <span class=m>0</span>
+           Master_SSL_Allowed: No
+           Master_SSL_CA_File:
+           Master_SSL_CA_Path:
+              Master_SSL_Cert:
+            Master_SSL_Cipher:
+               Master_SSL_Key:
+        Seconds_Behind_Master: <span class=m>0</span>
+Master_SSL_Verify_Server_Cert: No
+                Last_IO_Errno: <span class=m>0</span>
+                Last_IO_Error:
+               Last_SQL_Errno: <span class=m>0</span>
+               Last_SQL_Error:
+  Replicate_Ignore_Server_Ids:
+             Master_Server_Id: <span class=m>1000</span>
+               Master_SSL_Crl:
+           Master_SSL_Crlpath:
+                   Using_Gtid: Slave_Pos
+                  Gtid_IO_Pos: 0-1000-4
+      Replicate_Do_Domain_Ids:
+  Replicate_Ignore_Domain_Ids:
+                Parallel_Mode: conservative
+<span class=m>1</span> row in <span class=nb>set</span> <span class=o>(</span>0.00 sec<span class=o>)</span>
+
++----+-------------+-----------+------+---------+------+-----------------------------------------------------------------------------+------------------+----------+
+<span class=p>|</span> Id <span class=p>|</span> User        <span class=p>|</span> Host      <span class=p>|</span> db   <span class=p>|</span> Command <span class=p>|</span> Time <span class=p>|</span> State                                                                       <span class=p>|</span> Info             <span class=p>|</span> Progress <span class=p>|</span>
++----+-------------+-----------+------+---------+------+-----------------------------------------------------------------------------+------------------+----------+
+<span class=p>|</span> <span class=m>13</span> <span class=p>|</span> system user <span class=p>|</span>           <span class=p>|</span> NULL <span class=p>|</span> Connect <span class=p>|</span> <span class=m>4858</span> <span class=p>|</span> Waiting <span class=k>for</span> master to send event                                            <span class=p>|</span> NULL             <span class=p>|</span>    0.000 <span class=p>|</span>
+<span class=p>|</span> <span class=m>14</span> <span class=p>|</span> system user <span class=p>|</span>           <span class=p>|</span> NULL <span class=p>|</span> Connect <span class=p>|</span> <span class=m>4858</span> <span class=p>|</span> Slave has <span class=nb>read</span> all relay log<span class=p>;</span> waiting <span class=k>for</span> the slave I/O thread to update it <span class=p>|</span> NULL             <span class=p>|</span>    0.000 <span class=p>|</span>
+<span class=p>|</span> <span class=m>15</span> <span class=p>|</span> root        <span class=p>|</span> localhost <span class=p>|</span> NULL <span class=p>|</span> Query   <span class=p>|</span>    <span class=m>0</span> <span class=p>|</span> init                                                                        <span class=p>|</span> show processlist <span class=p>|</span>    0.000 <span class=p>|</span>
++----+-------------+-----------+------+---------+------+-----------------------------------------------------------------------------+------------------+----------+
+<span class=m>3</span> rows in <span class=nb>set</span> <span class=o>(</span>0.00 sec<span class=o>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>**优点：**方便故障转移；从库不会丢失主库上的任何修改。
+**缺点：**故障处理比较复杂；对执行的SQL有一定的限制。</p>
+<h4 id=主从复制无法解决的问题>主从复制无法解决的问题</h4>
+<ul>
+<li>
+<p>无法分担写负载，但可以分担读负载；</p>
+</li>
+<li>
+<p>无法实现自动故障转移和主从切换，但提供了高可用架构基础；</p>
+</li>
+<li>
+<p>不提供读写分离功能。</p>
+</li>
+</ul>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-11-26
+<a href=https://github.com/rogeecn/notes/commit/8dc87a73a3f2da82883c4dc2f9a7d61a70e53f9a title=post>(8dc87a7)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/mariadb/>MariaDB</a>
+<a href=/tags/%E4%B8%BB%E4%BB%8E/>主从</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/nginx-wechat-image-reverse-proxy/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">Nginx 微信图片反向代理</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/flutter-media-query/>
+<span class="next-text nav-default">Flutter MediaQuery 相关说明</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-11-26 16:15:59 \u002b0800 \u002b0800',title:'MariaDB基于GTID的主从复制',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>

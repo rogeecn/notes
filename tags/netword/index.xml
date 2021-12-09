@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Netword on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/netword/</link><description>Recent content in Netword on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 16:05:36 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/netword/index.xml" rel="self" type="application/rss+xml"/><item><title>Flutter 无法访问HTTP服务</title><link>http://notes.711xd.com/post/flutter-no-network/</link><pubDate>Fri, 26 Nov 2021 16:05:36 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-no-network/</guid><description>&lt;h2 id="android无法访问http">Android无法访问http&lt;/h2>
+&lt;p>其实这本身不是Flutter的问题，但在开发中经常遇到，在Android Pie版本及以上和IOS 系统上默认禁止访问http，主要是为了安全考虑。&lt;/p>
+&lt;h3 id="android解决办法">Android解决办法：&lt;/h3>
+&lt;p>在&lt;code>./android/app/src/main/AndroidManifest.xml&lt;/code>配置文件中&lt;code>application&lt;/code>标签里面设置&lt;code>networkSecurityConfig&lt;/code>属性:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="cp">&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;manifest&lt;/span> &lt;span class="err">...&lt;/span> &lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;application&lt;/span> &lt;span class="na">android:networkSecurityConfig=&lt;/span>&lt;span class="s">&amp;#34;@xml/network_security_config&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="c">&amp;lt;!-- ... --&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/application&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/manifest&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在&lt;code>./android/app/src/main/res&lt;/code>目录下创建xml文件夹（已存在不用创建），在xml文件夹下创建&lt;code>network_security_config.xml&lt;/code>文件，内容如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="cp">&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;network-security-config&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;base-config&lt;/span> &lt;span class="na">cleartextTrafficPermitted=&lt;/span>&lt;span class="s">&amp;#34;true&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;trust-anchors&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;certificates&lt;/span> &lt;span class="na">src=&lt;/span>&lt;span class="s">&amp;#34;system&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/trust-anchors&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/base-config&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/network-security-config&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

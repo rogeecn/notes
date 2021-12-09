@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Laravel on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/laravel/</link><description>Recent content in Laravel on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Wed, 08 Dec 2021 09:55:03 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/laravel/index.xml" rel="self" type="application/rss+xml"/><item><title>Laravel - 从百草园到三味书屋</title><link>http://notes.711xd.com/post/laravel-baicaiyuan-dao-sanweishuwu/</link><pubDate>Wed, 08 Dec 2021 09:55:03 +0800</pubDate><guid>http://notes.711xd.com/post/laravel-baicaiyuan-dao-sanweishuwu/</guid><description>&lt;p>网上偶得此书, 是 Laravel 的作者写的. Laravel 是近年来优秀的 PHP 框架, 国内外都有很多支持者. 该框架应用了大量 PHP5 尤其是 5.3 以后的新特性, 使得后端的开发进一步的简便而灵活. 具体可以看这里 &lt;a href="http://www.laravel.com">http://www.laravel.com&lt;/a> 作者写的这本书详细介绍了 Laravel 框架涉及的各种软件理念和工具, 如依赖注入, 控制反转容器, 面向接口编程等. 我读来收获颇丰, 所以希望翻译成中文以飨读者.&lt;/p>
+&lt;h2 id="作者自序">作者自序&lt;/h2>
+&lt;p>自从编写了 Laravel 框架之后, 我收到了大量让我写书的请求. 想让我出一本关于如何建造具有良好架构的复杂应用的指南. 由于每一个应用程序都是独特的, 这就需要此书讲述的是通用且实用的理论, 同时易于在各种项目中实施.&lt;/p>
+&lt;p>因此我们将从基础要素之一的依赖注入开始讲起, 接着是深入了解服务提供者和应用程序结构, 以及&amp;quot;坚实&amp;quot;设计原则. 这些主题的中心思想会给你的 Laravel 项目奠定坚实的理论基础.&lt;/p>
+&lt;p>如果你对 Laravel 上的高级架构有更进一步的问题的话, 或者想在本书看到更多没讲到的东西, 请给我发电子邮件. 我打算基于社区的反馈来进一步扩展本书, 所以你的意见很重要!&lt;/p>
+&lt;p>最后, 十分感谢 Laravel 社区的每一个人. 你们为世界上成千上万的 PHP 开发者做出了巨大的贡献, 使得 PHP 开发变得更好玩更令人激动. 祝编码快乐!&lt;/p></description></item><item><title>简单的 11 步在 Laravel 中实现测试驱动开发 </title><link>http://notes.711xd.com/post/laravel-test-driving/</link><pubDate>Fri, 26 Nov 2021 16:19:29 +0800</pubDate><guid>http://notes.711xd.com/post/laravel-test-driving/</guid><description>&lt;p>&lt;strong>测试驱动开发&lt;/strong>（英语：Test-driven development，缩写为 TDD）是一种&lt;a href="https://zh.wikipedia.org/wiki/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B">软件开发过程&lt;/a>中的应用方法，由&lt;a href="https://zh.wikipedia.org/wiki/%E6%9E%81%E9%99%90%E7%BC%96%E7%A8%8B">极限编程&lt;/a>中倡导，以其倡导先写测试程序，然后编码实现其功能得名。&lt;/p>
+&lt;p>下文是我在 Medium 上看到的一篇文章讲述了如何在 Laravel 中实现测试驱动开发，我自己已经在项目中实现了测试驱动开发，并且通过持续集成完成了项目的自动测试，文章中有些我认为需要改进的地方也注明了，希望这篇文章能帮助到那些想写测试用例但是一直觉得无从下手的开发者们。文章一共有四篇，之后计划都翻译出来给大家参考。&lt;/p>
+&lt;p>原文链接: &lt;a href="https://medium.com/@jsdecena/simple-tdd-in-laravel-with-11-steps-c475f8b1b214">https://medium.com/@jsdecena/simple-tdd-in&amp;hellip;&lt;/a>&lt;/p></description></item><item><title>Dart 解析 Laravel 数据结构</title><link>http://notes.711xd.com/post/dart-parse-laravel-response/</link><pubDate>Fri, 26 Nov 2021 16:02:38 +0800</pubDate><guid>http://notes.711xd.com/post/dart-parse-laravel-response/</guid><description>&lt;h2 id="数据json内容">数据JSON内容：&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="p">{&lt;/span>
+&lt;span class="nt">&amp;#34;message&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;json_message_data&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nt">&amp;#34;errors&amp;#34;&lt;/span>&lt;span class="p">:{&lt;/span>
+&lt;span class="nt">&amp;#34;name&amp;#34;&lt;/span>&lt;span class="p">:[&lt;/span>
+&lt;span class="s2">&amp;#34;name_message_nnn&amp;#34;&lt;/span>
+&lt;span class="p">],&lt;/span>
+&lt;span class="nt">&amp;#34;user&amp;#34;&lt;/span>&lt;span class="p">:[&lt;/span>
+&lt;span class="s2">&amp;#34;user_message&amp;#34;&lt;/span>
+&lt;span class="p">]&lt;/span>
+&lt;span class="p">},&lt;/span>
+&lt;span class="nt">&amp;#34;data&amp;#34;&lt;/span>&lt;span class="p">:{&lt;/span>
+&lt;span class="nt">&amp;#34;username&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="s2">&amp;#34;Rogee&amp;#34;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Laravel 一些不错的扩展</title><link>http://notes.711xd.com/post/laravel-awesome-extensions/</link><pubDate>Fri, 26 Nov 2021 15:48:01 +0800</pubDate><guid>http://notes.711xd.com/post/laravel-awesome-extensions/</guid><description>带 [-] 标签为推荐安装包 拼音 https://github.com/overtrue/laravel-pinyin https://github.com/overtrue/laravel-follow https://github.com/overtrue/laravel-favorite https://github.com/overtrue/laravel-subscribe https://github.com/overtrue/laravel-like 菜单生成 https://github.com/spatie/menu 控制台 https://github.com/spatie/laravel-dashboard Enum https://github.com/spatie/laravel-enum https://github.com/BenSampo/laravel-enum stubs https://github.com/atehnix/laravel-stubs web tinker https://github.com/spatie/laravel-web-tinker 过期文件自动删除 https://github.com/spatie/laravel-directory-cleanup sluggable https://github.com/spatie/laravel-sluggable permission https://github.com/spatie/laravel-permission 另一个权限控制 https://github.com/mateusjunges/laravel-acl docker manager https://github.com/spatie/docker html generator https://github.com/spatie/laravel-html ssh https://github.com/spatie/ssh 邮件订阅 https://github.com/spatie/laravel-newsletter flash message</description></item><item><title>Laravel Nginx 配置</title><link>http://notes.711xd.com/post/laravel-nginx-conf/</link><pubDate>Fri, 26 Nov 2021 15:46:20 +0800</pubDate><guid>http://notes.711xd.com/post/laravel-nginx-conf/</guid><description>&lt;h2 id="精简版">精简版&lt;/h2>
+&lt;h3 id="serverconf">server.conf&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx" data-lang="nginx">&lt;span class="k">server&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kn">listen&lt;/span> &lt;span class="mi">80&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">server_name&lt;/span> &lt;span class="s">example.com&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">root&lt;/span> &lt;span class="s">/example.com/public&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">include&lt;/span> &lt;span class="s">presets.d/laravel.conf&lt;/span>
+&lt;span class="err">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="presetsdlaravelconf">presets.d/laravel.conf&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx" data-lang="nginx">&lt;span class="k">add_header&lt;/span> &lt;span class="s">X-Frame-Options&lt;/span> &lt;span class="s">&amp;#34;SAMEORIGIN&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">add_header&lt;/span> &lt;span class="s">X-XSS-Protection&lt;/span> &lt;span class="s">&amp;#34;1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">mode=block&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">add_header&lt;/span> &lt;span class="s">X-Content-Type-Options&lt;/span> &lt;span class="s">&amp;#34;nosniff&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">index&lt;/span> &lt;span class="s">index.html&lt;/span> &lt;span class="s">index.htm&lt;/span> &lt;span class="s">index.php&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">charset&lt;/span> &lt;span class="s">utf-8&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="s">/&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kn">try_files&lt;/span> &lt;span class="nv">$uri&lt;/span> &lt;span class="nv">$uri/&lt;/span> &lt;span class="s">/index.php?&lt;/span>&lt;span class="nv">$query_string&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">/favicon.ico&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="kn">access_log&lt;/span> &lt;span class="no">off&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="kn">log_not_found&lt;/span> &lt;span class="no">off&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">/robots.txt&lt;/span>  &lt;span class="p">{&lt;/span> &lt;span class="kn">access_log&lt;/span> &lt;span class="no">off&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="kn">log_not_found&lt;/span> &lt;span class="no">off&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="k">error_page&lt;/span> &lt;span class="mi">404&lt;/span> &lt;span class="s">/index.php&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="p">~&lt;/span> &lt;span class="sr">\.php$&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kn">fastcgi_pass&lt;/span> &lt;span class="s">unix:/var/run/php/php7.2-fpm.sock&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">fastcgi_index&lt;/span> &lt;span class="s">index.php&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">fastcgi_param&lt;/span> &lt;span class="s">SCRIPT_FILENAME&lt;/span> &lt;span class="nv">$realpath_root$fastcgi_script_name&lt;/span>&lt;span class="p">;&lt;/span>
+    &lt;span class="kn">include&lt;/span> &lt;span class="s">fastcgi_params&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">location&lt;/span> &lt;span class="p">~&lt;/span> &lt;span class="sr">/\.(?!well-known).*&lt;/span> &lt;span class="p">{&lt;/span>
+    &lt;span class="kn">deny&lt;/span> &lt;span class="s">all&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Laravel Artisan 命令任意执行</title><link>http://notes.711xd.com/post/laravel-artisan-everywhere/</link><pubDate>Fri, 26 Nov 2021 15:44:17 +0800</pubDate><guid>http://notes.711xd.com/post/laravel-artisan-everywhere/</guid><description>&lt;p>只要在 laravel 项目根目录下即可运行 ,不需要再敲烦人的 &lt;code>./&lt;/code> 前缀了。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="cp">#!/bin/bash
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="nb">cd&lt;/span> &lt;span class="sb">`&lt;/span>&lt;span class="nb">pwd&lt;/span>&lt;span class="sb">`&lt;/span>
+php artisan &lt;span class="nv">$@&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Laravel 测试命令</title><link>http://notes.711xd.com/post/lara-test-command/</link><pubDate>Fri, 26 Nov 2021 15:42:07 +0800</pubDate><guid>http://notes.711xd.com/post/lara-test-command/</guid><description>&lt;p>复制下面内容到　&lt;code>/usr/local/bin/lara-test&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="cp">#!/bin/bash
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="o">[&lt;/span> &lt;span class="nv">$#&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="o">]&lt;/span> &lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Usage: lara-test [suite] [filter]&amp;#34;&lt;/span>
+&lt;span class="nb">exit&lt;/span>
+&lt;span class="k">fi&lt;/span>
+&lt;span class="nb">cd&lt;/span> &lt;span class="sb">`&lt;/span>&lt;span class="nb">pwd&lt;/span>&lt;span class="sb">`&lt;/span>
+&lt;span class="nv">COMMAND&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;php artisan test&amp;#34;&lt;/span>
+&lt;span class="nv">SUITE&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">$1&lt;/span>
+&lt;span class="nv">FILTER&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">$2&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="o">[&lt;/span> &lt;span class="nv">$#&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="o">]&lt;/span> &lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;span class="nv">$COMMAND&lt;/span> --testsuite &lt;span class="nv">$SUITE&lt;/span>
+&lt;span class="nb">exit&lt;/span>
+&lt;span class="k">fi&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="o">[&lt;/span> &lt;span class="nv">$#&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="m">2&lt;/span> &lt;span class="o">]&lt;/span> &lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;span class="nv">$COMMAND&lt;/span> --testsuite &lt;span class="nv">$SUITE&lt;/span> --filter &lt;span class="nv">$FILTER&lt;/span>
+&lt;span class="nb">exit&lt;/span>
+&lt;span class="k">fi&lt;/span>
+&lt;span class="nb">shift&lt;/span>
+&lt;span class="nb">shift&lt;/span>
+&lt;span class="nv">$COMMAND&lt;/span> --testsuite &lt;span class="nv">$SUITE&lt;/span> --filter &lt;span class="nv">$FILTER&lt;/span> &lt;span class="nv">$@&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

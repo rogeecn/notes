@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Session on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/session/</link><description>Recent content in Session on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 16:06:24 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/session/index.xml" rel="self" type="application/rss+xml"/><item><title>Flutter 获取webview中cookie存储的session</title><link>http://notes.711xd.com/post/flutter-get-webview-session-in-cookie/</link><pubDate>Fri, 26 Nov 2021 16:06:24 +0800</pubDate><guid>http://notes.711xd.com/post/flutter-get-webview-session-in-cookie/</guid><description>&lt;h2 id="需求">需求&lt;/h2>
+&lt;p>由于最近要获取阿里系网站的信息，网站在登录模块做了大量的保护工作，我的需求是拿到登录之后的cookie以获得session字段的值，用来保持登录状态。所以想通过webview来获取登录的信息。&lt;/p>
+&lt;p>在flutter上面比较流行的一个webview插件为：&lt;code>flutter_webview_plugin&lt;/code>&lt;/p>
+&lt;h2 id="flutter_webview_plugin-使用">flutter_webview_plugin 使用&lt;/h2>
+&lt;h3 id="1在app的路由上面添加登录的页面">1.在app的路由上面添加登录的页面&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-dart" data-lang="dart">&lt;span class="nl">routes:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="s2">&amp;#34;/web_login&amp;#34;&lt;/span>&lt;span class="o">:&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WebviewScaffold&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nl">url:&lt;/span> &lt;span class="n">Config&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">login&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nl">withLocalStorage:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nl">hidden:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nl">userAgent:&lt;/span> &lt;span class="s2">&amp;#34;Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nl">appBar:&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">AppBar&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;span class="nl">centerTitle:&lt;/span> &lt;span class="kc">true&lt;/span> &lt;span class="p">,&lt;/span>
+&lt;span class="nl">title:&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Text&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;登录&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="p">),&lt;/span>
+&lt;span class="nl">initialChild:&lt;/span> &lt;span class="n">Container&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;span class="nl">child:&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Center&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;span class="nl">child:&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CupertinoActivityIndicator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nl">animating:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="p">),&lt;/span>
+&lt;span class="p">),&lt;/span>
+&lt;span class="p">),&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>注意：userAgent字段一定要加上，不然在ios下打开WKwebview会白屏&lt;/p></description></item></channel></rss>

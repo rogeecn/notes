@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>文章字段 on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/%E6%96%87%E7%AB%A0%E5%AD%97%E6%AE%B5/</link><description>Recent content in 文章字段 on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 15:20:34 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/%E6%96%87%E7%AB%A0%E5%AD%97%E6%AE%B5/index.xml" rel="self" type="application/rss+xml"/><item><title>文章基础字段</title><link>http://notes.711xd.com/post/base-artile-fields/</link><pubDate>Fri, 26 Nov 2021 15:20:34 +0800</pubDate><guid>http://notes.711xd.com/post/base-artile-fields/</guid><description>&lt;p>一个文章表所应包含的字段列表&lt;/p>
+&lt;h2 id="主体内容">主体内容&lt;/h2>
+&lt;ul>
+&lt;li>标题
+&lt;ul>
+&lt;li>颜色&lt;/li>
+&lt;li>加粗&lt;/li>
+&lt;li>SLUG&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>内容&lt;/li>
+&lt;li>SEO
+&lt;ul>
+&lt;li>keywords&lt;/li>
+&lt;li>tags&lt;/li>
+&lt;li>description&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>封面图
+&lt;ul>
+&lt;li>上传&lt;/li>
+&lt;li>外链&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item></channel></rss>

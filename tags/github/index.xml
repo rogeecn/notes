@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Github on Rogee's 备忘录</title><link>http://notes.711xd.com/tags/github/</link><description>Recent content in Github on Rogee's 备忘录</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Rogee</copyright><lastBuildDate>Fri, 26 Nov 2021 12:16:38 +0800</lastBuildDate><atom:link href="http://notes.711xd.com/tags/github/index.xml" rel="self" type="application/rss+xml"/><item><title>Hugo 发布到 gh-pages 分支</title><link>http://notes.711xd.com/post/hugo-publish-to-gh-page-branch/</link><pubDate>Fri, 26 Nov 2021 12:16:38 +0800</pubDate><guid>http://notes.711xd.com/post/hugo-publish-to-gh-page-branch/</guid><description>&lt;h2 id="方法一手工操作">方法一：手工操作&lt;/h2>
+&lt;p>如果希望单独控制源文档和生成的网页文档的版本历史，可以使用单独建立一个gh-pages branch的方法托管到Github Pages——先将/public子目录添加到.gitignore中，让master branch忽略其更新，然后在本地和Github端添加一个名为gh-pages的branch：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="c1"># 忽略public子目录&lt;/span>
+&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;public&amp;#34;&lt;/span> &amp;gt;&amp;gt; .gitignore
+&lt;span class="c1"># 初始化gh-pages branch&lt;/span>
+git checkout --orphan gh-pages
+git reset --hard
+git commit --allow-empty -m &lt;span class="s2">&amp;#34;Initializing gh-pages branch&amp;#34;&lt;/span>
+git push origin gh-pages
+git checkout main
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

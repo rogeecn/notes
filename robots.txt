@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: http://notes.711xd.com/sitemap.xml

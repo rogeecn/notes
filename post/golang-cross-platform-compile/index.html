@@ -1,0 +1,310 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<title>Golang 在 Mac、Linux、Windows 下如何交叉编译 - Rogee's 备忘录</title>
+<meta name=renderer content="webkit">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=theme-color content="#f8f5ec">
+<meta name=msapplication-navbutton-color content="#f8f5ec">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec">
+<meta name=author content="Rogee"><meta name=description content="交叉编译不支持 CGO 所以要禁用它
+如何编译 Mac 下编译 Linux 和 Windows 64位可执行程序 1 2  CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build main.go   "><meta name=keywords content="备忘录,Rogee,烂笔头">
+<meta name=generator content="Hugo 0.89.4 with theme even">
+<link rel=canonical href=http://notes.711xd.com/post/golang-cross-platform-compile/>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5>
+<script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script>
+<link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous>
+<meta property="og:title" content="Golang 在 Mac、Linux、Windows 下如何交叉编译">
+<meta property="og:description" content="交叉编译不支持 CGO 所以要禁用它
+如何编译
+Mac 下编译 Linux 和 Windows 64位可执行程序
+
+
+1
+2
+
+
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build main.go
+
+
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://notes.711xd.com/post/golang-cross-platform-compile/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2021-11-26T16:01:14+08:00">
+<meta property="article:modified_time" content="2021-11-26T16:31:21+08:00">
+<meta itemprop=name content="Golang 在 Mac、Linux、Windows 下如何交叉编译">
+<meta itemprop=description content="交叉编译不支持 CGO 所以要禁用它
+如何编译
+Mac 下编译 Linux 和 Windows 64位可执行程序
+
+
+1
+2
+
+
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build main.go
+
+
+"><meta itemprop=datePublished content="2021-11-26T16:01:14+08:00">
+<meta itemprop=dateModified content="2021-11-26T16:31:21+08:00">
+<meta itemprop=wordCount content="187">
+<meta itemprop=keywords content="Golang,交叉编译,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Golang 在 Mac、Linux、Windows 下如何交叉编译">
+<meta name=twitter:description content="交叉编译不支持 CGO 所以要禁用它
+如何编译
+Mac 下编译 Linux 和 Windows 64位可执行程序
+
+
+1
+2
+
+
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build main.go
+
+
+"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body>
+<div id=mobile-navbar class=mobile-navbar>
+<div class=mobile-header-logo>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<div class=mobile-navbar-icon>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<nav id=mobile-menu class="mobile-menu slideout-menu">
+<ul class=mobile-menu-list>
+<a href=/>
+<li class=mobile-menu-item>首页</li>
+</a><a href=/post/>
+<li class=mobile-menu-item>归档</li>
+</a><a href=/tags/>
+<li class=mobile-menu-item>标签</li>
+</a><a href=/categories/>
+<li class=mobile-menu-item>分类</li>
+</a><a href=/about/>
+<li class=mobile-menu-item>关于</li>
+</a>
+</ul>
+</nav>
+<div class=container id=mobile-panel>
+<header id=header class=header>
+<div class=logo-wrapper>
+<a href=/ class=logo>Rogee's 备忘录</a>
+</div>
+<nav class=site-navbar>
+<ul id=menu class=menu>
+<li class=menu-item>
+<a class=menu-item-link href=/>首页</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/post/>归档</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/tags/>标签</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/categories/>分类</a>
+</li><li class=menu-item>
+<a class=menu-item-link href=/about/>关于</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id=main class=main>
+<div class=content-wrapper>
+<div id=content class=content>
+<article class=post>
+<header class=post-header>
+<h1 class=post-title>Golang 在 Mac、Linux、Windows 下如何交叉编译</h1>
+<div class=post-meta>
+<span class=post-time> 2021-11-26 </span>
+<span id=busuanzi_container_page_pv class=more-meta> <span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读 </span>
+</div>
+</header>
+<div class=post-toc id=post-toc>
+<h2 class=post-toc-title>文章目录</h2>
+<div class=post-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#如何编译>如何编译</a>
+<ul>
+<li><a href=#mac-下编译-linux-和-windows-64位可执行程序>Mac 下编译 Linux 和 Windows 64位可执行程序</a></li>
+<li><a href=#linux-下编译-mac-和-windows-64位可执行程序>Linux 下编译 Mac 和 Windows 64位可执行程序</a></li>
+<li><a href=#windows-下编译-mac-和-linux-64位可执行程序>Windows 下编译 Mac 和 Linux 64位可执行程序</a></li>
+</ul>
+</li>
+<li><a href=#goos目标平台的操作系统>GOOS：目标平台的操作系统</a></li>
+<li><a href=#goarch目标平台的体系架构>GOARCH：目标平台的体系架构</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class=post-content>
+<p><strong>交叉编译不支持 CGO 所以要禁用它</strong></p>
+<h2 id=如何编译>如何编译</h2>
+<h3 id=mac-下编译-linux-和-windows-64位可执行程序>Mac 下编译 Linux 和 Windows 64位可执行程序</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nv>CGO_ENABLED</span><span class=o>=</span><span class=m>0</span> <span class=nv>GOOS</span><span class=o>=</span>linux <span class=nv>GOARCH</span><span class=o>=</span>amd64 go build main.go
+<span class=nv>CGO_ENABLED</span><span class=o>=</span><span class=m>0</span> <span class=nv>GOOS</span><span class=o>=</span>windows <span class=nv>GOARCH</span><span class=o>=</span>amd64 go build main.go
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=linux-下编译-mac-和-windows-64位可执行程序>Linux 下编译 Mac 和 Windows 64位可执行程序</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nv>CGO_ENABLED</span><span class=o>=</span><span class=m>0</span> <span class=nv>GOOS</span><span class=o>=</span>darwin <span class=nv>GOARCH</span><span class=o>=</span>amd64 go build main.go
+<span class=nv>CGO_ENABLED</span><span class=o>=</span><span class=m>0</span> <span class=nv>GOOS</span><span class=o>=</span>windows <span class=nv>GOARCH</span><span class=o>=</span>amd64 go build main.go
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=windows-下编译-mac-和-linux-64位可执行程序>Windows 下编译 Mac 和 Linux 64位可执行程序</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>SET <span class=nv>CGO_ENABLED</span><span class=o>=</span><span class=m>0</span>
+SET <span class=nv>GOOS</span><span class=o>=</span>darwin
+SET <span class=nv>GOARCH</span><span class=o>=</span>amd64 go build main.go
+SET <span class=nv>CGO_ENABLED</span><span class=o>=</span><span class=m>0</span>
+SET <span class=nv>GOOS</span><span class=o>=</span>linux
+SET <span class=nv>GOARCH</span><span class=o>=</span>amd64
+go build main.go
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=goos目标平台的操作系统>GOOS：目标平台的操作系统</h2>
+<ul>
+<li>
+<p>darwin</p>
+</li>
+<li>
+<p>freebsd</p>
+</li>
+<li>
+<p>linux</p>
+</li>
+<li>
+<p>windows</p>
+</li>
+</ul>
+<h2 id=goarch目标平台的体系架构>GOARCH：目标平台的体系架构</h2>
+<ul>
+<li>
+<p>386</p>
+</li>
+<li>
+<p>amd64</p>
+</li>
+<li>
+<p>arm</p>
+</li>
+</ul>
+<p>上面的命令编译 64 位可执行程序，你当然应该也会使用 386 编译 32 位可执行程序</p>
+</div>
+<div class=post-copyright>
+<p class=copyright-item>
+<span class=item-title>文章作者</span>
+<span class=item-content>Rogee</span>
+</p>
+<p class=copyright-item>
+<span class=item-title>上次更新</span>
+<span class=item-content>
+2021-11-26
+<a href=https://github.com/rogeecn/notes/commit/8dc87a73a3f2da82883c4dc2f9a7d61a70e53f9a title=post>(8dc87a7)</a>
+</span>
+</p>
+</div>
+<footer class=post-footer>
+<div class=post-tags>
+<a href=/tags/golang/>Golang</a>
+<a href=/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/>交叉编译</a>
+</div>
+<nav class=post-nav>
+<a class=prev href=/post/dart-parse-laravel-response/>
+<i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">Dart 解析 Laravel 数据结构</span>
+<span class="prev-text nav-mobile">上一篇</span>
+</a>
+<a class=next href=/post/vmware-wrokstation-pre-15_5-activation-code/>
+<span class="next-text nav-default">VMware Workstation Pro 15.5 激活码</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i>
+</a>
+</nav>
+</footer>
+</article>
+</div>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css crossorigin=anonymous>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js crossorigin=anonymous></script>
+<script type=text/javascript>var gitalk=new Gitalk({id:'2021-11-26 16:01:14 \u002b0800 \u002b0800',title:'Golang 在 Mac、Linux、Windows 下如何交叉编译',clientID:'a76a97e7cc23e0e0b81c',clientSecret:'c2b70fdf4690b743838e85e01d904249470079c8',repo:'notes',owner:'rogeecn',admin:['rogeecn'],body:decodeURI(location.href)});gitalk.render('gitalk-container')</script>
+<noscript>Please enable JavaScript to view the <a href=https://github.com/gitalk/gitalk>comments powered by gitalk.</a></noscript>
+</div>
+</main>
+<footer id=footer class=footer>
+<div class=social-links>
+<a href=https://github.com/rogeecn class="iconfont icon-github" title=github></a>
+<a href=http://notes.711xd.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a>
+</div>
+<div class=copyright>
+<span class=power-by>
+由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动
+</span>
+<span class=division>|</span>
+<span class=theme-info>
+主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a>
+</span>
+<div class=busuanzi-footer>
+<span id=busuanzi_container_site_pv> 本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次 </span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv> 本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人 </span>
+</div>
+<span class=copyright-year>
+&copy;
+2020 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>Rogee</span>
+</span>
+</div>
+</footer>
+<div class=back-to-top id=back-to-top>
+<i class="iconfont icon-up"></i>
+</div>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script>
+</body>
+</html>
